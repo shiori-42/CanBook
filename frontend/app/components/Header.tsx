@@ -22,7 +22,7 @@ export default function ButtonAppBar() {
           >
             BookCamp
           </Typography>
-          <Button color="inherit" sx={{ fontFamily: "" }}>
+          <Button color="inherit" href="/login">
             ログイン
           </Button>
           <IconButton
