@@ -1,5 +1,9 @@
-import Image from "next/image";
+import CampusAll from "./components/CampusAll";
 
 export default function Home() {
-  return <div>test</div>;
+  return (
+    <>
+      <CampusAll />
+    </>
+  );
 }
