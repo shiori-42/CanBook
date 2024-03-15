@@ -1,4 +1,4 @@
-import CampusAll from "./components/CampusAll";
+import CampusAll from "./components/SearchBox";
 
 export default function Home() {
   return (
