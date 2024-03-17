@@ -12,7 +12,7 @@ const ItemGrid = () => {
           <Link href={"/aaa"} style={{ textDecoration: "none" }}>
             <Card
               sx={{
-                height: 200,
+                height: { xs: 200, sm: 270 },
                 transition: "0.3s",
                 "&:hover": {
                   bgcolor: "#ffffff",
@@ -23,9 +23,9 @@ const ItemGrid = () => {
             >
               <Box bgcolor={"#ededed"}>
                 <CardMedia
-                  sx={{ objectFit: "contain" }}
+                  // sx={{ objectFit: "contain" }}
                   component="img"
-                  height={110}
+                  sx={{ height: { xs: 110, sm: 180 } }}
                   image={item.imagepath}
                 />
               </Box>
