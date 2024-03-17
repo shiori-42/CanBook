@@ -17,7 +17,7 @@ type Listing struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
-type LisringResponse struct {
+type ListingResponse struct {
 	ID        uint      `json:"id" gorm:"primaryKey"`
 	BookTitle string    `json:"title" gorm:"not null"`
 	CreatedAt time.Time `json:"created_at"`
