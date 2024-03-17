@@ -7,7 +7,7 @@ import (
 )
 
 type IUserValidator interface {
-	UserValidate(user *model.User) error
+	UserValidate(user model.User) error
 }
 
 type userValidator struct{}
@@ -16,7 +16,7 @@ func NewUserValidator() IUserValidator {
 	return &userValidator{}
 }
 
-func (uv *userValidator) ListingBalidate(user *model.User) error {
+func (uv *userValidator) UserValidate(user model.User) error {
 	return validation.ValidateStruct(&user,
 		validation.Field(
 			&user.Email,
