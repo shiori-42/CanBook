@@ -6,21 +6,21 @@ import (
 )
 
 type IListingValidator interface {
-	ListingBalidate(listing *model.Listing) error
+	ListingValidate(listing model.Listing) error
 }
 
-type listingValidator struct {}
+type listingValidator struct{}
 
 func NewListingValidator() IListingValidator {
 	return &listingValidator{}
 }
 
-func (lv *listingValidator) ListingBalidate(listing *model.Listing) error {
-	return validation.ValidationStruct(&listing,
+func (lv *listingValidator) ListingValidate(listing model.Listing) error {
+	return validation.ValidateStruct(&listing,
 		validation.Field(
-			&listing.Title, 
+			&listing.BookTitle, 
 			validation.Required.Error("title is required"),
-			validation.RuneLength(1, 10).Error("limited max 10 characters")
+			validation.RuneLength(1, 10).Error("limited max 10 characters"),
 		),
 	)
 }

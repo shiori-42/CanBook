@@ -1,23 +1,21 @@
 package repository
 
-import(
-
-	"gorm.io/gorm/clause"
+import (
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	"github.com/shiori-42/textbook_change_app/model"
-
 )
 
 type IListingRepository interface {
-	GetAllMyListings(listigs *[]model.Listing,userId uint)error
-	GetMyListingById(listing *model.Listing, userId uint,listingId uint) error
+	GetAllMyListings(listigs *[]model.Listing, userId uint) error
+	GetMyListingById(listing *model.Listing, userId uint, listingId uint) error
 	CreateListing(listing *model.Listing) error
-	UpdateListing(listing *model.Listing, userId uint,listingId uint) error
-	DeleteListing(userId uint,listingId uint) error
+	UpdateListing(listing *model.Listing, userId uint, listingId uint) error
+	DeleteListing(userId uint, listingId uint) error
 }
 
-type listingRepository struct{
+type listingRepository struct {
 	db *gorm.DB
 }
 
@@ -47,7 +45,7 @@ func (lr *listingRepository) CreateListing(listing *model.Listing) error {
 }
 
 func (lr *listingRepository) UpdateListing(listing *model.Listing, userId uint, listingId uint) error {
-	result:=lr.db.Model(listing).Clauses(clause.Returning{}).Where("id=? AND user_id=?",listingId,userId).Update("book_title",listing.BookTitle)
+	result := lr.db.Model(listing).Clauses(clause.Returning{}).Where("id=? AND user_id=?", listingId, userId).Update("book_title", listing.BookTitle)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -57,8 +55,8 @@ func (lr *listingRepository) UpdateListing(listing *model.Listing, userId uint, 
 	return nil
 }
 
-func(lr *listingRepository) DeleteListing(userId uint, listingId uint) error {
-	result:=lr.db.Where("id=? AND user_id=?",listingId,userId).Delete(&model.Listing{})
+func (lr *listingRepository) DeleteListing(userId uint, listingId uint) error {
+	result := lr.db.Where("id=? AND user_id=?", listingId, userId).Delete(&model.Listing{})
 	if result.Error != nil {
 		return result.Error
 	}
