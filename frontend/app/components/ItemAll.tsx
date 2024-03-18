@@ -1,8 +1,8 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Typography } from "@mui/material";
-import { items } from "../data/data";
 import Link from "next/link";
+import { items } from "../data/data";
 
 const ItemGrid = () => {
   return (
