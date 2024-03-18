@@ -1,8 +1,10 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import ItemGrid from "./ItemGrid";
+import ItemGrid from "./ItemAll";
 import { Box, Tabs, Tab } from "@mui/material";
 import ItemDetail from "./ItemDetail";
+import ItemKeep from "./ItemKeep";
+import ItemMyList from "./ItemMyList";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -65,7 +67,7 @@ export default function BasicTabs() {
             sx={{ "&.Mui-selected": { color: "#32C0C9" } }}
           />
           <Tab
-            label="すぐ欲しい"
+            label="保存済み"
             {...a11yProps(2)}
             sx={{ "&.Mui-selected": { color: "#32C0C9" } }}
           />
@@ -79,19 +81,15 @@ export default function BasicTabs() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <Typography fontSize={15} fontWeight={"bold"}>
-          保存した商品
+          出品した商品
         </Typography>
-        <></>
-        <Typography fontSize={15} fontWeight={"bold"}>
-          出品中の商品
-        </Typography>
-        <></>
+        <ItemMyList />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <Typography fontSize={15} fontWeight={"bold"}>
-          すぐに欲しい人がいます！
+          保存した商品
         </Typography>
-        <></>
+        <ItemKeep />
       </CustomTabPanel>
     </Box>
   );
