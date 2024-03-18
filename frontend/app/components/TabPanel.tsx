@@ -2,6 +2,7 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import ItemGrid from "./ItemGrid";
 import { Box, Tabs, Tab } from "@mui/material";
+import ItemDetail from "./ItemDetail";
 
 interface TabPanelProps {
   children?: React.ReactNode;

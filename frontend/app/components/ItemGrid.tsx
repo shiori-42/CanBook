@@ -9,7 +9,7 @@ const ItemGrid = () => {
     <Grid container spacing={1} py={2}>
       {items.map((item, index) => (
         <Grid key={index} item xs={4}>
-          <Link href={"/aaa"} style={{ textDecoration: "none" }}>
+          <Link href={"/ItemDetail"} style={{ textDecoration: "none" }}>
             <Card
               sx={{
                 height: { xs: 200, sm: 270 },
