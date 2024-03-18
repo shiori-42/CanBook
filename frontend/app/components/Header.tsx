@@ -1,3 +1,11 @@
+import {
+  SignedIn,
+  UserButton,
+  SignedOut,
+  SignInButton,
+  SignIn,
+  RedirectToSignIn,
+} from "@clerk/nextjs";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   Box,
@@ -22,17 +30,23 @@ export default function ButtonAppBar() {
           >
             BookCamp
           </Typography>
-          <Button color="inherit" href="/login">
-            ログイン
-          </Button>
-          <IconButton
+
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+          <SignedOut>
+            <Button color="inherit" href="/my-page">
+              ログイン
+            </Button>
+          </SignedOut>
+          {/* <IconButton
             size="large"
             color="inherit"
             aria-label="menu"
             sx={{ p: "12px" }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
         </Toolbar>
       </AppBar>
     </Box>
