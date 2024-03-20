@@ -1,9 +1,8 @@
 "use client";
+import { items } from "@/app/data/data";
+import NotFound from "@/app/not-found";
 import { Box, Typography, styled } from "@mui/material";
 import React, { Fragment } from "react";
-import ItemInfo from "./ItemInfo";
-import NotFound from "../not-found";
-import { items } from "../data/data";
 
 const ItemDetail = async ({ params }: { params: { id: string } }) => {
   const item = items.find((itemdata) => itemdata.id === parseInt(params.id));
@@ -29,18 +28,23 @@ const ItemDetail = async ({ params }: { params: { id: string } }) => {
         borderBottom={1}
         borderColor={"divider"}
         pb={3}
-        sx={backgroundImageStyle}
       >
-        <Typography fontSize={20} fontWeight={"bold"}>
-          {item.name}
-        </Typography>
-        <Typography fontSize={20}>￥{item.price}</Typography>
-        <Typography fontSize={12}>{item.sell}</Typography>
+        <Box px={{ sm: 10 }}>
+          <Box width={"100%"} sx={backgroundImageStyle}></Box>
+        </Box>
+        <Box mx={{ sm: 10 }}>
+          <Typography fontSize={20} fontWeight={"bold"}>
+            {item.name}
+          </Typography>
+          <Typography fontSize={20}>￥{item.price}</Typography>
+          <Typography fontSize={12}>{item.sell}</Typography>
+
+          <Typography fontSize={15} fontWeight={"bold"} mt={1}>
+            商品の詳細
+          </Typography>
+        </Box>
       </Box>
-      {/* <Typography fontSize={15} fontWeight={"bold"} mt={1}>
-        商品の詳細
-      </Typography>
-      <ItemInfo /> */}
+      {/* <ItemInfo /> */}
     </>
   );
 };
