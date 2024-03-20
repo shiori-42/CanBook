@@ -4,12 +4,12 @@ import { Box, Card, CardMedia, Typography } from "@mui/material";
 import Link from "next/link";
 import { items } from "../data/data";
 
-const ItemGrid = () => {
+const ItemAll = () => {
   return (
     <Grid container spacing={1} py={2}>
       {items.map((item, index) => (
         <Grid key={index} item xs={4}>
-          <Link href={"/ItemDetail"} style={{ textDecoration: "none" }}>
+          <Link href={`/item/${item.id}`} style={{ textDecoration: "none" }}>
             <Card
               sx={{
                 height: { xs: 200, sm: 270 },
@@ -42,4 +42,4 @@ const ItemGrid = () => {
   );
 };
 
-export default ItemGrid;
+export default ItemAll;

@@ -5,13 +5,6 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  borderColor: "black",
-
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
   marginRight: theme.spacing(2),
   marginLeft: 0,
   marginTop: 18,
@@ -40,7 +33,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function SearchBox() {
   return (
     <Search>
       <SearchIconWrapper>
