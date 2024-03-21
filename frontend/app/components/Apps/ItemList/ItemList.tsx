@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 
 interface Item {
   id: number;
-  name: string;
-  category: string;
   image_name: string;
+  text_name: string;
+  class_name: string;
+  price: number;
+  sell_type: number;
 }
 
 const server = process.env.REACT_APP_API_URL || "http://127.0.0.1:9000";
@@ -49,12 +51,12 @@ export const ItemList: React.FC<Prop> = (props) => {
       {items.map((item) => {
         return (
           <div key={item.id} className="ItemList">
-            {/* TODO: Task 1: Replace the placeholder image with the item image */}
+            {/* //Replace the placeholder image with the item image */}
             <img src={placeholderImage} />
             <p>
-              <span>Name: {item.name}</span>
+              <span>Name: {item.text_name}</span>
               <br />
-              <span>Category: {item.category}</span>
+              <span>Category: {item.class_name}</span>
             </p>
           </div>
         );
