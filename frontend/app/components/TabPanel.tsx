@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import { Box, Tabs, Tab } from "@mui/material";
 import ItemDetail from "./ItemDetail";
 import ItemKeep from "./ItemKeep";
-import ItemMyList from "./ItemMyList";
+import ItemMyList from "./Apps/ItemList/ItemMyList";
 import ItemAll from "./ItemAll";
 
 interface TabPanelProps {

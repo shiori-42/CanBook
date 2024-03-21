@@ -1,7 +1,6 @@
 import { useState } from "react";
-import "./PutUpForm.css";
-import { ItemList } from "./ItemList/ItemList";
-import { Listing } from "./Listing/Listing";
+import ItemMyList from "./ItemList/ItemMyList";
+import { InputForm } from "./Listing/InputForm";
 
 function App() {
   // reload ItemList after Listing complete
@@ -9,10 +8,10 @@ function App() {
   return (
     <div>
       <div>
-        <Listing onListingCompleted={() => setReload(true)} />
+        <InputForm onListingCompleted={() => setReload(true)} />
       </div>
       <div>
-        <ItemList reload={reload} onLoadCompleted={() => setReload(false)} />
+        <ItemMyList reload={reload} onLoadCompleted={() => setReload(false)} />
       </div>
     </div>
   );
