@@ -4,7 +4,7 @@ import { Box, Card, CardMedia, Typography } from "@mui/material";
 import Link from "next/link";
 import { items } from "../data/data";
 
-const ItemGrid = () => {
+const ItemKeep = () => {
   return (
     <Grid container spacing={1} py={2}>
       {items.map((item, index) => (
@@ -42,4 +42,4 @@ const ItemGrid = () => {
   );
 };
 
-export default ItemGrid;
+export default ItemKeep;

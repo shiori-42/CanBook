@@ -1,10 +1,10 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import ItemGrid from "./ItemAll";
 import { Box, Tabs, Tab } from "@mui/material";
 import ItemDetail from "./ItemDetail";
 import ItemKeep from "./ItemKeep";
 import ItemMyList from "./ItemMyList";
+import ItemAll from "./ItemAll";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -77,14 +77,16 @@ export default function BasicTabs() {
         <Typography fontSize={15} fontWeight={"bold"}>
           キャンパス内の商品
         </Typography>
-        <ItemGrid />
+        <ItemAll />
       </CustomTabPanel>
+
       <CustomTabPanel value={value} index={1}>
         <Typography fontSize={15} fontWeight={"bold"}>
           出品した商品
         </Typography>
         <ItemMyList />
       </CustomTabPanel>
+
       <CustomTabPanel value={value} index={2}>
         <Typography fontSize={15} fontWeight={"bold"}>
           保存した商品
