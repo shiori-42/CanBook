@@ -2,6 +2,7 @@
 import { alpha, styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
+import { useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -33,7 +34,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchBox() {
+// デフォルトの値として空の関数を設定しておく
+export default function SearchBox({ onSearch = () => {} }) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleInputChange = (event: any) => {
+    const { value } = event.target;
+    setSearchQuery(value);
+    // onSearch プロパティが関数であることを確認してから呼び出す
+    if (typeof onSearch === "function") {
+      onSearch();
+    }
+  };
+
   return (
     <Search>
       <SearchIconWrapper>
@@ -42,6 +55,8 @@ export default function SearchBox() {
       <StyledInputBase
         placeholder="何をお探しですか"
         inputProps={{ "aria-label": "search" }}
+        value={searchQuery}
+        onChange={handleInputChange}
       />
     </Search>
   );

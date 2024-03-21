@@ -5,7 +5,7 @@ import TabPanel from "./components/TabPanel";
 export default function Home() {
   return (
     <>
-      <SearchBox />
+      {/* <SearchBox /> */}
       <TabPanel />
     </>
   );
