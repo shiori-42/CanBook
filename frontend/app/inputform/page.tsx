@@ -1,5 +1,5 @@
 import React from "react";
-import InputForm from "../components/InputForm";
+import InputForm from "../form/page";
 
 const ImputForm = () => {
   return <InputForm />;
