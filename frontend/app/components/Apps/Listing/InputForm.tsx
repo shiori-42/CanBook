@@ -15,7 +15,7 @@ type formDataType = {
   sell_type: number;
 };
 
-export const Listing: React.FC<Prop> = (props) => {
+export const InputForm: React.FC<Prop> = (props) => {
   const { onListingCompleted } = props;
   const initialState = {
     image_name: "",
@@ -153,6 +153,8 @@ export const Listing: React.FC<Prop> = (props) => {
     </div>
   );
 };
+
+export default InputForm;
 
 // const StyledTextField = styled(TextField)(({ theme }) => ({
 //   width: "100%",
