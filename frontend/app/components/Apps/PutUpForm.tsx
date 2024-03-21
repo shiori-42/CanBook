@@ -8,11 +8,6 @@ function App() {
   const [reload, setReload] = useState(true);
   return (
     <div>
-      <header className="Title">
-        <p>
-          <b>Simple Mercari</b>
-        </p>
-      </header>
       <div>
         <Listing onListingCompleted={() => setReload(true)} />
       </div>

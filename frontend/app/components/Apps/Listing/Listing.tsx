@@ -1,3 +1,4 @@
+import { Box, Button, MenuItem, TextField } from "@mui/material";
 import React, { useState } from "react";
 
 const server = process.env.REACT_APP_API_URL || "http://127.0.0.1:9000";
@@ -7,17 +8,21 @@ interface Prop {
 }
 
 type formDataType = {
-  name: string;
-  category: string;
-  image: string | File; //スマホは写真にしたい
+  image_name: string | File;
+  text_name: string;
+  class_name: string;
+  price: number;
+  sell_type: number;
 };
 
 export const Listing: React.FC<Prop> = (props) => {
   const { onListingCompleted } = props;
   const initialState = {
-    name: "",
-    category: "",
-    image: "",
+    image_name: "",
+    text_name: "",
+    class_name: "",
+    price: 0, //GPTが0をいれますと言ってたから入れた
+    sell_type: 0,
   };
   const [values, setValues] = useState<formDataType>(initialState);
 
@@ -36,9 +41,11 @@ export const Listing: React.FC<Prop> = (props) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData();
-    data.append("name", values.name);
-    data.append("category", values.category);
-    data.append("image", values.image);
+    data.append("image_name", values.image_name);
+    data.append("text_name", values.text_name);
+    data.append("class_name", values.class_name);
+    data.append("price", values.price.toString());
+    data.append("sell_type", values.sell_type.toString());
 
     fetch(server.concat("/items"), {
       //itemsのリンクで入力フォームが出るはず！！！
@@ -54,35 +61,104 @@ export const Listing: React.FC<Prop> = (props) => {
         console.error("POST error:", error);
       });
   };
+
+  const currencies = [
+    {
+      value: "rental",
+      label: "レンタル",
+    },
+    {
+      value: "sale",
+      label: "売り出し",
+    },
+  ];
+
   return (
     <div className="Listing">
       <form onSubmit={onSubmit}>
-        <div>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="name"
-            onChange={onValueChange}
-            required
-          />
-          <input
-            type="text"
-            name="category"
-            id="category"
-            placeholder="category"
-            onChange={onValueChange}
-          />
-          <input
+        <Box mt={5}>
+          <TextField
             type="file"
-            name="image"
-            id="image"
+            // sx={{ display: "none" }}
+            name="image_name"
+            id="image_name"
             onChange={onFileChange}
             required
+            fullWidth
+            // label="写真"
+            variant="outlined"
+            inputProps={{
+              multiple: true,
+            }}
+            // inputProps={{
+            //   multiple: true,
+            // }}
+            // variant="outlined"
           />
-          <button type="submit">List this item</button>
-        </div>
+          <TextField
+            type="text"
+            name="text_name"
+            id="text_name"
+            onChange={onValueChange}
+            required
+            fullWidth
+            label="教科書名"
+            sx={{ mb: 3, mt: 3 }}
+          />
+          <TextField
+            type="text"
+            name="class_name"
+            id="class_name"
+            onChange={onValueChange}
+            required
+            fullWidth
+            label="講義名"
+            sx={{ mb: 3 }}
+          />
+          <TextField
+            type="text"
+            name="price"
+            id="price"
+            onChange={onValueChange}
+            required
+            fullWidth
+            label="価格"
+            sx={{ mb: 3 }}
+          />
+          <TextField
+            select
+            type="text"
+            name="sell_type"
+            id="sell_type"
+            onChange={onValueChange}
+            required
+            fullWidth
+            label="出品タイプ"
+            helperText="選択してください"
+            sx={{ mb: 3 }}
+          >
+            {currencies.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Box textAlign="center">
+            <Button type="submit" variant="outlined">
+              List this item
+            </Button>
+          </Box>
+        </Box>
       </form>
     </div>
   );
 };
+
+// const StyledTextField = styled(TextField)(({ theme }) => ({
+//   width: "100%",
+//   height: 500,
+//   zIndex: 0,
+//   [theme.breakpoints.down("sm")]: {
+//     height: 400,
+//   },
+// }));
