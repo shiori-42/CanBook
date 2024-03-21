@@ -1,9 +1,9 @@
 import { useState } from "react";
+import InputForm from "./Form/InputForm";
 import ItemMyList from "./ItemList/ItemMyList";
-import { InputForm } from "./Listing/InputForm";
 
-function App() {
-  // reload ItemList after Listing complete
+function PutUpform() {
+  //form/page.tsxで記述
   const [reload, setReload] = useState(true);
   return (
     <div>
@@ -17,4 +17,4 @@ function App() {
   );
 }
 
-export default App;
+export default PutUpform;
