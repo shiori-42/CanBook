@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   item_handler.go                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
+/*   Updated: 2024/03/22 07:21:37 by shiori0123       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 package handler
 
 import (
 	"net/http"
 	"os"
+	"strconv"
 
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -11,7 +24,7 @@ import (
 )
 
 type ErrorResponse struct {
-    Message string `json:"message"`
+	Message string `json:"message"`
 }
 
 func RegisterItemRoutes(e *echo.Echo) {
@@ -38,39 +51,41 @@ func getAllItems(c echo.Context) error {
 }
 
 func getItemByID(c echo.Context) error {
-    itemID := c.Param("itemId")
-    item, err := service.GetItemByID(itemID)
-    if err != nil {
-        return c.JSON(http.StatusInternalServerError, ErrorResponse{Message: err.Error()})
-    }
-    return c.JSON(http.StatusOK, item)
+	itemIDStr := c.Param("itemId")
+	itemID, err := strconv.Atoi(itemIDStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ErrorResponse{Message: "invalid item id"})
+	}
+	item, err := service.GetItemByID(itemID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ErrorResponse{Message: err.Error()})
+	}
+	return c.JSON(http.StatusOK, item)
 }
 
 func createItem(c echo.Context) error {
-	item, err := service.CreateItem(c)
+	userID, ok := c.Get("user_id").(uint)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "invalid user id"})
+	}
+	item, err := service.CreateItem(c, userID)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
+		return c.JSON(http.StatusBadRequest, ErrorResponse{Message: err.Error()})
 	}
-
-	userID := c.Get("user_id").(uint)
-	item.UserID = userID
-
-	if err := repository.CreateItem(&item); err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
-	}
-
 	return c.JSON(http.StatusCreated, item)
 }
 
 func updateItem(c echo.Context) error {
-	item, err := service.UpdateItem(c)
+	itemIDStr := c.Param("itemId")
+	itemID, err := strconv.Atoi(itemIDStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ErrorResponse{Message: "invalid item id"})
+	}
+	userID := c.Get("user_id").(uint)
+	item, err := service.UpdateItem(c, itemID, userID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
-
-	userID := c.Get("user_id").(uint)
-	item.UserID = userID
-
 	return c.JSON(http.StatusOK, item)
 }
 
@@ -86,7 +101,7 @@ func deleteItem(c echo.Context) error {
 
 func searchItems(c echo.Context) error {
 	keyword := c.QueryParam("keyword")
-	items, err := service.SearchItems(keyword)
+	items, err := service.SearchItemsByKeyword(keyword)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}

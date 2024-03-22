@@ -1,2 +1,3 @@
-# Go environment file
-.env 
+.env
+.vscode
+.DS_Store
