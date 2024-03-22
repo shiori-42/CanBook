@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:37:43 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/21 17:54:29 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 15:52:03 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
-	"github.com/shiori-42/textbook_change_app/model"
-	"github.com/shiori-42/textbook_change_app/service"
+	"github.com/shiori-42/textbook_change_app/go/backend/model"
+	"github.com/shiori-42/textbook_change_app/go/backend/service"
 )
 
 func RegisterUserRoutes(e *echo.Echo) {

@@ -2,8 +2,8 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/shiori-42/textbook_change_app/db"
-	"github.com/shiori-42/textbook_change_app/model"
+	"github.com/shiori-42/textbook_change_app/go/backend/db"
+	"github.com/shiori-42/textbook_change_app/go/backend/model"
 )
 
 func GetUserByEmail(email string) (*model.User, error) {

@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 07:21:37 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 15:51:51 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ import (
 
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
-	"github.com/shiori-42/textbook_change_app/repository"
-	"github.com/shiori-42/textbook_change_app/service"
+	"github.com/shiori-42/textbook_change_app/go/backend/repository"
+	"github.com/shiori-42/textbook_change_app/go/backend/service"
 )
 
 type ErrorResponse struct {

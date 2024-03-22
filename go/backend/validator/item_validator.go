@@ -2,7 +2,7 @@ package validator
 
 import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"github.com/shiori-42/textbook_change_app/model"
+	"github.com/shiori-42/textbook_change_app/go/backend/model"
 )
 
 func ItemValidate(item model.Item) error {

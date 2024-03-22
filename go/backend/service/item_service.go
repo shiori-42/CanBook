@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 10:53:58 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 15:53:17 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@ package service
 import (
 	"fmt"
 	"github.com/labstack/echo/v4"
-	"github.com/shiori-42/textbook_change_app/model"
-	"github.com/shiori-42/textbook_change_app/repository"
-	"github.com/shiori-42/textbook_change_app/util"
-	"github.com/shiori-42/textbook_change_app/validator"
+	"github.com/shiori-42/textbook_change_app/go/backend/model"
+	"github.com/shiori-42/textbook_change_app/go/backend/repository"
+	"github.com/shiori-42/textbook_change_app/go/backend/util"
+	"github.com/shiori-42/textbook_change_app/go/backend/validator"
 	"strconv"
 )
 

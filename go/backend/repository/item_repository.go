@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 10:54:30 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 15:52:47 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"github.com/shiori-42/textbook_change_app/db"
-	"github.com/shiori-42/textbook_change_app/model"
+	"github.com/shiori-42/textbook_change_app/go/backend/db"
+	"github.com/shiori-42/textbook_change_app/go/backend/model"
 )
 
 func GetAllItems() (model.Items, error) {
