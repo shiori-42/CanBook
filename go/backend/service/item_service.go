@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 07:20:04 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 10:53:58 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,6 @@ func CreateItem(c echo.Context, userID uint) (model.Item, error) {
 	if err != nil {
 		return item, fmt.Errorf("invalid category_id: %v", err)
 	}
-	// categoryExist, err := repository.CheckCategoryIDExist(categoryID)
-	// if err != nil {
-	// 	return item, fmt.Errorf("failed to check category existence: %v", err)
-	// }
-	// if !categoryExist {
-	// 	return item, fmt.Errorf("category_id %d does not exist", categoryID)
-	// }
 	image, err := c.FormFile("image")
 	if err != nil {
 		return item, fmt.Errorf("failed to get image file: %v", err)
@@ -85,13 +78,6 @@ func UpdateItem(c echo.Context, itemID int, userID uint) (model.Item, error) {
 	if err != nil {
 		return item, fmt.Errorf("invalid category_id: %v", err)
 	}
-	// categoryExist, err := repository.CheckCategoryIDExist(categoryID)
-	// if err != nil {
-	// 	return item, fmt.Errorf("failed to check category existence: %v", err)
-	// }
-	// if !categoryExist {
-	// 	return item, fmt.Errorf("category_id %d does not exist", categoryID)
-	// }
 	image, err := c.FormFile("image")
 	if err != nil {
 		return item, fmt.Errorf("failed to get image file: %v", err)
