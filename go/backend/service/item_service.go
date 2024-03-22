@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 15:53:17 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 18:51:28 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ func CreateItem(c echo.Context, userID uint) (model.Item, error) {
 		return item, fmt.Errorf("failed to open image file: %v", err)
 	}
 	defer src.Close()
-	ImageName, err := util.SaveImage(src)
+	ImageName, err := util.SaveImage(src,image)
 	if err != nil {
 		return item, fmt.Errorf("failed to save image: %v", err)
 	}
@@ -87,7 +87,7 @@ func UpdateItem(c echo.Context, itemID int, userID uint) (model.Item, error) {
 		return item, fmt.Errorf("failed to open image file: %v", err)
 	}
 	defer src.Close()
-	ImageName, err := util.SaveImage(src)
+	ImageName, err := util.SaveImage(src,image)
 	if err != nil {
 		return item, fmt.Errorf("failed to save image: %v", err)
 	}

@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:02:51 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 15:52:30 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 19:07:56 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ import (
 type Item struct {
 	ID         int       `json:"id"`
 	Name       string    `json:"name"`
+	Price      int       `json:"price"`
+	SellType   string    `json:"sell"` 
 	CategoryID int       `json:"category_id"`
 	Category   string    `json:"category"`
 	ImageName  string    `json:"imagename"`
@@ -47,9 +49,11 @@ func AutoMigrateItem() error {
         name TEXT NOT NULL,
         category_id INT NOT NULL,
         image_name TEXT NOT NULL,
+        price INT NOT NULL,
+        sell_type TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        user_id INT,
+        user_id INT NOT NULL,
         FOREIGN KEY (category_id) REFERENCES categories(id),
         FOREIGN KEY (user_id) REFERENCES users(id)
     )
