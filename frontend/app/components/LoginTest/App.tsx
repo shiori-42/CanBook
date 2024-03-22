@@ -2,8 +2,8 @@
 // import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import axios from "axios";
 // import { CsrfToken } from "./types";
-// import { Auth } from "./component/Auth";
-// import { Todo } from "./component/Todo";
+// import { Auth } from "../Auth";
+// import { Todo } from "../Todo";
 
 // function App() {
 //   useEffect(() => {
