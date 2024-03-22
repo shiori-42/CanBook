@@ -1,6 +1,5 @@
 "use client";
 import { AccountCircle } from "@mui/icons-material";
-import MenuIcon from "@mui/icons-material/Menu";
 import {
   Box,
   AppBar,
@@ -10,6 +9,7 @@ import {
   Button,
   Menu,
   MenuItem,
+  Link,
 } from "@mui/material";
 import React from "react";
 
@@ -44,8 +44,12 @@ export default function MenuAppBar() {
             BookCamp
           </Typography>
 
-          <Button color="inherit" href="">
-            ログイン
+          <Button color="inherit" href="/login" sx={{ mr: { sm: 3 } }}>
+            <Typography>ログイン</Typography>
+          </Button>
+
+          <Button color="inherit" href="/" sx={{ mr: { sm: 3 } }}>
+            <Typography>ホーム</Typography>
           </Button>
 
           {auth && (
@@ -75,10 +79,27 @@ export default function MenuAppBar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose} href="/profile">
-                  Profile
+                <MenuItem role="none" onClick={handleClose}>
+                  <Link
+                    role="menuitem"
+                    href="/profile"
+                    sx={{ textDecoration: "none" }}
+                    width={"100%"}
+                  >
+                    <Typography color={""}>Profile</Typography>
+                  </Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
+                <MenuItem role="none" onClick={handleClose}>
+                  <Link
+                    role="menuitem"
+                    href="/my-account"
+                    sx={{ textDecoration: "none" }}
+                    width={"100%"}
+                  >
+                    <Typography color={""}>My account</Typography>
+                  </Link>
+                </MenuItem>
               </Menu>
             </div>
           )}
