@@ -12,13 +12,28 @@ const ItemDetail = async ({ params }: { params: { id: string } }) => {
     return <NotFound />;
   }
 
-  const backgroundImageStyle = {
-    backgroundImage: `url(${item.imagepath})`,
+  // const backgroundImageStyle = {
+  //   backgroundImage: `url(${item.imagepath})`,
+  //   backgroundSize: "cover",
+  //   backgroundPosition: "center",
+  //   width: "100%",
+  //   height: 500,
+  // };
+
+  const StyledBox = styled(Box)(({ theme }) => ({
+    position: "relative",
+    overflow: "hidden",
     backgroundSize: "cover",
     backgroundPosition: "center",
+    backgroundImage: `url(${item.imagepath})`,
+    // textAlign: "center",
     width: "100%",
     height: 500,
-  };
+    zIndex: 0,
+    [theme.breakpoints.down("sm")]: {
+      height: 400,
+    },
+  }));
 
   return (
     <>
@@ -28,8 +43,9 @@ const ItemDetail = async ({ params }: { params: { id: string } }) => {
         borderBottom={1}
         borderColor={"divider"}
         pb={3}
-        sx={backgroundImageStyle}
+        // sx={backgroundImageStyle}
       >
+        <StyledBox />
         <Typography fontSize={20} fontWeight={"bold"}>
           {item.name}
         </Typography>
@@ -43,20 +59,5 @@ const ItemDetail = async ({ params }: { params: { id: string } }) => {
     </>
   );
 };
-
-// const StyledBox = styled(Box)(({ theme }) => ({
-//   position: "relative",
-//   overflow: "hidden",
-//   backgroundSize: "cover",
-//   backgroundPosition: "center",
-//   backgroundImage: `url("/text-o-chem.jpg")`,
-//   // textAlign: "center",
-//   width: "100%",
-//   height: 500,
-//   zIndex: 0,
-//   [theme.breakpoints.down("sm")]: {
-//     height: 400,
-//   },
-// }));
 
 export default ItemDetail;
