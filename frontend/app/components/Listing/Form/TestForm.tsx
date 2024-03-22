@@ -1,7 +1,7 @@
 // import { Box, Button, MenuItem, TextField } from "@mui/material";
 // import React, { useState } from "react";
 
-// const server = process.env.REACT_APP_API_URL || "http://127.0.0.1:9000";
+// const server = process.env.NEXT_PUBLIC_API_URLL || "http://127.0.0.1:9000";
 
 // interface Prop {
 //   onListingCompleted?: () => void;

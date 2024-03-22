@@ -15,7 +15,7 @@ interface Item {
   sell_type: number;
 }
 
-const server = process.env.REACT_APP_API_URL || "http://127.0.0.1:9000";
+const server = process.env.NEXT_PUBLIC_API_URL|| "http://127.0.0.1:9000";
 const placeholderImage = process.env.PUBLIC_URL + "/logo192.png";
 
 interface Prop {

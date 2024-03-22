@@ -10,7 +10,7 @@ export const useError = () => {
   const resetEditedTask = useStore((state) => state.resetEditedTask);
   //   const getCsrfToken = async () => {
   //     const { data } = await axios.get<CsrfToken>(
-  //       `${process.env.REACT_APP_API_URL}/csrf`
+  //       `${process.env.NEXT_PUBLIC_API_URLL}/csrf`
   //     );
   //     axios.defaults.headers.common["X-CSRF-TOKEN"] = data.csrf_token;
   //   };

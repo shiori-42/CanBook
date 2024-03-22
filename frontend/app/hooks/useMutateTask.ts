@@ -11,7 +11,7 @@
 
 //   const createTaskMutation = useMutation(
 //     (task: Omit<Task, "id" | "created_at" | "updated_at">) =>
-//       axios.post<Task>(`${process.env.REACT_APP_API_URL}/tasks`, task),
+//       axios.post<Task>(`${process.env.NEXT_PUBLIC_API_URLL}/tasks`, task),
 //     {
 //       onSuccess: (res) => {
 //         const previousTasks = queryClient.getQueryData<Task[]>(["tasks"]);
@@ -31,7 +31,7 @@
 //   );
 //   const updateTaskMutation = useMutation(
 //     (task: Omit<Task, "created_at" | "updated_at">) =>
-//       axios.put<Task>(`${process.env.REACT_APP_API_URL}/tasks/${task.id}`, {
+//       axios.put<Task>(`${process.env.NEXT_PUBLIC_API_URLL}/tasks/${task.id}`, {
 //         title: task.title,
 //       }),
 //     {
@@ -58,7 +58,7 @@
 //   );
 //   const deleteTaskMutation = useMutation(
 //     (id: number) =>
-//       axios.delete(`${process.env.REACT_APP_API_URL}/tasks/${id}`),
+//       axios.delete(`${process.env.NEXT_PUBLIC_API_URLL}/tasks/${id}`),
 //     {
 //       onSuccess: (_, variables) => {
 //         const previousTasks = queryClient.getQueryData<Task[]>(["tasks"]);

@@ -13,20 +13,20 @@ export const Auth = () => {
     e.preventDefault();
     if (isLogin) {
       loginMutation.mutate({
-        name: "",
+        name: name,
         email: email,
         password: pw,
       });
     } else {
       await registerMutation
         .mutateAsync({
-          name: "",
+          name: name,
           email: email,
           password: pw,
         })
         .then(() =>
           loginMutation.mutate({
-            name: "",
+            name: name,
             email: email,
             password: pw,
           })
