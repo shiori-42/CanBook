@@ -3,6 +3,7 @@ import { CheckBadgeIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useMutateAuth } from "../hooks/useMutateAuth";
 
 export const Auth = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [isLogin, setIsLogin] = useState(true);
@@ -12,17 +13,20 @@ export const Auth = () => {
     e.preventDefault();
     if (isLogin) {
       loginMutation.mutate({
+        name: "",
         email: email,
         password: pw,
       });
     } else {
       await registerMutation
         .mutateAsync({
+          name: "",
           email: email,
           password: pw,
         })
         .then(() =>
           loginMutation.mutate({
+            name: "",
             email: email,
             password: pw,
           })
@@ -42,12 +46,24 @@ export const Auth = () => {
       <h2 className="my-6">{isLogin ? "Login" : "Create a new account"}</h2>
       <form onSubmit={submitAuthHandler}>
         <div>
+          {/* //ユーザーがnameを入力するためのところ */}
+          <input
+            className="mb-3 px-3 text-sm py-2 border border-gray-300"
+            name="name"
+            type="name"
+            autoFocus
+            placeholder="name"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+          />
+        </div>
+        <div>
           {/* //ユーザーがe-mailを入力するためのところ */}
           <input
             className="mb-3 px-3 text-sm py-2 border border-gray-300"
             name="email"
             type="email"
-            autoFocus
+            // autoFocus
             placeholder="Email address"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
