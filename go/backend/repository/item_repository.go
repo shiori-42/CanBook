@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 07:47:53 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 10:54:30 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ func GetItemByID(itemID int) (model.Item, error) {
         SELECT items.id, items.name, items.category_id, categories.name AS category_name, items.image_name, items.created_at, items.updated_at, items.user_id
         FROM items
         JOIN categories ON items.category_id = categories.id
-        WHERE items.id = ?
+        WHERE items.id = $1
     `
 
 	err := db.DB.QueryRow(query, itemID).Scan(
@@ -85,28 +85,22 @@ func GetItemByID(itemID int) (model.Item, error) {
 func CreateItem(item *model.Item) error {
 	query := `
         INSERT INTO items (name, category_id, image_name, user_id)
-        VALUES (?, ?, ?, ?)
+        VALUES ($1, $2, $3, $4) RETURNING id
     `
-	result, err := db.DB.Exec(query, item.Name, item.CategoryID, item.ImageName, item.UserID)
+	err := db.DB.QueryRow(query, item.Name, item.CategoryID, item.ImageName, item.UserID).Scan(&item.ID)
 	if err != nil {
 		return err
 	}
-
-	insertedID, err := result.LastInsertId()
-	if err != nil {
-		return err
-	}
-
-	item.ID = int(insertedID)
 
 	return nil
 }
 
 func UpdateItem(item *model.Item, itemID int, userID uint) error {
 	query := `
-		UPDATE items
-		SET name = ?, category_id = ?, image_name = ?
-		WHERE id = ? AND user_id = ?`
+        UPDATE items
+        SET name = $1, category_id = $2, image_name = $3
+        WHERE id = $4 AND user_id = $5
+    `
 	_, err := db.DB.Exec(query, item.Name, item.CategoryID, item.ImageName, itemID, userID)
 	if err != nil {
 		return err
@@ -115,11 +109,12 @@ func UpdateItem(item *model.Item, itemID int, userID uint) error {
 }
 
 func DeleteItem(itemID string, userID uint) error {
-	query := `DELETE FROM items WHERE id = ? AND user_id = ?`
+	query := `DELETE FROM items WHERE id = $1 AND user_id = $2`
 	result, err := db.DB.Exec(query, itemID, userID)
 	if err != nil {
 		return err
 	}
+
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		return err
@@ -133,16 +128,16 @@ func DeleteItem(itemID string, userID uint) error {
 func SearchItemsByKeyword(keyword string) (model.Items, error) {
 	var items model.Items
 	query := `
-		SELECT
-			items.id,
-			items.name,
-			items.category_id,
-			categories.name AS category,
-			items.image_name
-		FROM items
-		JOIN categories ON items.category_id = categories.id
-		WHERE items.name LIKE ?
-	`
+        SELECT
+            items.id,
+            items.name,
+            items.category_id,
+            categories.name AS category,
+            items.image_name
+        FROM items
+        JOIN categories ON items.category_id = categories.id
+        WHERE items.name LIKE $1
+    `
 	rows, err := db.DB.Query(query, "%"+keyword+"%")
 	if err != nil {
 		return items, err
@@ -160,13 +155,3 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 
 	return items, nil
 }
-
-// func CheckCategoryIDExist(categoryID int) (bool, error) {
-// 	var exists bool
-// 	query := "SELECT EXISTS(SELECT 1 FROM categories WHERE id = ?)"
-// 	err := db.DB.QueryRow(query, categoryID).Scan(&exists)
-// 	if err != nil {
-// 		return false, err
-// 	}
-// 	return exists, nil
-// }
