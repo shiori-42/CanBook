@@ -7,7 +7,6 @@ import { items } from "../data/data";
 
 const ItemDetail = async ({ params }: { params: { id: string } }) => {
   const item = items.find((itemdata) => itemdata.id === parseInt(params.id));
-  // const member = await getUserData(params.id);
 
   if (!item) {
     return <NotFound />;

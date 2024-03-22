@@ -2,7 +2,13 @@ import React from "react";
 import ItemDetail from "../components/ItemDetail";
 
 const page = () => {
-  return <ItemDetail />;
+  return (
+    <ItemDetail
+      params={{
+        id: "",
+      }}
+    />
+  );
 };
 
 export default page;
