@@ -14,7 +14,7 @@ import { Auth } from "../components/Auth";
 import { Todo } from "../components/Todo";
 // import { CsrfToken } from "../types";
 
-function App() {
+function AppLogin() {
   useEffect(() => {
     // axios.defaults.withCredentials = true;
     // const getCsrfToken = async () => {
@@ -36,4 +36,4 @@ function App() {
   );
 }
 
-export default App;
+export default AppLogin;

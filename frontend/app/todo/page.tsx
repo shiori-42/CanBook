@@ -2,9 +2,9 @@
 import { useEffect } from "react";
 import { Todo } from "../components/Todo";
 
-function App() {
+function AppTodo() {
   useEffect(() => {}, []);
   return <Todo />;
 }
 
-export default App;
+export default AppTodo;
