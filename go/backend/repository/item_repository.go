@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 15:52:47 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 18:50:54 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,10 @@ func GetItemByID(itemID int) (model.Item, error) {
 
 func CreateItem(item *model.Item) error {
 	query := `
-        INSERT INTO items (name, category_id, image_name, user_id)
-        VALUES ($1, $2, $3, $4) RETURNING id
+        INSERT INTO items (name, category_id, image_name, price, sell_type, user_id)
+        VALUES ($1, $2, $3, $4, $5, $6) RETURNING id
     `
-	err := db.DB.QueryRow(query, item.Name, item.CategoryID, item.ImageName, item.UserID).Scan(&item.ID)
+	err := db.DB.QueryRow(query, item.Name, item.CategoryID, item.ImageName, item.Price, item.SellType, item.UserID).Scan(&item.ID)
 	if err != nil {
 		return err
 	}
@@ -98,10 +98,10 @@ func CreateItem(item *model.Item) error {
 func UpdateItem(item *model.Item, itemID int, userID uint) error {
 	query := `
         UPDATE items
-        SET name = $1, category_id = $2, image_name = $3
-        WHERE id = $4 AND user_id = $5
+        SET name = $1, category_id = $2, image_name = $3, price = $4, sell_type = $5
+        WHERE id = $6 AND user_id = $7
     `
-	_, err := db.DB.Exec(query, item.Name, item.CategoryID, item.ImageName, itemID, userID)
+	_, err := db.DB.Exec(query, item.Name, item.CategoryID, item.ImageName, item.Price, item.SellType, itemID, userID)
 	if err != nil {
 		return err
 	}
