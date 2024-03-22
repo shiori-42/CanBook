@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:02:51 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 11:40:14 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 15:52:30 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ package model
 import (
 	"time"
 
-	"github.com/shiori-42/textbook_change_app/db"
+	"github.com/shiori-42/textbook_change_app/go/backend/db"
 )
 
 type Item struct {

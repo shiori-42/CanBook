@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 08:18:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 11:12:36 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 15:54:33 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"github.com/shiori-42/textbook_change_app/api"
-	"github.com/shiori-42/textbook_change_app/db"
-	"github.com/shiori-42/textbook_change_app/model"
+	"github.com/shiori-42/textbook_change_app/go/backend/api"
+	"github.com/shiori-42/textbook_change_app/go/backend/db"
+	"github.com/shiori-42/textbook_change_app/go/backend/model"
 )
 
 func main() {
