@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:44:01 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/20 16:44:03 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/21 15:29:19 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ func SaveImage(src io.Reader) (string, error) {
 	}
 
 	hashedFileName := hex.EncodeToString(hasher.Sum(nil)) + ".jpg"
-	if err := os.Rename(tempFile.Name(), filepath.Join("images", hashedFileName)); err != nil {
+	hashedFilePath := filepath.Join("images", hashedFileName)
+	if err := os.Rename(tempFile.Name(), hashedFilePath); err != nil {
 		return "", err
 	}
-
 	return hashedFileName, nil
 }

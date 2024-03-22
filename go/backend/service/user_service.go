@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 18:49:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/20 21:17:27 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/21 13:24:44 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,35 +30,35 @@ func SignUpUser(user model.User) (model.UserResponse, error) {
 	if err != nil {
 		return userRes, err
 	}
-	user.Password = string(hash)
-
-	if err := repository.CreateUser(&user); err != nil {
+	newUser := model.User{Name: user.Name, Email: user.Email, Password: string(hash)}
+	if err := repository.CreateUser(&newUser); err != nil {
 		return userRes, err
 	}
 	resUser := model.UserResponse{
-		ID:    user.ID,
-		Email: user.Email,
+		ID:    newUser.ID,
+		Name:  newUser.Name,
+		Email: newUser.Email,
 	}
 	return resUser, nil
 }
 
 func LoginUser(user model.User) (model.User, error) {
-    if err := validator.UserValidate(user); err != nil {
-        return model.User{}, err
-    }
+	if err := validator.UserValidate(user); err != nil {
+		return model.User{}, err
+	}
 
-    storedUser, err := repository.GetUserByEmail(user.Email)
-    if err != nil {
-        return model.User{}, err
-    }
-    if storedUser == nil {
-        return model.User{}, fmt.Errorf("user not found")
-    }
+	storedUser, err := repository.GetUserByEmail(user.Email)
+	if err != nil {
+		return model.User{}, err
+	}
+	if storedUser == nil {
+		return model.User{}, fmt.Errorf("user not found")
+	}
 
-    err = bcrypt.CompareHashAndPassword([]byte(storedUser.Password), []byte(user.Password))
-    if err != nil {
-        return model.User{}, err
-    }
+	err = bcrypt.CompareHashAndPassword([]byte(storedUser.Password), []byte(user.Password))
+	if err != nil {
+		return model.User{}, err
+	}
 
-    return *storedUser, nil
+	return *storedUser, nil
 }

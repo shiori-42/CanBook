@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/20 21:58:35 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/22 07:20:04 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,41 +19,57 @@ import (
 	"github.com/shiori-42/textbook_change_app/repository"
 	"github.com/shiori-42/textbook_change_app/util"
 	"github.com/shiori-42/textbook_change_app/validator"
+	"strconv"
 )
 
-func CreateItem(c echo.Context) (model.Item, error) {
+func CreateItem(c echo.Context, userID uint) (model.Item, error) {
 	var item model.Item
-	if err := c.Bind(&item); err != nil {
-		return item, err
-	}
-	if err := validator.ItemValidate(item); err != nil {	
-		return item, err	
-		}	
-		
-	categoryExist, err := repository.CheckCategoryIDExist(item.CategoryID)
+	name := c.FormValue("name")
+	categoryIDStr := c.FormValue("category_id")
+	categoryID, err := strconv.Atoi(categoryIDStr)
 	if err != nil {
-		return item, err
+		return item, fmt.Errorf("invalid category_id: %v", err)
 	}
-	if !categoryExist {
-		return item, fmt.Errorf("category_id %d does not exist", item.CategoryID)
-	}
-	file, err := c.FormFile("image")
+	// categoryExist, err := repository.CheckCategoryIDExist(categoryID)
+	// if err != nil {
+	// 	return item, fmt.Errorf("failed to check category existence: %v", err)
+	// }
+	// if !categoryExist {
+	// 	return item, fmt.Errorf("category_id %d does not exist", categoryID)
+	// }
+	image, err := c.FormFile("image")
 	if err != nil {
-		return item, err
+		return item, fmt.Errorf("failed to get image file: %v", err)
 	}
-	src, err := file.Open()
+	src, err := image.Open()
 	if err != nil {
-		return item, err
+		return item, fmt.Errorf("failed to open image file: %v", err)
 	}
 	defer src.Close()
-	item.ImageName, err = util.SaveImage(src)
+	ImageName, err := util.SaveImage(src)
 	if err != nil {
-		return item, err
+		return item, fmt.Errorf("failed to save image: %v", err)
 	}
-	return item, nil
+	item = model.Item{
+		Name:       name,
+		CategoryID: categoryID,
+		ImageName:  ImageName,
+		UserID:     userID,
+	}
+	if err := validator.ItemValidate(item); err != nil {
+		return item, fmt.Errorf("validation failed: %v", err)
+	}
+	if err := repository.CreateItem(&item); err != nil {
+		return item, fmt.Errorf("failed to create item in database: %v", err)
+	}
+	newItem, err := repository.GetItemByID(item.ID)
+	if err != nil {
+		return item, fmt.Errorf("failed to get updated item: %v", err)
+	}
+	return newItem, nil
 }
 
-func GetItemByID(itemID string) (model.Item, error) {
+func GetItemByID(itemID int) (model.Item, error) {
 	item, err := repository.GetItemByID(itemID)
 	if err != nil {
 		return item, err
@@ -61,51 +77,50 @@ func GetItemByID(itemID string) (model.Item, error) {
 	return item, nil
 }
 
-func UpdateItem(c echo.Context) (model.Item, error) {
-	itemID:=c.Param("itemId")
+func UpdateItem(c echo.Context, itemID int, userID uint) (model.Item, error) {
 	var item model.Item
-	if err := c.Bind(&item); err != nil {
-		return item, err
-	}
-	if err := validator.ItemValidate(item); err != nil {	
-		return item, err	
-		}
-	_, err := repository.GetItemByID(itemID)
+	name := c.FormValue("name")
+	categoryIDStr := c.FormValue("category_id")
+	categoryID, err := strconv.Atoi(categoryIDStr)
 	if err != nil {
-		return item, err
+		return item, fmt.Errorf("invalid category_id: %v", err)
 	}
-	if item.CategoryID != 0 {
-		categoryExist, err := repository.CheckCategoryIDExist(item.CategoryID)
-		if err != nil {
-			return item, err
-		}
-		if !categoryExist {
-			return item, fmt.Errorf("category_id %d does not exist", item.CategoryID)
-		}
+	// categoryExist, err := repository.CheckCategoryIDExist(categoryID)
+	// if err != nil {
+	// 	return item, fmt.Errorf("failed to check category existence: %v", err)
+	// }
+	// if !categoryExist {
+	// 	return item, fmt.Errorf("category_id %d does not exist", categoryID)
+	// }
+	image, err := c.FormFile("image")
+	if err != nil {
+		return item, fmt.Errorf("failed to get image file: %v", err)
 	}
-
-	file, err := c.FormFile("image")
-	if err == nil {
-		src, err := file.Open()
-		if err != nil {
-			return item, err
-		}
-		defer src.Close()
-
-		item.ImageName, err = util.SaveImage(src)
-		if err != nil {
-			return item, err
-		}
+	src, err := image.Open()
+	if err != nil {
+		return item, fmt.Errorf("failed to open image file: %v", err)
 	}
-
-	if err := repository.UpdateItem(item); err != nil {
-		return item, err
+	defer src.Close()
+	ImageName, err := util.SaveImage(src)
+	if err != nil {
+		return item, fmt.Errorf("failed to save image: %v", err)
+	}
+	item = model.Item{
+		Name:       name,
+		CategoryID: categoryID,
+		ImageName:  ImageName,
+	}
+	if err := validator.ItemValidate(item); err != nil {
+		return item, fmt.Errorf("validation failed: %v", err)
+	}
+	if err := repository.UpdateItem(&item, itemID, userID); err != nil {
+		return item, fmt.Errorf("failed to update item in database: %v", err)
 	}
 	updatedItem, err := repository.GetItemByID(itemID)
-    if err != nil {
-        return item, err
-    }
-    return updatedItem, nil
+	if err != nil {
+		return item, fmt.Errorf("failed to get updated item: %v", err)
+	}
+	return updatedItem, nil
 }
 
 func DeleteItem(itemID string, userID uint) error {
@@ -115,7 +130,7 @@ func DeleteItem(itemID string, userID uint) error {
 	return nil
 }
 
-func SearchItems(keyword string) (model.Items, error) {
+func SearchItemsByKeyword(keyword string) (model.Items, error) {
 	items, err := repository.SearchItemsByKeyword(keyword)
 	if err != nil {
 		return items, err
