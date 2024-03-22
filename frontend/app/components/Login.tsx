@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { teal } from "@mui/material/colors";
+
 export const Login = () => {
   return (
     <Paper
@@ -36,13 +37,14 @@ export const Login = () => {
           Sign In
         </Typography>
       </Grid>
-      <TextField label="Username" variant="standard" fullWidth required />
+      <TextField label="Username" variant="outlined" fullWidth required />
       <TextField
         type="password"
         label="Password"
-        variant="standard"
+        variant="outlined"
         fullWidth
         required
+        sx={{ mt: 2 }}
       />
       {/* ラベルとチェックボックス */}
       {/* <FormControlLabel
