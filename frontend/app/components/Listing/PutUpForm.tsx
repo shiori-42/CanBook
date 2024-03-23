@@ -6,14 +6,9 @@ function PutUpform() {
   //form/page.tsxで記述
   const [reload, setReload] = useState(true);
   return (
-    <div>
-      <div>
-        <InputForm onListingCompleted={() => setReload(true)} />
-      </div>
-      <div>
-        <ItemMyList reload={reload} onLoadCompleted={() => setReload(false)} />
-      </div>
-    </div>
+    <InputForm onListingCompleted={() => setReload(true)} />
+
+    // {/* <ItemMyList reload={reload} onLoadCompleted={() => setReload(false)} /> */}
   );
 }
 

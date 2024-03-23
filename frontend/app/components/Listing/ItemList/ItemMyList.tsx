@@ -15,7 +15,7 @@ interface Item {
   sell_type: number;
 }
 
-const server = process.env.NEXT_PUBLIC_API_URL|| "http://127.0.0.1:9000";
+const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:9000";
 const placeholderImage = process.env.PUBLIC_URL + "/logo192.png";
 
 interface Prop {
@@ -52,10 +52,12 @@ export const ItemMyList: React.FC<Prop> = (props) => {
     }
   }, [reload]);
 
+  console.log(items);
+
   return (
     <Grid container spacing={1} py={2}>
       {items.map((item, index) => (
-        <Grid key={index} item xs={4}>
+        <Grid item xs={4}>
           <Link href={"/ItemDetail"} style={{ textDecoration: "none" }}>
             <Card
               sx={{
