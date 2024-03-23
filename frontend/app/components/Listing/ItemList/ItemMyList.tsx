@@ -1,10 +1,10 @@
-import * as React from "react";
+// ItemMyList.tsx
+
+'use client';
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Typography } from "@mui/material";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-
-// const ItemMyList = () => {
 
 interface Item {
   id: number;
@@ -15,8 +15,7 @@ interface Item {
   sell_type: number;
 }
 
-const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:9000";
-const placeholderImage = process.env.PUBLIC_URL + "/logo192.png";
+const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
 
 interface Prop {
   reload?: boolean;
@@ -26,24 +25,31 @@ interface Prop {
 export const ItemMyList: React.FC<Prop> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [items, setItems] = useState<Item[]>([]);
+
   const fetchItems = () => {
-    fetch(server.concat("/items"), {
+    fetch(`${server}/items`, { // Template literalsを使用
       method: "GET",
-      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("GET success:", data);
-        setItems(data.items);
-        onLoadCompleted && onLoadCompleted();
-      })
-      .catch((error) => {
-        console.error("GET error:", error);
-      });
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // ここで取得したデータがItem[]型であると仮定
+      setItems(data); // data.itemsからdataへ変更
+      if (onLoadCompleted) {
+        onLoadCompleted();
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching data: ", error);
+    });
   };
 
   useEffect(() => {
@@ -52,13 +58,11 @@ export const ItemMyList: React.FC<Prop> = (props) => {
     }
   }, [reload]);
 
-  console.log(items);
-
   return (
     <Grid container spacing={1} py={2}>
       {items.map((item, index) => (
-        <Grid item xs={4}>
-          <Link href={"/ItemDetail"} style={{ textDecoration: "none" }}>
+        <Grid key={index} item xs={4}>
+          <Link href={`/ItemDetail/${item.id}`} style={{ textDecoration: "none" }}> {/* リンクの修正 */}
             <Card
               sx={{
                 height: { xs: 200, sm: 270 },
@@ -72,10 +76,9 @@ export const ItemMyList: React.FC<Prop> = (props) => {
             >
               <Box bgcolor={"#ededed"}>
                 <CardMedia
-                  // sx={{ objectFit: "contain" }}
                   component="img"
                   sx={{ height: { xs: 110, sm: 180 } }}
-                  image={item.image_name}
+                  image={item.image_name || "/logo192.png"} // placeholderImageを削除し、デフォルト画像パスを直接記述
                 />
               </Box>
               <Typography fontSize={13} height={40}>

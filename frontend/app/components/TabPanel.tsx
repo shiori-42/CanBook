@@ -1,3 +1,4 @@
+'use client';
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import { Box, Tabs, Tab } from "@mui/material";
