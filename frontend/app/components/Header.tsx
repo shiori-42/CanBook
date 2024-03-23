@@ -35,21 +35,21 @@ export default function MenuAppBar() {
       <AppBar color="default" position="static">
         <Toolbar>
           <Typography
-            variant="h6"
+            fontSize={20}
             component="div"
             fontFamily=""
             letterSpacing={2}
             sx={{ flexGrow: 1 }}
           >
-            BookCamp
+            CanBook
           </Typography>
 
-          <Button color="inherit" href="/login" sx={{ mr: { sm: 3 } }}>
-            <Typography>ログイン</Typography>
+          <Button color="inherit" href="/login" sx={{ mr: { sm: 2 } }}>
+            <Typography fontSize={13}>ログイン</Typography>
           </Button>
 
-          <Button color="inherit" href="/" sx={{ mr: { sm: 3 } }}>
-            <Typography>ホーム</Typography>
+          <Button color="inherit" href="/" sx={{ mr: { sm: 2 } }}>
+            <Typography fontSize={13}>ホーム</Typography>
           </Button>
 
           {auth && (
