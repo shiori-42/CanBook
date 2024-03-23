@@ -64,10 +64,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
     <Grid container spacing={1.2} py={2}>
       {Items.map((item, index) => (
         <Grid key={index} item xs={4} pb={3}>
-          <Link
-            href={`/ItemDetail/${item.id}`}
-            style={{ textDecoration: "none" }}
-          >
+          <Link href={`/item/${item.id}`} style={{ textDecoration: "none" }}>
             {" "}
             {/* リンクの修正 */}
             <Card
