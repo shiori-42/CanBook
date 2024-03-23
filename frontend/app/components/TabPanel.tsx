@@ -2,7 +2,7 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import { Box, Tabs, Tab } from "@mui/material";
 import ItemKeep from "./ItemKeep";
-import ItemAll from "./ItemAll";
+// import ItemAll from "./ItemAll";
 import ItemMyList from "./Listing/ItemList/ItemMyList";
 
 interface TabPanelProps {
@@ -76,7 +76,8 @@ export default function BasicTabs() {
         <Typography fontSize={15} fontWeight={"bold"}>
           キャンパス内の商品
         </Typography>
-        <ItemAll />
+        <ItemMyList />
+        {/* <ItemAll /> */}
       </CustomTabPanel>
 
       <CustomTabPanel value={value} index={1}>

@@ -11,13 +11,13 @@ export const useMutateAuth = () => {
   const resetEditedTask = useStore((state) => state.resetEditedTask);
   const { switchErrorHandling } = useError();
   const loginMutation = useMutation(
-    async (user: Credential) =>{
-      console.log(process.env.NEXT_PUBLIC_API_URL)
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, user) //ここが怪しい「/login」が正しいのか？バックエンド側で/loginではないものを書いてほしいかも
+    async (user: Credential) => {
+      console.log(process.env.NEXT_PUBLIC_API_URL);
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, user); //ここが怪しい「/login」が正しいのか？バックエンド側で/loginではないものを書いてほしいかも
     },
     {
       onSuccess: () => {
-        router.push("/todo");
+        router.push("/home");
       },
       onError: (err: any) => {
         if (err.response.data.message) {
