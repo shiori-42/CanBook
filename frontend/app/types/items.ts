@@ -1,8 +1,8 @@
 export type item = {
   id: number;
-  name: string;
+  text_name: string;
   price: string;
-  sell: string;
-  imagepath: string;
+  sell_type: string;
+  image_name: string;
   //学部入れる？？？？？？？？？？
 };
