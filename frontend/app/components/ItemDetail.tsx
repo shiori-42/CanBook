@@ -3,10 +3,9 @@ import { Box, Typography, styled } from "@mui/material";
 import React, { Fragment } from "react";
 import ItemInfo from "./ItemInfo";
 import NotFound from "../not-found";
-import { items } from "../data/data";
-
+import { Items } from "../data/data";
 const ItemDetail = async ({ params }: { params: { id: string } }) => {
-  const item = items.find((itemdata) => itemdata.id === parseInt(params.id));
+  const item = Items.find((itemdata) => itemdata.id === parseInt(params.id));
 
   if (!item) {
     return <NotFound />;
@@ -25,7 +24,7 @@ const ItemDetail = async ({ params }: { params: { id: string } }) => {
     overflow: "hidden",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    backgroundImage: `url(${item.imagepath})`,
+    backgroundImage: `url(${item.image_name})`,
     // textAlign: "center",
     width: "100%",
     height: 500,
@@ -47,10 +46,10 @@ const ItemDetail = async ({ params }: { params: { id: string } }) => {
       >
         <StyledBox />
         <Typography fontSize={20} fontWeight={"bold"}>
-          {item.name}
+          {item.text_name}
         </Typography>
         <Typography fontSize={20}>￥{item.price}</Typography>
-        <Typography fontSize={12}>{item.sell}</Typography>
+        <Typography fontSize={12}>{item.sell_type}</Typography>
       </Box>
       {/* <Typography fontSize={15} fontWeight={"bold"} mt={1}>
         商品の詳細
