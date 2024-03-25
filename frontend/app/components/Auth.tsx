@@ -1,5 +1,4 @@
 import { useState, FormEvent } from "react";
-import { CheckBadgeIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useMutateAuth } from "../hooks/useMutateAuth";
 import {
   Avatar,
@@ -151,6 +150,7 @@ export const Auth = () => {
             variant="contained"
             fullWidth
             disabled={!name || !email || !pw}
+            href="/profile-form" //ここは普通に飛ばしちゃって大丈夫なのか？？？？？？？？
           >
             {isLogin ? "ログイン" : "会員登録"}
           </Button>
@@ -177,16 +177,17 @@ export const Auth = () => {
         >
           アカウントを持っていますか？
         </Typography>
-        <Link href="#">
+        <Link onClick={() => setIsLogin(!isLogin)}>
           <Typography
             fontSize={12}
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              cursor: "pointer",
             }}
           >
-            アカウントを作成
+            {isLogin ? "アカウントを作成" : "ログインをする"}
           </Typography>
         </Link>
         {/* <ImportExportIcon
