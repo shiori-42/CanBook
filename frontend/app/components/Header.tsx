@@ -32,24 +32,57 @@ export default function MenuAppBar() {
 
   return (
     <Box>
-      <AppBar color="default" position="static">
+      <AppBar position="static" sx={{ bgcolor: "#ffffff" }}>
         <Toolbar>
           <Typography
-            fontSize={20}
+            fontSize={23}
             component="div"
-            fontFamily=""
-            letterSpacing={2}
+            fontFamily="revert-layer"
+            letterSpacing={1.5}
+            fontWeight={"bold"}
+            color={"#009C88"}
             sx={{ flexGrow: 1 }}
+            ml={1}
           >
             CanBook
           </Typography>
 
-          <Button color="inherit" href="/login" sx={{ mr: { sm: 2 } }}>
-            <Typography fontSize={13}>ログイン</Typography>
+          <Button
+            href="/login"
+            sx={{
+              mr: { sm: 2 },
+              border: 1,
+              color: "white",
+              bgcolor: "#009C88",
+              "&:hover": {
+                bgcolor: "#ffffff",
+                borderColor: "#009C88",
+                color: "#009C88",
+              },
+            }}
+          >
+            <Typography fontSize={13} fontFamily="revert-layer">
+              ログイン
+            </Typography>
           </Button>
 
-          <Button color="inherit" href="/" sx={{ mr: { sm: 2 } }}>
-            <Typography fontSize={13}>ホーム</Typography>
+          <Button
+            color="inherit"
+            href="/"
+            sx={{
+              mr: { sm: 2 },
+              border: 1,
+              borderColor: "#ffffff",
+              color: "#009C88",
+              "&:hover": {
+                borderColor: "#009C88",
+                bgcolor: "white",
+              },
+            }}
+          >
+            <Typography fontSize={13} fontFamily="revert-layer">
+              ホーム
+            </Typography>
           </Button>
 
           {auth && (
@@ -60,7 +93,7 @@ export default function MenuAppBar() {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleMenu}
-                color="inherit"
+                sx={{ color: "#c6c6c6" }}
               >
                 <AccountCircle />
               </IconButton>
