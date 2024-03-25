@@ -59,16 +59,16 @@ const ItemDetail = async ({ params }: { params: { id: string } }) => {
         >
           {item.text_name}
         </Typography>
-        <Stack direction={"row"} mt={1}>
+        <Stack direction={"row"} mt={{ xs: 0, sm: 1 }}>
           <Typography
             fontSize={{ xs: 9, sm: 11 }}
             mx={0.5}
-            mt={{ xs: 0.7, sm: 0.5 }}
+            mt={{ xs: 0.7, sm: 0.6 }}
             fontWeight={"bold"}
             textAlign={"center"}
             justifyContent={"center"}
             width={{ xs: 49, sm: 100 }}
-            height={{ xs: 15, sm: 18 }}
+            height={{ xs: 15, sm: 23 }}
             border={1.9}
             borderRadius={"20px"}
             color={item.sell_type === "レンタル" ? "#009C88" : "#1573FF"}
