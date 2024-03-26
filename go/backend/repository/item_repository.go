@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 21:44:34 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 22:09:03 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 	query := `
         SELECT
             items.id,
-            items.Name,
+            items.name,
 			items.course_name,
             items.image_name
         FROM items
