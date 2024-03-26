@@ -5,9 +5,9 @@ import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Stack, Typography } from "@mui/material";
 import Link from "next/link";
-import { Items } from "@/app/data/data";
+// import { Items } from "@/app/data/data";
 
-interface Item {
+interface item {
   id: number;
   text_name: string;
   class_name: string;
@@ -25,7 +25,7 @@ interface Prop {
 
 export const ItemMyList: React.FC<Prop> = (props) => {
   const { reload = true, onLoadCompleted } = props;
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<item[]>([]);
 
   const fetchItems = () => {
     fetch(`${server}/items`, {
@@ -62,7 +62,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
 
   return (
     <Grid container spacing={1.2} py={2}>
-      {Items.map((item, index) => (
+      {items.map((item, index) => (
         <Grid key={index} item xs={4} pb={3}>
           <Link href={`/item/${item.id}`} style={{ textDecoration: "none" }}>
             {" "}
@@ -101,7 +101,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
                   height={{ xs: 15, sm: 18 }}
                   border={1.9}
                   borderRadius={"20px"}
-                  color={item.sell_type === "レンタル" ? "#009C88" : "#1573FF"}
+                  color={item.sell_type === 1 ? "#009C88" : "#1573FF"} //レンタルが1？？？
                   style={{ display: "flex", alignItems: "center" }}
                 >
                   {item.sell_type}
@@ -110,7 +110,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
                   fontSize={{ xs: 16, sm: 20 }}
                   alignItems={"center"}
                   justifyContent={"center"}
-                  color={item.sell_type === "レンタル" ? "#009C88" : "#1573FF"}
+                  color={item.sell_type === 1 ? "#009C88" : "#1573FF"} //レンタルが1？？？
                 >
                   ￥{item.price}
                 </Typography>
