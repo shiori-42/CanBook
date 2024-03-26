@@ -47,7 +47,10 @@ export const InputForm: React.FC<Prop> = (props) => {
     data.append("price", values.price.toString());
     data.append("sell_type", values.sell_type.toString());
 
+
+
     const token = localStorage.getItem('token');
+
     console.log("token:", token);
 
     fetch(server.concat("/items"), {
@@ -55,7 +58,9 @@ export const InputForm: React.FC<Prop> = (props) => {
       method: "POST",
       mode: "cors",
       headers: {
+
         "Authorization": `Bearer ${token}`,
+
       },
       body: data,
     })

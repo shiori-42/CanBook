@@ -13,12 +13,16 @@ export const useMutateAuth = () => {
   const loginMutation = useMutation(
     async (user: Credential) => {
       console.log(process.env.NEXT_PUBLIC_API_URL);
+
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, user);
+
       return res.data;
     },
     {
       onSuccess: (data) => {
+
         localStorage.setItem('token', data.token);
+
         router.push("/home");
       },
       onError: (err: any) => {
@@ -48,7 +52,9 @@ export const useMutateAuth = () => {
     async () => await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`),
     {
       onSuccess: () => {
+
         localStorage.removeItem('token'); // トークンをローカルストレージから削除
+
         resetEditedTask();
         router.push("/login");
       },

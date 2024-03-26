@@ -1,3 +1,5 @@
+//この内容はitem\[id]のpage.tsxに書いてある
+
 // "use client";
 // import { Items } from "@/app/data/data";
 // import NotFound from "@/app/not-found";
