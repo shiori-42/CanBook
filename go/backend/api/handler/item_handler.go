@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 22:34:25 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/27 00:50:38 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ func RegisterItemRoutes(e *echo.Echo) {
 	i.DELETE("/:itemId", deleteItem)
 	e.GET("/search", searchItems)
 	e.GET("", getAllUserItems) //for no login user
+	e.GET("/image/:imageFilename", getImg)
 }
 
 func getMyItems(c echo.Context) error {
@@ -74,6 +75,13 @@ func getItemByID(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, ErrorResponse{Message: err.Error()})
 	}
 	return c.JSON(http.StatusOK, item)
+}
+
+func getImg(c echo.Context) error {
+    imageFilename := c.Param("imageFilename")
+    imagePath := fmt.Sprintf("images/%s", imageFilename)
+
+    return c.File(imagePath)
 }
 
 func createItem(c echo.Context) error {
