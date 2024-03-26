@@ -6,21 +6,21 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:44:01 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 18:43:11 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 21:44:24 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 package util
 
 import (
-	"fmt"
-	"mime/multipart"
-	"strings"
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"io"
+	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func SaveImage(src io.Reader, fileHeader *multipart.FileHeader) (string, error) {

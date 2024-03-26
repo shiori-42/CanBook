@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:02:51 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 19:07:56 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 21:57:41 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,10 @@ import (
 type Item struct {
 	ID         int       `json:"id"`
 	Name       string    `json:"name"`
+	CourseName string    `json:"course_name"`
 	Price      int       `json:"price"`
-	SellType   string    `json:"sell"` 
-	CategoryID int       `json:"category_id"`
-	Category   string    `json:"category"`
-	ImageName  string    `json:"imagename"`
+	SellType   string    `json:"sell_type"`
+	ImageName  string    `json:"image_name"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 	UserID     uint      `json:"user_id"`
@@ -47,14 +46,13 @@ func AutoMigrateItem() error {
     CREATE TABLE IF NOT EXISTS items (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
-        category_id INT NOT NULL,
+        course_name TEXT NOT NULL,
         image_name TEXT NOT NULL,
         price INT NOT NULL,
         sell_type TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         user_id INT NOT NULL,
-        FOREIGN KEY (category_id) REFERENCES categories(id),
         FOREIGN KEY (user_id) REFERENCES users(id)
     )
 `)

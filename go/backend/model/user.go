@@ -6,15 +6,16 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:03:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 18:55:46 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 21:44:34 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 package model
 
 import (
-	"github.com/shiori-42/textbook_change_app/go/backend/db"
 	"time"
+
+	"github.com/shiori-42/textbook_change_app/go/backend/db"
 )
 
 type User struct {
