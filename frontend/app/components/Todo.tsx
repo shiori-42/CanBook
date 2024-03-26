@@ -21,7 +21,7 @@ export const Todo = () => {
     e.preventDefault();
     if (editedTask.id === 0)
       createTaskMutation.mutate({
-        title: editedTask.title,
+        name: editedTask.name,
       });
     else {
       updateTaskMutation.mutate(editedTask);
@@ -46,14 +46,14 @@ export const Todo = () => {
       <form onSubmit={submitTaskHandler}>
         <input
           className="mb-3 mr-3 px-3 py-2 border border-gray-300"
-          placeholder="title ?"
+          placeholder="name ?"
           type="text"
-          onChange={(e) => updateTask({ ...editedTask, title: e.target.value })}
-          value={editedTask.title || ""}
+          onChange={(e) => updateTask({ ...editedTask, name: e.target.value })}
+          value={editedTask.name || ""}
         />
         <button
           className="disabled:opacity-40 mx-3 py-2 px-3 text-white bg-indigo-600 rounded"
-          disabled={!editedTask.title}
+          disabled={!editedTask.name}
         >
           {editedTask.id === 0 ? "Create" : "Update"}
         </button>
@@ -63,7 +63,7 @@ export const Todo = () => {
       ) : (
         <ul className="my-5">
           {data?.map((task) => (
-            <TaskItem key={task.id} id={task.id} title={task.title} />
+            <TaskItem key={task.id} id={task.id} name={task.name} />
           ))}
         </ul>
       )}

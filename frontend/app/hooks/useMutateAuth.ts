@@ -13,11 +13,16 @@ export const useMutateAuth = () => {
   const loginMutation = useMutation(
     async (user: Credential) => {
       console.log(process.env.NEXT_PUBLIC_API_URL);
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, user); //ここが怪しい「/login」が正しいのか？バックエンド側で/loginではないものを書いてほしいかも
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/login`,
+        user
+      );
+      return res.data;
     },
     {
-      onSuccess: () => {
-        router.push("/home"); //今後"/profile-form"に飛ばす！！
+      onSuccess: (data) => {
+        localStorage.setItem("token", data.token);
+        router.push("/home");
       },
       onError: (err: any) => {
         if (err.response.data.message) {
@@ -45,6 +50,7 @@ export const useMutateAuth = () => {
     async () => await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`),
     {
       onSuccess: () => {
+        localStorage.removeItem("token"); // トークンをローカルストレージから削除
         resetEditedTask();
         router.push("/login");
       },
