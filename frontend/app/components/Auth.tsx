@@ -150,7 +150,8 @@ export const Auth = () => {
             variant="contained"
             fullWidth
             disabled={!name || !email || !pw}
-            href="/profile-form" //ここは普通に飛ばしちゃって大丈夫なのか？？？？？？？？
+            // href="/profile-form" //ここは普通に飛ばしちゃって大丈夫なのか？？？？？？？？
+            //ダメでしたuseMutateAuthにかいてる
           >
             {isLogin ? "ログイン" : "会員登録"}
           </Button>
