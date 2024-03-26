@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 22:09:03 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 22:35:43 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,52 @@ import (
 	"github.com/shiori-42/textbook_change_app/go/backend/model"
 )
 
-func GetAllItems() (model.Items, error) {
+func GetMyItems(userID uint) (model.Items, error) {
+	var items model.Items
+	query := `
+        SELECT 
+            items.id, 
+            items.name,
+			items.course_name, 
+            items.price,
+            items.sell_type,
+            items.image_name,
+            items.created_at,
+            items.updated_at,
+            items.user_id
+        FROM items
+        WHERE items.user_id = $1
+    `
+
+	rows, err := db.DB.Query(query, userID)
+	if err != nil {
+		return items, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var item model.Item
+		err = rows.Scan(
+			&item.ID,
+			&item.Name,
+			&item.CourseName,
+			&item.Price,
+			&item.SellType,
+			&item.ImageName,
+			&item.CreatedAt,
+			&item.UpdatedAt,
+			&item.UserID,
+		)
+		if err != nil {
+			return items, err
+		}
+		items.Items = append(items.Items, item)
+	}
+
+	return items, nil
+}
+
+func GetAllUserItems() (model.Items, error) {
 	var items model.Items
 	query := `
         SELECT 

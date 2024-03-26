@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 20:55:27 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 22:34:25 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,26 @@ func RegisterItemRoutes(e *echo.Echo) {
 	// 	TokenLookup: "header:Authorization",
 	// }))
 	i.Use(AuthMiddleware)
-	i.GET("", getAllItems) //my page
+	i.GET("", getMyItems) //my page
 	i.GET("/:itemId", getItemByID)
 	i.POST("", createItem)
 	i.PUT("/:itemId", updateItem)
 	i.DELETE("/:itemId", deleteItem)
 	e.GET("/search", searchItems)
-	e.GET("", getAllItems) //for no login user
+	e.GET("", getAllUserItems) //for no login user
 }
 
-func getAllItems(c echo.Context) error {
-	items, err := repository.GetAllItems()
+func getMyItems(c echo.Context) error {
+	userID := c.Get("user_id").(uint)
+	items, err := repository.GetMyItems(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, items)
+}
+
+func getAllUserItems(c echo.Context) error {
+	items, err := repository.GetAllUserItems()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
