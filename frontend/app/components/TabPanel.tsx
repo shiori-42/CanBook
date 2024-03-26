@@ -5,6 +5,8 @@ import { Box, Tabs, Tab } from "@mui/material";
 import ItemKeep from "./ItemKeep";
 // import ItemAll from "./ItemAll";
 import ItemMyList from "./Listing/ItemList/ItemMyList";
+import ItemAll from "./ItemAll";
+import SearchBox from "./SearchBox";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -51,38 +53,40 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
           centered
           sx={{
+            mt: 2,
             "& .MuiTabs-indicator": {
-              backgroundColor: "#32C0C9",
+              backgroundColor: "#009C88",
             },
           }}
         >
           <Tab
             label="キャンパス"
             {...a11yProps(0)}
-            sx={{ "&.Mui-selected": { color: "#32C0C9" } }}
+            sx={{ "&.Mui-selected": { color: "#009C88" } }}
           />
           <Tab
             label="マイリスト"
             {...a11yProps(1)}
-            sx={{ "&.Mui-selected": { color: "#32C0C9" } }}
+            sx={{ "&.Mui-selected": { color: "#009C88" } }}
           />
           <Tab
             label="保存済み"
             {...a11yProps(2)}
-            sx={{ "&.Mui-selected": { color: "#32C0C9" } }}
+            sx={{ "&.Mui-selected": { color: "#009C88" } }}
           />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Typography fontSize={15} fontWeight={"bold"}>
+        <SearchBox onSearch={undefined} />
+        <Typography fontSize={15} fontWeight={"bold"} mt={2}>
           キャンパス内の商品
         </Typography>
-        <ItemMyList />
-        {/* <ItemAll /> */}
+        {/* <ItemMyList /> */}
+        <ItemAll />
       </CustomTabPanel>
 
       <CustomTabPanel value={value} index={1}>
-        <Typography fontSize={15} fontWeight={"bold"}>
+        <Typography fontSize={15} fontWeight={"bold"} mt={1.5}>
           出品した商品
         </Typography>
         <ItemMyList />

@@ -3,7 +3,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
-import { Box, Card, CardMedia, Typography } from "@mui/material";
+import { Box, Card, CardMedia, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { Items } from "@/app/data/data";
 
@@ -82,14 +82,39 @@ export const ItemMyList: React.FC<Prop> = (props) => {
                 <CardMedia
                   component="img"
                   sx={{ height: { xs: 110, sm: 180 } }}
-                  image={item.image_name || "/logo192.png"} // placeholderImageを削除し、デフォルト画像パスを直接記述
+                  // image={item.image_name}
+                  image={item.image_name || "/logo192.png"} // placeholderImageを削除し、デフォルト画像パスを直接記述　ん？？？？？？？？？？
                 />
               </Box>
-              <Typography fontSize={13} height={40}>
+              <Typography fontSize={{ xs: 12, sm: 15 }} height={40} px={0.5}>
                 {item.text_name}
               </Typography>
-              <Typography>￥{item.price}</Typography>
-              <Typography fontSize={9}>{item.sell_type}</Typography>
+              <Stack direction={"row"} mt={1}>
+                <Typography
+                  fontSize={{ xs: 7, sm: 9 }}
+                  mx={0.5}
+                  mt={{ xs: 0.2, sm: 0.5 }}
+                  fontWeight={"bold"}
+                  textAlign={"center"}
+                  justifyContent={"center"}
+                  width={{ xs: 45, sm: 53 }}
+                  height={{ xs: 15, sm: 18 }}
+                  border={1.9}
+                  borderRadius={"20px"}
+                  color={item.sell_type === "レンタル" ? "#009C88" : "#1573FF"}
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  {item.sell_type}
+                </Typography>
+                <Typography
+                  fontSize={{ xs: 16, sm: 20 }}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  color={item.sell_type === "レンタル" ? "#009C88" : "#1573FF"}
+                >
+                  ￥{item.price}
+                </Typography>
+              </Stack>
             </Card>
           </Link>
         </Grid>
