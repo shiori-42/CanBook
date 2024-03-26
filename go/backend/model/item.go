@@ -22,7 +22,7 @@ type Item struct {
 	ID         int       `json:"id"`
 	Name       string    `json:"name"`
 	Price      int       `json:"price"`
-	SellType   string    `json:"sell"` 
+	SellType   string    `json:"sell"`
 	CategoryID int       `json:"category_id"`
 	Category   string    `json:"category"`
 	ImageName  string    `json:"imagename"`

@@ -39,7 +39,7 @@ func CreateItem(c echo.Context, userID uint) (model.Item, error) {
 		return item, fmt.Errorf("failed to open image file: %v", err)
 	}
 	defer src.Close()
-	ImageName, err := util.SaveImage(src,image)
+	ImageName, err := util.SaveImage(src, image)
 	if err != nil {
 		return item, fmt.Errorf("failed to save image: %v", err)
 	}
@@ -87,7 +87,7 @@ func UpdateItem(c echo.Context, itemID int, userID uint) (model.Item, error) {
 		return item, fmt.Errorf("failed to open image file: %v", err)
 	}
 	defer src.Close()
-	ImageName, err := util.SaveImage(src,image)
+	ImageName, err := util.SaveImage(src, image)
 	if err != nil {
 		return item, fmt.Errorf("failed to save image: %v", err)
 	}
