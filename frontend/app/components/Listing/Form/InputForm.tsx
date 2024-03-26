@@ -41,16 +41,22 @@ export const InputForm: React.FC<Prop> = (props) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData();
-    data.append("image_name", values.image_name);
-    data.append("text_name", values.text_name);
-    data.append("class_name", values.class_name);
+    data.append("image", values.image_name);
+    data.append("name", values.text_name);
+    data.append("course_name", values.class_name);
     data.append("price", values.price.toString());
     data.append("sell_type", values.sell_type.toString());
+
+    const token = localStorage.getItem('token');
+    console.log("token:", token);
 
     fetch(server.concat("/items"), {
       //itemsのリンクで入力フォームが出るはず！！！
       method: "POST",
       mode: "cors",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
       body: data,
     })
       .then((response) => {

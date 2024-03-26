@@ -32,7 +32,7 @@ export const useMutateTask = () => {
   const updateTaskMutation = useMutation(
     (task: Omit<Task, "created_at" | "updated_at">) =>
       axios.put<Task>(`${process.env.NEXT_PUBLIC_API_URLL}/tasks/${task.id}`, {
-        title: task.title,
+        name: task.name,
       }),
     {
       onSuccess: (res, variables) => {

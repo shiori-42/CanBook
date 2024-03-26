@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:02:59 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 11:27:36 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 21:10:38 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,6 @@ func AutoMigrate() error {
 	err := AutoMigrateUser()
 	if err != nil {
 		log.Printf("Error migrating user table: %v", err)
-		return err
-	}
-
-	err = AutoMigrateCategory()
-	if err != nil {
-		log.Printf("Error migrating category table: %v", err)
 		return err
 	}
 

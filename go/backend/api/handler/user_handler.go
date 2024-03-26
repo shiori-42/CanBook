@@ -6,14 +6,13 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:37:43 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 15:52:03 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 21:24:26 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -63,17 +62,9 @@ func logIn(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
-	cookie := new(http.Cookie)
-	cookie.Name = "token"
-	cookie.Value = tokenString
-	cookie.Expires = time.Now().Add(24 * time.Hour)
-	cookie.Path = "/"
-	cookie.Domain = os.Getenv("API_DOMAIN")
-	cookie.Secure = true
-	cookie.HttpOnly = true
-	cookie.SameSite = http.SameSiteNoneMode
-	c.SetCookie(cookie)
-	return c.NoContent(http.StatusOK)
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": tokenString,
+	})
 }
 
 func logOut(c echo.Context) error {
@@ -88,28 +79,4 @@ func logOut(c echo.Context) error {
 	cookie.SameSite = http.SameSiteNoneMode
 	c.SetCookie(cookie)
 	return c.NoContent(http.StatusOK)
-}
-
-func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		cookie, err := c.Cookie("token")
-		if err != nil {
-			return c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "Unauthorized"})
-		}
-
-		token, err := jwt.Parse(cookie.Value, func(token *jwt.Token) (interface{}, error) {
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-			}
-			return []byte(os.Getenv("SECRET")), nil
-		})
-
-		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			if userID, ok := claims["user_id"].(float64); ok {
-				c.Set("user_id", uint(userID))
-				return next(c)
-			}
-		}
-		return c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "Unauthorized"})
-	}
 }

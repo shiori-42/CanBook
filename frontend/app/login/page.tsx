@@ -14,9 +14,9 @@ import { Auth } from "../components/Auth";
 import { Todo } from "../components/Todo";
 // import { CsrfToken } from "../types";
 
+axios.defaults.withCredentials = true;
 function AppLogin() {
   useEffect(() => {
-    // axios.defaults.withCredentials = true;
     // const getCsrfToken = async () => {
     //   const { data } = await axios.get<CsrfToken>(
     //     `${process.env.NEXT_PUBLIC_API_URLL}/csrf`

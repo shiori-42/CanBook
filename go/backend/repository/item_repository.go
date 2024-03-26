@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 11:03:03 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 21:44:34 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+
 	"github.com/shiori-42/textbook_change_app/go/backend/db"
 	"github.com/shiori-42/textbook_change_app/go/backend/model"
 )
@@ -24,9 +25,8 @@ func GetAllItems() (model.Items, error) {
 	query := `
         SELECT 
             items.id, 
-            items.name, 
-            items.category_id, 
-            categories.name AS category,
+            items.name,
+			items.course_name, 
             items.price,
             items.sell_type,
             items.image_name,
@@ -34,7 +34,6 @@ func GetAllItems() (model.Items, error) {
             items.updated_at,
             items.user_id
         FROM items
-        JOIN categories ON items.category_id = categories.id
     `
 
 	rows, err := db.DB.Query(query)
@@ -46,15 +45,14 @@ func GetAllItems() (model.Items, error) {
 	for rows.Next() {
 		var item model.Item
 		err = rows.Scan(
-			&item.ID, 
-			&item.Name, 
-			&item.CategoryID, 
-			&item.Category, 
+			&item.ID,
+			&item.Name,
+			&item.CourseName,
 			&item.Price,
 			&item.SellType,
-			&item.ImageName, 
+			&item.ImageName,
 			&item.CreatedAt,
-			&item.UpdatedAt, 
+			&item.UpdatedAt,
 			&item.UserID,
 		)
 		if err != nil {
@@ -71,9 +69,8 @@ func GetItemByID(itemID int) (model.Item, error) {
 	query := `
         SELECT 
             items.id, 
-            items.name, 
-            items.category_id, 
-            categories.name AS category_name,
+            items.name,
+			items.course_name, 
             items.price,
             items.sell_type,
             items.image_name, 
@@ -81,15 +78,13 @@ func GetItemByID(itemID int) (model.Item, error) {
             items.updated_at, 
             items.user_id
         FROM items
-        JOIN categories ON items.category_id = categories.id
         WHERE items.id = $1
     `
 
 	err := db.DB.QueryRow(query, itemID).Scan(
 		&item.ID,
 		&item.Name,
-		&item.CategoryID,
-		&item.Category,
+		&item.CourseName,
 		&item.Price,
 		&item.SellType,
 		&item.ImageName,
@@ -109,10 +104,10 @@ func GetItemByID(itemID int) (model.Item, error) {
 
 func CreateItem(item *model.Item) error {
 	query := `
-        INSERT INTO items (name, category_id, image_name, price, sell_type, user_id)
+        INSERT INTO items (name,course_name , image_name, price, sell_type, user_id)
         VALUES ($1, $2, $3, $4, $5, $6) RETURNING id
     `
-	err := db.DB.QueryRow(query, item.Name, item.CategoryID, item.ImageName, item.Price, item.SellType, item.UserID).Scan(&item.ID)
+	err := db.DB.QueryRow(query, item.Name, item.CourseName, item.ImageName, item.Price, item.SellType, item.UserID).Scan(&item.ID)
 	if err != nil {
 		return err
 	}
@@ -123,10 +118,10 @@ func CreateItem(item *model.Item) error {
 func UpdateItem(item *model.Item, itemID int, userID uint) error {
 	query := `
         UPDATE items
-        SET name = $1, category_id = $2, image_name = $3, price = $4, sell_type = $5
+        SET name = $1,  course_name= $2, image_name = $3, price = $4, sell_type = $5
         WHERE id = $6 AND user_id = $7
     `
-	_, err := db.DB.Exec(query, item.Name, item.CategoryID, item.ImageName, item.Price, item.SellType, itemID, userID)
+	_, err := db.DB.Exec(query, item.Name, item.CourseName, item.ImageName, item.Price, item.SellType, itemID, userID)
 	if err != nil {
 		return err
 	}
@@ -155,12 +150,10 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 	query := `
         SELECT
             items.id,
-            items.name,
-            items.category_id,
-            categories.name AS category,
+            items.Name,
+			items.course_name,
             items.image_name
         FROM items
-        JOIN categories ON items.category_id = categories.id
         WHERE items.name LIKE $1
     `
 	rows, err := db.DB.Query(query, "%"+keyword+"%")
@@ -171,7 +164,7 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 
 	for rows.Next() {
 		var item model.Item
-		err = rows.Scan(&item.ID, &item.Name, &item.CategoryID, &item.Category, &item.ImageName)
+		err = rows.Scan(&item.ID, &item.Name, &item.CourseName, &item.ImageName)
 		if err != nil {
 			return items, err
 		}
