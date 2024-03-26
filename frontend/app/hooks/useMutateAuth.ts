@@ -17,7 +17,7 @@ export const useMutateAuth = () => {
     },
     {
       onSuccess: () => {
-        router.push("/home");
+        router.push("/home"); //今後"/profile-form"に飛ばす！！
       },
       onError: (err: any) => {
         if (err.response.data.message) {
