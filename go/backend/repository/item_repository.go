@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 18:50:54 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 11:03:03 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ func GetAllItems() (model.Items, error) {
             items.id, 
             items.name, 
             items.category_id, 
-            categories.name AS category, 
+            categories.name AS category,
+            items.price,
+            items.sell_type,
             items.image_name,
             items.created_at,
             items.updated_at,
@@ -43,7 +45,18 @@ func GetAllItems() (model.Items, error) {
 
 	for rows.Next() {
 		var item model.Item
-		err = rows.Scan(&item.ID, &item.Name, &item.CategoryID, &item.Category, &item.ImageName, &item.CreatedAt, &item.UpdatedAt, &item.UserID)
+		err = rows.Scan(
+			&item.ID, 
+			&item.Name, 
+			&item.CategoryID, 
+			&item.Category, 
+			&item.Price,
+			&item.SellType,
+			&item.ImageName, 
+			&item.CreatedAt,
+			&item.UpdatedAt, 
+			&item.UserID,
+		)
 		if err != nil {
 			return items, err
 		}
@@ -56,7 +69,17 @@ func GetAllItems() (model.Items, error) {
 func GetItemByID(itemID int) (model.Item, error) {
 	var item model.Item
 	query := `
-        SELECT items.id, items.name, items.category_id, categories.name AS category_name, items.image_name, items.created_at, items.updated_at, items.user_id
+        SELECT 
+            items.id, 
+            items.name, 
+            items.category_id, 
+            categories.name AS category_name,
+            items.price,
+            items.sell_type,
+            items.image_name, 
+            items.created_at, 
+            items.updated_at, 
+            items.user_id
         FROM items
         JOIN categories ON items.category_id = categories.id
         WHERE items.id = $1
@@ -67,6 +90,8 @@ func GetItemByID(itemID int) (model.Item, error) {
 		&item.Name,
 		&item.CategoryID,
 		&item.Category,
+		&item.Price,
+		&item.SellType,
 		&item.ImageName,
 		&item.CreatedAt,
 		&item.UpdatedAt,

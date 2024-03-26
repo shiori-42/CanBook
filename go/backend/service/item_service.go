@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/22 18:51:28 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/26 10:58:50 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ func CreateItem(c echo.Context, userID uint) (model.Item, error) {
 	if err != nil {
 		return item, fmt.Errorf("invalid category_id: %v", err)
 	}
+	priceStr := c.FormValue("price")
+	price, err := strconv.Atoi(priceStr)
+	if err != nil {
+		return item, fmt.Errorf("invalid price: %v", err)
+	}
+	sellType := c.FormValue("sell_type")
 	image, err := c.FormFile("image")
 	if err != nil {
 		return item, fmt.Errorf("failed to get image file: %v", err)
@@ -46,6 +52,8 @@ func CreateItem(c echo.Context, userID uint) (model.Item, error) {
 	item = model.Item{
 		Name:       name,
 		CategoryID: categoryID,
+		Price:      price,
+		SellType:   sellType,
 		ImageName:  ImageName,
 		UserID:     userID,
 	}
@@ -78,6 +86,12 @@ func UpdateItem(c echo.Context, itemID int, userID uint) (model.Item, error) {
 	if err != nil {
 		return item, fmt.Errorf("invalid category_id: %v", err)
 	}
+	priceStr := c.FormValue("price")
+	price, err := strconv.Atoi(priceStr)
+	if err != nil {
+		return item, fmt.Errorf("invalid price: %v", err)
+	}
+	sellType := c.FormValue("sell_type")
 	image, err := c.FormFile("image")
 	if err != nil {
 		return item, fmt.Errorf("failed to get image file: %v", err)
@@ -94,6 +108,8 @@ func UpdateItem(c echo.Context, itemID int, userID uint) (model.Item, error) {
 	item = model.Item{
 		Name:       name,
 		CategoryID: categoryID,
+		Price:      price,
+		SellType:   sellType,  
 		ImageName:  ImageName,
 	}
 	if err := validator.ItemValidate(item); err != nil {
