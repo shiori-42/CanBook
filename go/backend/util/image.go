@@ -13,14 +13,14 @@
 package util
 
 import (
-	"fmt"
-	"mime/multipart"
-	"strings"
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"io"
+	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func SaveImage(src io.Reader, fileHeader *multipart.FileHeader) (string, error) {
