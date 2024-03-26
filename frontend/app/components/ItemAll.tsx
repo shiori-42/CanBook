@@ -14,7 +14,9 @@ const ItemAll = () => {
   //     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   //   );
   //   setFilteredItems(filtered);
-  // };　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//絞り込みしてる
+  // };//絞り込みしてる
+
+  //ItemMyListのようにGETメソッド書く！
 
   return (
     <>
