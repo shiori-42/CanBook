@@ -17,6 +17,7 @@ const ItemAll = () => {
   // };//絞り込みしてる
 
   //ItemMyListのようにGETメソッド書く！
+  //ItemMyListが上手くいったら！！！！
 
   return (
     <>
