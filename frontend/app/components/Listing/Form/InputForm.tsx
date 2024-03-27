@@ -1,5 +1,6 @@
 import { Box, Button, MenuItem, TextField } from "@mui/material";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:9000";
 
@@ -17,6 +18,7 @@ type formDataType = {
 
 export const InputForm: React.FC<Prop> = (props) => {
   const { onListingCompleted } = props;
+  const router = useRouter();
   const initialState = {
     image_name: "",
     text_name: "",
@@ -63,6 +65,7 @@ export const InputForm: React.FC<Prop> = (props) => {
       .then((response) => {
         console.log("POST status:", response.statusText);
         onListingCompleted && onListingCompleted();
+        router.push("/home");
       })
       .catch((error) => {
         console.error("POST error:", error);
