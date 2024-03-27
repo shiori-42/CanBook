@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/27 00:50:38 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/27 14:50:43 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ func RegisterItemRoutes(e *echo.Echo) {
 	i.PUT("/:itemId", updateItem)
 	i.DELETE("/:itemId", deleteItem)
 	e.GET("/search", searchItems)
-	e.GET("", getAllUserItems) //for no login user
+	e.GET("alluseritems", getAllUserItems) //for no login user
 	e.GET("/image/:imageFilename", getImg)
 }
 
@@ -78,10 +78,10 @@ func getItemByID(c echo.Context) error {
 }
 
 func getImg(c echo.Context) error {
-    imageFilename := c.Param("imageFilename")
-    imagePath := fmt.Sprintf("images/%s", imageFilename)
+	imageFilename := c.Param("imageFilename")
+	imagePath := fmt.Sprintf("images/%s", imageFilename)
 
-    return c.File(imagePath)
+	return c.File(imagePath)
 }
 
 func createItem(c echo.Context) error {
@@ -136,14 +136,11 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "Authorization header is required"})
 		}
 
-		// "Bearer "を削除してトークンの文字列を取得
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 		if tokenString == authHeader {
-			// "Bearer "が削除されていなければ、ヘッダーの形式が正しくない
 			return c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "Authorization header must be in the format 'Bearer {token}'"})
 		}
 
-		// トークンの検証
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
