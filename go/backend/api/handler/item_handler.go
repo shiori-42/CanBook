@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/27 14:50:43 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/27 19:39:24 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"path"
 
 	// echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -44,7 +45,7 @@ func RegisterItemRoutes(e *echo.Echo) {
 	i.DELETE("/:itemId", deleteItem)
 	e.GET("/search", searchItems)
 	e.GET("alluseritems", getAllUserItems) //for no login user
-	e.GET("/image/:imageFilename", getImg)
+	e.GET("/images/:imageFilename", getImg)
 }
 
 func getMyItems(c echo.Context) error {
@@ -77,12 +78,17 @@ func getItemByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, item)
 }
 
-func getImg(c echo.Context) error {
-	imageFilename := c.Param("imageFilename")
-	imagePath := fmt.Sprintf("images/%s", imageFilename)
 
-	return c.File(imagePath)
+func getImg(c echo.Context) error {
+	storedDir := "../images/"
+	imgPath := path.Join(storedDir, c.Param("imageFilename"))
+	if _, err := os.Stat(imgPath); err != nil {
+		c.Logger().Errorf("Image not found: %s%s", imgPath, imgPath)
+		imgPath = path.Join(storedDir, "default.jpg")
+	}
+	return c.File(imgPath)
 }
+
 
 func createItem(c echo.Context) error {
 	userID, ok := c.Get("user_id").(uint)
