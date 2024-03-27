@@ -15,6 +15,6 @@ package ws
 import "github.com/gorilla/websocket"
 
 type Client struct {
-    UserID string
-    Conn   *websocket.Conn
+	UserID string
+	Conn   *websocket.Conn
 }

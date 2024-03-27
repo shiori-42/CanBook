@@ -62,7 +62,7 @@ func main() {
 	api.RegisterRoutes(e)
 
 	handler.RegisterWebSocketRoutes(e)
-	
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
