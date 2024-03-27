@@ -13,15 +13,14 @@
 package handler
 
 import (
-
 	"github.com/labstack/echo/v4"
 	"github.com/shiori-42/textbook_change_app/go/backend/ws"
 )
 
 func RegisterWebSocketRoutes(e *echo.Echo, hub *ws.Hub) {
-    wsHandler := &ws.Handler{
-        Hub: hub,
-    }
-    e.GET("/ws/:roomId", wsHandler.HandleWebSocket)
-    e.POST("/ws/createRoom", wsHandler.CreateRoom)
+	wsHandler := &ws.Handler{
+		Hub: hub,
+	}
+	e.GET("/ws/:roomId", wsHandler.HandleWebSocket)
+	e.POST("/ws/createRoom", wsHandler.CreateRoom)
 }

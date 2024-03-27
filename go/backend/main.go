@@ -65,8 +65,8 @@ func main() {
 	api.RegisterRoutes(e)
 
 	hub := ws.NewHub()
-    go hub.Run()
-    handler.RegisterWebSocketRoutes(e, hub)
+	go hub.Run()
+	handler.RegisterWebSocketRoutes(e, hub)
 
 	port := os.Getenv("PORT")
 	if port == "" {
