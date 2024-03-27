@@ -6,7 +6,8 @@ import ItemKeep from "./ItemKeep";
 // import ItemAll from "./ItemAll";
 import ItemMyList from "./Listing/ItemList/ItemMyList";
 import ItemAll from "./ItemAll";
-import SearchBox from "./SearchBox";
+import SearchBox from "./SearchButton";
+import SearchButton from "./SearchButton";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -60,7 +61,7 @@ export default function BasicTabs() {
           }}
         >
           <Tab
-            label="キャンパス"
+            label="すべて"
             {...a11yProps(0)}
             sx={{ "&.Mui-selected": { color: "#009C88" } }}
           />
@@ -77,10 +78,10 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <SearchBox onSearch={undefined} />
         <Typography fontSize={15} fontWeight={"bold"} mt={2}>
-          キャンパス内の商品
+          すべての商品
         </Typography>
+        <SearchButton />
         {/* <ItemMyList /> */}
         <ItemAll />
       </CustomTabPanel>
