@@ -5,75 +5,67 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 14:57:37 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/27 16:49:24 by shiori0123       ###   ########.fr       */
+/*   Created: 2024/03/27 23:20:41 by shiori0123        #+#    #+#             */
+/*   Updated: 2024/03/27 23:48:15 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 package ws
 
 import (
-	"net/http"
+    "log"
+    "net/http"
 
-	"github.com/gorilla/websocket"
-	"github.com/labstack/echo/v4"
+    "github.com/gorilla/websocket"
+    "github.com/labstack/echo/v4"
 )
 
-type Handler struct {
-	Hub *Hub
-}
+var (
+    clients = make(map[string]*Client)
+    upgrader = websocket.Upgrader{
+        CheckOrigin: func(r *http.Request) bool {
+            return true
+        },
+    }
+)
 
-type CreateRoomReq struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
-func (h *Handler) CreateRoom(c echo.Context) error {
-	var req CreateRoomReq
-	if err := c.Bind(&req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
-	}
-	h.Hub.Rooms[req.ID] = &Room{
-		ID:      req.ID,
-		Name:    req.Name,
-		Clients: make(map[string]*Client),
-	}
-	return c.JSON(http.StatusOK, req)
-}
-
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		origin := r.Header.Get("Origin")
-		return origin == "http://localhost:3000"
-	},
-}
+type Handler struct{}
 
 func (h *Handler) HandleWebSocket(c echo.Context) error {
-	sellerID := c.QueryParam("sellerId")
-	buyerID := c.QueryParam("buyerId")
-	clientID := c.QueryParam("clientId")
-	clientType := c.QueryParam("clientType")
+    userID := c.QueryParam("userID")
 
-	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
+    conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+    if err != nil {
+        return err
+    }
+    defer conn.Close()
 
-	cl := &Client{
-		Conn:     conn,
-		Message:  make(chan *Message, 10),
-		ID:       clientID,
-		SellerID: sellerID,
-		BuyerID:  buyerID,
-		Type:     clientType,
-		RoomID:   generateRoomID(sellerID, buyerID),
-	}
+    client := &Client{
+        UserID: userID,
+        Conn:   conn,
+    }
+    clients[userID] = client
 
-	h.Hub.Register <- cl
+    for {
+        var message Message
+        err := conn.ReadJSON(&message)
+        if err != nil {
+            log.Println(err)
+            break
+        }
 
-	go cl.writeMessage()
-	cl.readMessage(h.Hub)
+        recipientClient, ok := clients[message.RecipientID]
+        if !ok {
+            log.Printf("Recipient %s not found", message.RecipientID)
+            continue
+        }
 
-	return nil
+        if err := recipientClient.Conn.WriteJSON(message); err != nil {
+            log.Println(err)
+        }
+    }
+
+    delete(clients, userID)
+
+    return nil
 }

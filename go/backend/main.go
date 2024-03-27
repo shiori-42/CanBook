@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 08:18:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/27 17:46:56 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/27 23:39:27 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ import (
 	"github.com/shiori-42/textbook_change_app/go/backend/api/handler"
 	"github.com/shiori-42/textbook_change_app/go/backend/db"
 	"github.com/shiori-42/textbook_change_app/go/backend/model"
-	"github.com/shiori-42/textbook_change_app/go/backend/ws"
 )
 
 func main() {
@@ -47,8 +46,6 @@ func main() {
 	}
 
 	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
 
 	frontURL := os.Getenv("FE_URL")
 	if frontURL == "" {
@@ -64,10 +61,8 @@ func main() {
 
 	api.RegisterRoutes(e)
 
-	hub := ws.NewHub()
-	go hub.Run()
-	handler.RegisterWebSocketRoutes(e, hub)
-
+	handler.RegisterWebSocketRoutes(e)
+	
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
