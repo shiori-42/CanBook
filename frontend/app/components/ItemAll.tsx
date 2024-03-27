@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { Items } from "../data/data";
-import SearchBox from "./SearchBox";
+import SearchBox from "./SearchButton";
 
 // const handleSearch = (searchQuery: string) => {
 //   const filtered = items.filter((item) =>
@@ -49,7 +49,9 @@ export const ItemAll: React.FC<Prop> = (props) => {
         "Content-Type": "application/json",
         Accept: "application/json",
 
+
         "Authorization": `Bearer ${token}`,
+
       },
     })
       .then((response) => {
