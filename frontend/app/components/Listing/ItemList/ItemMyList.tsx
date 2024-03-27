@@ -96,9 +96,8 @@ export const ItemMyList: React.FC<Prop> = (props) => {
                 <CardMedia
                   component="img"
                   sx={{ height: { xs: 110, sm: 180 } }}
-                  image={`${process.env.NEXT_PUBLIC_API_URL}/image/${item.image_name}` || "/logo192.png"}
+                  image={`${process.env.NEXT_PUBLIC_API_URL}/images/${item.image_name}`}
               />
-
               </Box>
               <Typography fontSize={{ xs: 12, sm: 15 }} height={40} px={0.5}>
                 {item.name}
