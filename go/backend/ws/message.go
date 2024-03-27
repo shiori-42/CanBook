@@ -13,7 +13,7 @@
 package ws
 
 type Message struct {
-    SenderID    string `json:"senderID"`
-    RecipientID string `json:"recipientID"`
-    Content     string `json:"content"`
+	SenderID    string `json:"senderID"`
+	RecipientID string `json:"recipientID"`
+	Content     string `json:"content"`
 }
