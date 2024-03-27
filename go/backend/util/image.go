@@ -22,33 +22,33 @@ import (
 )
 
 func SaveImage(src multipart.File, image *multipart.FileHeader) (string, error) {
-    uploadDir := "../images/"
+	uploadDir := "../images/"
 
-    hasher := sha256.New()
-    _, err := io.Copy(hasher, src)
-    if err != nil {
-        return "", err
-    }
-    hashBytes := hasher.Sum(nil)
-    hashString := hex.EncodeToString(hashBytes)
-    fileName := hashString + filepath.Ext(image.Filename)
+	hasher := sha256.New()
+	_, err := io.Copy(hasher, src)
+	if err != nil {
+		return "", err
+	}
+	hashBytes := hasher.Sum(nil)
+	hashString := hex.EncodeToString(hashBytes)
+	fileName := hashString + filepath.Ext(image.Filename)
 
-    filePath := filepath.Join(uploadDir, fileName)
+	filePath := filepath.Join(uploadDir, fileName)
 
-    dst, err := os.Create(filePath)
-    if err != nil {
-        return "", err
-    }
-    defer dst.Close()
+	dst, err := os.Create(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer dst.Close()
 
-    _, err = src.Seek(0, io.SeekStart)
-    if err != nil {
-        return "", err
-    }
-    _, err = io.Copy(dst, src)
-    if err != nil {
-        return "", err
-    }
+	_, err = src.Seek(0, io.SeekStart)
+	if err != nil {
+		return "", err
+	}
+	_, err = io.Copy(dst, src)
+	if err != nil {
+		return "", err
+	}
 
-    return fileName, nil
+	return fileName, nil
 }
