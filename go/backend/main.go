@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 08:18:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 10:04:31 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/27 23:39:27 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/shiori-42/textbook_change_app/go/backend/api"
+	"github.com/shiori-42/textbook_change_app/go/backend/api/handler"
 	"github.com/shiori-42/textbook_change_app/go/backend/db"
 	"github.com/shiori-42/textbook_change_app/go/backend/model"
 )
@@ -45,8 +46,6 @@ func main() {
 	}
 
 	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
 
 	frontURL := os.Getenv("FE_URL")
 	if frontURL == "" {
@@ -61,6 +60,8 @@ func main() {
 	}))
 
 	api.RegisterRoutes(e)
+
+	handler.RegisterWebSocketRoutes(e)
 
 	port := os.Getenv("PORT")
 	if port == "" {

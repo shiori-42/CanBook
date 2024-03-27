@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 22:34:25 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/27 19:39:24 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"net/http"
 	"os"
+	"path"
 	"strconv"
 	"strings"
 
@@ -43,7 +44,8 @@ func RegisterItemRoutes(e *echo.Echo) {
 	i.PUT("/:itemId", updateItem)
 	i.DELETE("/:itemId", deleteItem)
 	e.GET("/search", searchItems)
-	e.GET("", getAllUserItems) //for no login user
+	e.GET("alluseritems", getAllUserItems) //for no login user
+	e.GET("/images/:imageFilename", getImg)
 }
 
 func getMyItems(c echo.Context) error {
@@ -74,6 +76,16 @@ func getItemByID(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, ErrorResponse{Message: err.Error()})
 	}
 	return c.JSON(http.StatusOK, item)
+}
+
+func getImg(c echo.Context) error {
+	storedDir := "../images/"
+	imgPath := path.Join(storedDir, c.Param("imageFilename"))
+	if _, err := os.Stat(imgPath); err != nil {
+		c.Logger().Errorf("Image not found: %s%s", imgPath, imgPath)
+		imgPath = path.Join(storedDir, "default.jpg")
+	}
+	return c.File(imgPath)
 }
 
 func createItem(c echo.Context) error {
@@ -128,14 +140,11 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "Authorization header is required"})
 		}
 
-		// "Bearer "を削除してトークンの文字列を取得
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 		if tokenString == authHeader {
-			// "Bearer "が削除されていなければ、ヘッダーの形式が正しくない
 			return c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "Authorization header must be in the format 'Bearer {token}'"})
 		}
 
-		// トークンの検証
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])

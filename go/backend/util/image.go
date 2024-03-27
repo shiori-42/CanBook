@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:44:01 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 21:44:24 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/27 19:17:40 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,40 @@ package util
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"io"
 	"mime/multipart"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
-func SaveImage(src io.Reader, fileHeader *multipart.FileHeader) (string, error) {
-	ext := strings.ToLower(filepath.Ext(fileHeader.Filename))
-	if ext != ".jpg" && ext != ".png" {
-		return "", fmt.Errorf("unsupported file type: %v", ext)
-	}
+func SaveImage(src multipart.File, image *multipart.FileHeader) (string, error) {
+	uploadDir := "../images/"
 
 	hasher := sha256.New()
-	if _, err := io.Copy(hasher, src); err != nil {
-		return "", err
-	}
-	hashedFileName := hex.EncodeToString(hasher.Sum(nil)) + ext
-	hashedFilePath := filepath.Join("images", hashedFileName)
-	file, err := os.Create(hashedFilePath)
+	_, err := io.Copy(hasher, src)
 	if err != nil {
 		return "", err
 	}
-	defer file.Close()
+	hashBytes := hasher.Sum(nil)
+	hashString := hex.EncodeToString(hashBytes)
+	fileName := hashString + filepath.Ext(image.Filename)
 
-	if _, err := io.Copy(file, src); err != nil {
+	filePath := filepath.Join(uploadDir, fileName)
+
+	dst, err := os.Create(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer dst.Close()
+
+	_, err = src.Seek(0, io.SeekStart)
+	if err != nil {
+		return "", err
+	}
+	_, err = io.Copy(dst, src)
+	if err != nil {
 		return "", err
 	}
 
-	return hashedFileName, nil
+	return fileName, nil
 }
