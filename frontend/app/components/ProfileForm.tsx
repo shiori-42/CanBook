@@ -1,27 +1,12 @@
 "use client";
-import { Box, Typography, styled } from "@mui/material";
+import { Box, Button, TextField, Typography, styled } from "@mui/material";
 
 const ProfForm = () => {
-  const StyledBox = styled(Box)(({ theme }) => ({
-    overflow: "hidden",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundImage: `url(/Dots-to-Code.png)`,
-    width: 200,
-    height: 200,
-    borderRadius: "50%",
-    [theme.breakpoints.down("sm")]: {
-      width: 100,
-      height: 100,
-    },
-  }));
-
   return (
     <>
       <Box
         width={"100%"}
         height={"100%"}
-        borderBottom={1}
         borderColor={"divider"}
         mt={3}
         pb={3}
@@ -30,17 +15,59 @@ const ProfForm = () => {
         alignItems="center"
         // sx={backgroundImageStyle}
       >
-        <StyledBox />
-        <Typography fontSize={20} fontWeight={"bold"} mt={1.5}>
-          ああああああ
-        </Typography>
-      </Box>
+        {/* <StyledTextField /> */}
 
-      <Typography fontSize={20} fontWeight={"bold"}>
-        あああ
-      </Typography>
-      <Typography fontSize={20}>あああ</Typography>
-      <Typography fontSize={12}>あああ</Typography>
+        <TextField
+          type="file"
+          // sx={{ display: "none" }}
+          name="image_name"
+          id="image_name"
+          // onChange={onFileChange}
+          required
+          fullWidth
+          // label="写真"
+          variant="outlined"
+        />
+      </Box>
+      <Box>
+        <TextField
+          name="nickname"
+          type="nickname"
+          label="ニックネーム"
+          variant="outlined"
+          fullWidth
+          required
+          autoFocus
+          // value={nickname}
+        />
+        <TextField
+          name="college"
+          type="college"
+          label="大学名"
+          variant="outlined"
+          fullWidth
+          required
+          autoFocus
+          // value={college}
+          sx={{ mt: 3 }}
+        />
+        <TextField
+          name="campus"
+          type="campus"
+          label="キャンパス名"
+          variant="outlined"
+          fullWidth
+          required
+          autoFocus
+          // value={campus}
+          sx={{ mt: 3 }}
+        />
+      </Box>
+      <Box textAlign="center" mt={5}>
+        <Button type="submit" variant="outlined" href="/profile">
+          保存する
+        </Button>
+      </Box>
     </>
   );
 };

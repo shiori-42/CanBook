@@ -47,9 +47,7 @@ export const InputForm: React.FC<Prop> = (props) => {
     data.append("price", values.price.toString());
     data.append("sell_type", values.sell_type.toString());
 
-
-
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     console.log("token:", token);
 
@@ -58,9 +56,7 @@ export const InputForm: React.FC<Prop> = (props) => {
       method: "POST",
       mode: "cors",
       headers: {
-
-        "Authorization": `Bearer ${token}`,
-
+        Authorization: `Bearer ${token}`,
       },
       body: data,
     })
@@ -100,10 +96,7 @@ export const InputForm: React.FC<Prop> = (props) => {
             variant="outlined"
             inputProps={{
               multiple: true,
-            }}
-            // inputProps={{
-            //   multiple: true,
-            // }}
+            }} //写真を複数入れられるかもしれないコード
             // variant="outlined"
           />
           <TextField
