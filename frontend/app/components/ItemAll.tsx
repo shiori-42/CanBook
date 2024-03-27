@@ -1,28 +1,90 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { Items } from "../data/data";
 import SearchBox from "./SearchBox";
 
-const ItemAll = () => {
-  const [filteredItems, setFilteredItems] = useState(Items);
-  const [isLogin, setIsLogin] = useState(true);
+// const handleSearch = (searchQuery: string) => {
+//   const filtered = items.filter((item) =>
+//     item.name.toLowerCase().includes(searchQuery.toLowerCase())
+//   );
+//   setFilteredItems(filtered);
+// };//絞り込みしてる
 
-  // const handleSearch = (searchQuery: string) => {
-  //   const filtered = items.filter((item) =>
-  //     item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  //   );
-  //   setFilteredItems(filtered);
-  // };//絞り込みしてる
+//ItemMyListのようにGETメソッド書く！
+//ItemMyListが上手くいったら！！！！
 
-  //ItemMyListのようにGETメソッド書く！
-  //ItemMyListが上手くいったら！！！！
+interface Item {
+  id: number;
+  name: string;
+  course_name: string;
+  price: number;
+  sell_type: string;
+  image_name: string;
+  created_at: string;
+  updated_at: string;
+  user_id: number;
+}
+
+const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
+
+interface Prop {
+  reload?: boolean;
+  onLoadCompleted?: () => void;
+}
+
+// const ItemAll = () => {
+export const ItemAll: React.FC<Prop> = (props) => {
+  const { reload = true, onLoadCompleted } = props;
+  const [items, setItems] = useState<Item[]>([]);
+
+  const fetchItems = () => {
+    const token = localStorage.getItem("token");
+
+    fetch(`${server}/alluseritems`, {
+      // Template literalsを使用
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data.items)) {
+          setItems(data.items); // dataからdata.itemsへ変更
+        } else {
+          console.error("Fetched data is not an array:", data);
+          setItems([]); // データが配列でない場合は、空の配列を設定する
+        }
+        if (onLoadCompleted) {
+          onLoadCompleted();
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  };
+
+  useEffect(() => {
+    if (reload) {
+      fetchItems();
+    }
+  }, [reload]);
 
   return (
+    //filteredItems.mapだった
     <>
       <Grid container spacing={1} py={2}>
-        {filteredItems.map((item, index) => (
+        {items.map((item, index) => (
           <Grid key={index} item xs={4}>
             <Link href={`/item/${item.id}`} style={{ textDecoration: "none" }}>
               <Card
@@ -45,7 +107,7 @@ const ItemAll = () => {
                   />
                 </Box>
                 <Typography fontSize={{ xs: 12, sm: 15 }} height={40} px={0.5}>
-                  {item.text_name}
+                  {item.name}
                 </Typography>
                 <Stack direction={"row"} mt={1}>
                   <Typography
