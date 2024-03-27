@@ -17,9 +17,9 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"net/http"
 	"os"
+	"path"
 	"strconv"
 	"strings"
-	"path"
 
 	// echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -78,7 +78,6 @@ func getItemByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, item)
 }
 
-
 func getImg(c echo.Context) error {
 	storedDir := "../images/"
 	imgPath := path.Join(storedDir, c.Param("imageFilename"))
@@ -88,7 +87,6 @@ func getImg(c echo.Context) error {
 	}
 	return c.File(imgPath)
 }
-
 
 func createItem(c echo.Context) error {
 	userID, ok := c.Get("user_id").(uint)
