@@ -31,7 +31,7 @@ interface Prop {
 //     return <NotFound />;
 //   }
 
-export const ItemDetail: React.FC<Prop> = (props) => {
+const ItemDetail: React.FC<Prop> = (props) => {
   const { reload = true, onLoadCompleted, params } = props;
   const [item, setItems] = useState<Item>();
 
@@ -157,3 +157,4 @@ export const ItemDetail: React.FC<Prop> = (props) => {
     </>
   );
 };
+export default ItemDetail;
