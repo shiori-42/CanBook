@@ -8,6 +8,8 @@ export type Message = {
   content: string;
   senderID: string;
   recipientID: string;
+  type: "recv" | "self";
+  username: string;
 };
 
 const ChatPage = () => {
@@ -50,8 +52,8 @@ const ChatPage = () => {
     if (ws && inputMessage.trim() !== "") {
       const message: Message = {
         content: inputMessage,
-        senderID: "", // バックエンドで設定されるため空文字列
-        recipientID: "", // バックエンドで設定されるため空文字列
+        senderID: "",
+        recipientID: "",
       };
       ws.send(JSON.stringify(message));
       setInputMessage("");

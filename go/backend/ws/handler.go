@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 23:20:41 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/28 03:49:02 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/28 17:31:14 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,13 @@ package ws
 import (
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
+	"github.com/shiori-42/textbook_change_app/go/backend/repository"
 )
 
 var (
@@ -33,50 +36,85 @@ var (
 type Handler struct{}
 
 func (h *Handler) HandleWebSocket(c echo.Context) error {
-    userID, ok := c.Get("user_id").(uint)
-    if !ok {
-        c.Logger().Error("Invalid user ID")
-        return echo.NewHTTPError(http.StatusInternalServerError, "Invalid user ID")
-    }
-    c.Logger().Info("User ID in HandleWebSocket:", userID)
+	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
 
-    conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
-    if err != nil {
-        return err
-    }
-    defer conn.Close()
+	var token string
+	var itemID uint
+	for {
+		var req map[string]interface{}
+		err := conn.ReadJSON(&req)
+		if err != nil {
+			log.Println(err)
+			break
+		}
 
-    client := &Client{
-        UserID: userID,
-        Conn:   conn,
-    }
-    clients[userID] = client
+		if token == "" {
+			if tokenStr, ok := req["token"].(string); ok {
+				token = tokenStr
+				claims := jwt.MapClaims{}
+				_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+					return []byte(os.Getenv("SECRET")), nil
+				})
+				if err != nil {
+					log.Println(err)
+					break
+				}
+				userID := uint(claims["user_id"].(float64))
+				c.Set("user_id", userID)
+			}
+		}
 
-    for {
-        var message Message
-        err := conn.ReadJSON(&message)
-        if err != nil {
-            log.Println(err)
-            break
-        }
+		if itemIDStr, ok := req["itemId"].(string); ok {
+			itemIDUint64, err := strconv.ParseUint(itemIDStr, 10, 64)
+			if err != nil {
+				log.Println(err)
+				break
+			}
+			itemID = uint(itemIDUint64)
+		}
 
-        recipientID, err := strconv.ParseUint(message.RecipientID, 10, 64)
-        if err != nil {
-            log.Printf("Invalid recipient ID: %v", err)
-            continue
-        }
+		if itemID != 0 {
+			item, err := repository.GetItemByID(int(itemID))
+			if err != nil {
+				log.Println(err)
+				break
+			}
 
-        recipientClient, ok := clients[uint(recipientID)]
-        if !ok {
-            log.Printf("Recipient %d not found", recipientID)
-            continue
-        }
+			client := &Client{
+				UserID: c.Get("user_id").(uint),
+				Conn:   conn,
+			}
+			clients[item.UserID] = client
 
-        if err := recipientClient.Conn.WriteJSON(message); err != nil {
-            log.Println(err)
-        }
-    }
-	delete(clients, userID)
+			for {
+				var message Message
+				err := conn.ReadJSON(&message)
+				if err != nil {
+					log.Println(err)
+					break
+				}
+
+				message.SenderID = strconv.FormatUint(uint64(client.UserID), 10)
+				message.RecipientID = strconv.FormatUint(uint64(item.UserID), 10)
+
+				recipientClient, ok := clients[item.UserID]
+				if !ok {
+					log.Printf("Recipient %d not found", item.UserID)
+					continue
+				}
+
+				if err := recipientClient.Conn.WriteJSON(message); err != nil {
+					log.Println(err)
+				}
+			}
+
+			delete(clients, item.UserID)
+		}
+	}
 
 	return nil
 }
