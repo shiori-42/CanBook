@@ -42,7 +42,7 @@ const SearchComponent = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `${server}/search?query=${encodeURIComponent(query)}`,
+        `${server}/search?keyword=${encodeURIComponent(query)}`,
         {
           // fetch(`${server}/search`, {
           method: "GET", // GETリクエストを使用
@@ -61,7 +61,7 @@ const SearchComponent = () => {
       }
 
       const data = await response.json();
-      setResults(data); // 検索結果を状態に保存
+      setResults(data.items); // 検索結果を状態に保存
     } catch (error) {
       console.error("Error fetching data:", error);
       setResults([]); // エラーが発生した場合、結果をクリア
