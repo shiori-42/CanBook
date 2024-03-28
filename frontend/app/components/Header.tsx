@@ -118,7 +118,6 @@ export default function MenuAppBar() {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleMenu}
                 sx={{ color: "#c6c6c6" }}
               >
                 <AccountCircle />
