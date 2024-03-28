@@ -1,23 +1,86 @@
 "use client";
-import { Items } from "@/app/data/data";
+// import { Items } from "@/app/data/data";
 import NotFound from "@/app/not-found";
 import { Box, Stack, Typography, styled } from "@mui/material";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
-const ItemDetail = async ({ params }: { params: { id: string } }) => {
-  const item = Items.find((itemdata) => itemdata.id === parseInt(params.id));
+interface Item {
+  id: number;
+  name: string;
+  course_name: string;
+  price: number;
+  sell_type: string;
+  image_name: string;
+  created_at: string;
+  updated_at: string;
+  user_id: number;
+}
 
-  if (!item) {
-    return <NotFound />;
+const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
+
+interface Prop {
+  reload?: boolean;
+  onLoadCompleted?: () => void;
+  params: { id: string };
+}
+
+// const ItemDetail = async ({ params }: { params: { id: string } }) => {
+//   const item = Items.find((itemdata) => itemdata.id === parseInt(params.id));
+
+//   if (!item) {
+//     return <NotFound />;
+//   }
+
+export const ItemDetail: React.FC<Prop> = (props) => {
+  const { reload = true, onLoadCompleted, params } = props;
+  const [item, setItems] = useState<Item>();
+
+  const fetchItems = () => {
+    const token = localStorage.getItem("token");
+
+    fetch(`${server}/items`, {
+      // Template literalsを使用
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data.items)) {
+          const item = data.items.find(
+            (itemdata: { id: number }) => itemdata.id === parseInt(params.id)
+          );
+          setItems(item); // dataからdata.itemsへ変更
+        } else {
+          console.error("Fetched data is not an array:", data);
+        }
+        if (onLoadCompleted) {
+          onLoadCompleted();
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  };
+
+  useEffect(() => {
+    if (reload) {
+      fetchItems();
+    }
+  }, [reload]);
+
+  if (item == undefined) {
+    return null;
   }
-
-  // const backgroundImageStyle = {
-  //   backgroundImage: `url(${item.imagepath})`,
-  //   backgroundSize: "cover",
-  //   backgroundPosition: "center",
-  //   width: "100%",
-  //   height: 500,
-  // };
 
   const StyledBox = styled(Box)(({ theme }) => ({
     position: "relative",
@@ -57,7 +120,7 @@ const ItemDetail = async ({ params }: { params: { id: string } }) => {
           mt={1}
           fontWeight={"bold"}
         >
-          {item.text_name}
+          {item.name}
         </Typography>
         <Stack direction={"row"} mt={{ xs: 0, sm: 1 }}>
           <Typography
@@ -94,5 +157,3 @@ const ItemDetail = async ({ params }: { params: { id: string } }) => {
     </>
   );
 };
-
-export default ItemDetail;

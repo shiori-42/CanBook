@@ -30,8 +30,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
   const [items, setItems] = useState<Item[]>([]);
 
   const fetchItems = () => {
-
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     fetch(`${server}/items`, {
       // Template literalsを使用
@@ -40,8 +39,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
         "Content-Type": "application/json",
         Accept: "application/json",
 
-        "Authorization": `Bearer ${token}`,
-
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -52,9 +50,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
       })
       .then((data) => {
         if (Array.isArray(data.items)) {
-
-        setItems(data.items); // dataからdata.itemsへ変更
-
+          setItems(data.items); // dataからdata.itemsへ変更
         } else {
           console.error("Fetched data is not an array:", data);
           setItems([]); // データが配列でない場合は、空の配列を設定する
@@ -97,7 +93,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
                   component="img"
                   sx={{ height: { xs: 110, sm: 180 } }}
                   image={`${process.env.NEXT_PUBLIC_API_URL}/images/${item.image_name}`}
-              />
+                />
               </Box>
               <Typography fontSize={{ xs: 12, sm: 15 }} height={40} px={0.5}>
                 {item.name}
@@ -114,9 +110,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
                   height={{ xs: 15, sm: 18 }}
                   border={1.9}
                   borderRadius={"20px"}
-
-                  color={item.sell_type === "rental" ? "#009C88" : "#1573FF"} 
-
+                  color={item.sell_type === "rental" ? "#009C88" : "#1573FF"}
                   style={{ display: "flex", alignItems: "center" }}
                 >
                   {item.sell_type}
@@ -125,9 +119,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
                   fontSize={{ xs: 16, sm: 20 }}
                   alignItems={"center"}
                   justifyContent={"center"}
-
-                  color={item.sell_type === "rental" ? "#009C88" : "#1573FF"} 
-
+                  color={item.sell_type === "rental" ? "#009C88" : "#1573FF"}
                 >
                   ￥{item.price}
                 </Typography>

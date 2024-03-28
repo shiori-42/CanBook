@@ -26,6 +26,8 @@ interface Item {
   user_id: number;
 }
 
+const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
+
 const SearchComponent = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Item[]>([]);
@@ -35,12 +37,14 @@ const SearchComponent = () => {
     e.preventDefault(); // フォームのデフォルトの送信を防ぐ
 
     // ここでバックエンドのURLを適切に設定する
-    const backendUrl = "http://localhost:8000/search"; // バックエンドのアドレスとポートを指定
+    // const backendUrl = "http://localhost:8080/search"; // バックエンドのアドレスとポートを指定
+
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `${backendUrl}?query=${encodeURIComponent(query)}`,
+        `${server}/search?query=${encodeURIComponent(query)}`,
         {
+          // fetch(`${server}/search`, {
           method: "GET", // GETリクエストを使用
           headers: {
             "Content-Type": "application/json",
