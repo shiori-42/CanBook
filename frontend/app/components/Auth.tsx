@@ -149,7 +149,9 @@ export const Auth = () => {
             }
             // href="/profile-form" //ここは普通に飛ばしちゃって大丈夫なのか？
             //ダメでしたuseMutateAuthにかいてる
-          ></Button>
+          >
+            {isLogin ? "ログイン" : "会員登録"}
+          </Button>
         </Box>
       </form>
       <Box position={"relative"}>
