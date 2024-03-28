@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   user_repository.go                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/29 05:11:19 by shiori0123        #+#    #+#             */
+/*   Updated: 2024/03/29 05:13:51 by shiori0123       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 package repository
 
 import (
@@ -9,8 +21,8 @@ import (
 
 func GetUserByEmail(email string) (*model.User, error) {
 	var user model.User
-	query := `SELECT * FROM users WHERE email = $1`
-	err := db.DB.QueryRow(query, email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
+	query := `SELECT id, name, email, password, college, campus, created_at, updated_at FROM users WHERE email = $1`
+	err := db.DB.QueryRow(query, email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.College, &user.Campus, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
@@ -21,8 +33,8 @@ func GetUserByEmail(email string) (*model.User, error) {
 }
 
 func CreateUser(user *model.User) error {
-	query := `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id`
-	err := db.DB.QueryRow(query, user.Name, user.Email, user.Password).Scan(&user.ID)
+	query := `INSERT INTO users (name, email, password, college, campus) VALUES ($1, $2, $3, $4, $5) RETURNING id`
+	err := db.DB.QueryRow(query, user.Name, user.Email, user.Password, user.College, user.Campus).Scan(&user.ID)
 	if err != nil {
 		return err
 	}
@@ -33,7 +45,7 @@ func CreateUser(user *model.User) error {
 func GetUserByID(userID uint) (model.User, error) {
 	var user model.User
 	query := `SELECT * FROM users WHERE id = $1`
-	err := db.DB.QueryRow(query, userID).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
+	err := db.DB.QueryRow(query, userID).Scan(&user.ID, &user.Name, &user.Email, &user.Password, user.College, user.Campus, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return user, nil

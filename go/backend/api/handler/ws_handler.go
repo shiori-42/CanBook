@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 23:23:35 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/28 17:06:16 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/28 21:30:56 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,5 @@ import (
 
 func RegisterWebSocketRoutes(e *echo.Echo) {
 	wsHandler := &ws.Handler{}
-	e.GET("/ws", wsHandler.HandleWebSocket, AuthMiddleware)
+	e.GET("/ws/:itemId", wsHandler.HandleWebSocket, AuthMiddleware)
 }

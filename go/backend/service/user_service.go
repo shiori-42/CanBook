@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 18:49:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 21:44:24 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/29 04:39:08 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,13 @@ func SignUpUser(user model.User) (model.UserResponse, error) {
 	if err != nil {
 		return userRes, err
 	}
-	newUser := model.User{Name: user.Name, Email: user.Email, Password: string(hash)}
+	newUser := model.User{
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: string(hash),
+		College:  user.College,
+		Campus:   user.Campus,
+	}
 	if err := repository.CreateUser(&newUser); err != nil {
 		return userRes, err
 	}

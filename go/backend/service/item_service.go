@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 21:44:34 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/29 05:14:38 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,14 @@ func DeleteItem(itemID string, userID uint) error {
 
 func SearchItemsByKeyword(keyword string) (model.Items, error) {
 	items, err := repository.SearchItemsByKeyword(keyword)
+	if err != nil {
+		return items, err
+	}
+	return items, nil
+}
+
+func SearchItemsByCollege(keyword string) (model.Items, error) {
+	items, err := repository.SearchItemsByCollege(keyword)
 	if err != nil {
 		return items, err
 	}
