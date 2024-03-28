@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import ChatBody from "../components/ChatBody";
-import { useRouter } from "next/router";
 
 export type Message = {
   content: string;
@@ -12,36 +11,39 @@ export type Message = {
   username: string;
 };
 
-const ChatPage = () => {
+const ChatPage = ({ params }: { params: { itemId: string } }) => {
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [ws, setWs] = useState<WebSocket | null>(null);
-  const router = useRouter();
-  const { itemId } = router.query;
+  const itemId = params.itemId;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && itemId) {
       const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-      const wsUrl = `${wsProtocol}//${process.env.NEXT_PUBLIC_API_URL?.replace(/^https?:\/\//, '')}/ws`;
+      const wsUrl = `${wsProtocol}://${process.env.NEXT_PUBLIC_API_URL?.replace(/^https?:\/\//, '')}/ws/${itemId}`;
       const newWs = new WebSocket(wsUrl);
 
       newWs.onopen = () => {
         console.log("WebSocket connected");
-        newWs.send(JSON.stringify({ token, itemId }));
+        newWs.send(JSON.stringify({ token }));
       };
-
+  
       newWs.onmessage = (event) => {
         const message = JSON.parse(event.data) as Message;
         setMessages((prevMessages) => [...prevMessages, message]);
       };
-
+  
       newWs.onclose = () => {
         console.log("WebSocket disconnected");
       };
-
+  
+      newWs.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+  
       setWs(newWs);
-
+  
       return () => {
         newWs.close();
       };
@@ -49,16 +51,30 @@ const ChatPage = () => {
   }, [itemId]);
 
   const sendMessage = () => {
-    if (ws && inputMessage.trim() !== "") {
-      const message: Message = {
-        content: inputMessage,
-        senderID: "",
-        recipientID: "",
-      };
-      ws.send(JSON.stringify(message));
-      setInputMessage("");
+    console.log("sendMessageが呼び出されました"); // デバッグログ
+    if (!ws) {
+        console.log("WebSocketがnullです");
+        return;
     }
-  };
+    if (ws.readyState !== WebSocket.OPEN) {
+        console.log(`WebSocketの状態がOPENではありません: 現在の状態 = ${ws.readyState}`);
+        return;
+    }
+    if (inputMessage.trim() !== "") {
+        const message: Message = {
+            content: inputMessage,
+            senderID: "",
+            recipientID: "",
+            type: "self",
+            username: "",
+        };
+        ws.send(JSON.stringify(message));
+        console.log("メッセージを送信しました: ", message); // デバッグログ
+        setInputMessage("");
+    } else {
+        console.log("入力されたメッセージが空です");
+    }
+};
 
 
   return (

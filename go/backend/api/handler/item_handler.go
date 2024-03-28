@@ -6,7 +6,7 @@
 /*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/27 19:39:24 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/03/29 05:16:07 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ func RegisterItemRoutes(e *echo.Echo) {
 	i.PUT("/:itemId", updateItem)
 	i.DELETE("/:itemId", deleteItem)
 	e.GET("/search", searchItems)
+	e.GET("/searchcollege", searchItemsByCollege)
 	e.GET("alluseritems", getAllUserItems) //for no login user
 	e.GET("/images/:imageFilename", getImg)
 }
@@ -127,6 +128,15 @@ func deleteItem(c echo.Context) error {
 func searchItems(c echo.Context) error {
 	keyword := c.QueryParam("keyword")
 	items, err := service.SearchItemsByKeyword(keyword)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, items)
+}
+
+func searchItemsByCollege(c echo.Context) error {
+	keyword := c.QueryParam("keyword")
+	items, err := service.SearchItemsByCollege(keyword)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
