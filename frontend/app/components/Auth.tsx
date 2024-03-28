@@ -142,12 +142,14 @@ export const Auth = () => {
             color="primary"
             variant="contained"
             fullWidth
-            disabled={!email || !pw}
-            // href="/profile-form" //ここは普通に飛ばしちゃって大丈夫なのか？？？？？？？？
+            disabled={
+              isLogin
+                ? !email || !pw
+                : !name || !email || !pw || !college || !campus
+            }
+            // href="/profile-form" //ここは普通に飛ばしちゃって大丈夫なのか？
             //ダメでしたuseMutateAuthにかいてる
-          >
-            {isLogin ? "ログイン" : "会員登録"}
-          </Button>
+          ></Button>
         </Box>
       </form>
       <Box position={"relative"}>

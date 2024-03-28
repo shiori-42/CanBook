@@ -1,7 +1,7 @@
 "use client";
 // import { Items } from "@/app/data/data";
 import NotFound from "@/app/not-found";
-import { Box, Stack, Typography, styled } from "@mui/material";
+import { Box, Button, Stack, Typography, styled } from "@mui/material";
 import React, { Fragment, useEffect, useState } from "react";
 
 interface Item {
@@ -148,6 +148,26 @@ const ItemDetail: React.FC<Prop> = (props) => {
           >
             ￥{item.price}
           </Typography>
+        </Stack>
+        <Stack my={2} direction="row" justifyContent="end" spacing={1}>
+          <Button
+            href="/chat"
+            sx={{
+              mt: 1,
+              border: 1,
+              color: "white",
+              bgcolor: "#F47381",
+              "&:hover": {
+                bgcolor: "#ffffff",
+                borderColor: "#F47381",
+                color: "#F47381",
+              },
+            }}
+          >
+            <Typography fontSize={{ xs: 10, sm: 13 }} fontFamily="revert-layer">
+              チャットを始める
+            </Typography>
+          </Button>
         </Stack>
       </Box>
       {/* <Typography fontSize={15} fontWeight={"bold"} mt={1}>
