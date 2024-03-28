@@ -11,17 +11,19 @@ export const useMutateAuth = () => {
   const resetEditedTask = useStore((state) => state.resetEditedTask);
   const { switchErrorHandling } = useError();
   const loginMutation = useMutation(
-    async (user: Credential) => {
+    async (user: { email: string; password: string }) => {
       console.log(process.env.NEXT_PUBLIC_API_URL);
 
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, user);
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/login`,
+        user
+      );
 
       return res.data;
     },
     {
       onSuccess: (data) => {
-
-        localStorage.setItem('token', data.token);
+        localStorage.setItem("token", data.token);
 
         router.push("/home");
       },
@@ -36,8 +38,13 @@ export const useMutateAuth = () => {
   );
 
   const registerMutation = useMutation(
-    async (user: Credential) =>
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/signup`, user),
+    async (user: {
+      name: string;
+      email: string;
+      password: string;
+      college: string;
+      campus: string;
+    }) => await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/signup`, user),
     {
       onError: (err: any) => {
         if (err.response.data.message) {
@@ -52,8 +59,7 @@ export const useMutateAuth = () => {
     async () => await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/logout`),
     {
       onSuccess: () => {
-
-        localStorage.removeItem('token'); // トークンをローカルストレージから削除
+        localStorage.removeItem("token"); // トークンをローカルストレージから削除
 
         resetEditedTask();
         router.push("/login");
