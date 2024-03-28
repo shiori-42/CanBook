@@ -50,7 +50,7 @@ export default function MenuAppBar() {
 
           <Button
             color="inherit"
-            href="/"
+            href="/home"
             sx={{
               mr: { sm: 2 },
               border: 1,
