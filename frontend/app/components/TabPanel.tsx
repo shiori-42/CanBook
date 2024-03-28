@@ -11,6 +11,7 @@ import SearchButton from "./SearchButton";
 import { AccountCircle } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CollegeSearchButton from "./CollegeSearchButton";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -81,11 +82,13 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
+        <Stack direction="row" spacing={1} justifyContent="end" mt={1}>
+          <SearchButton />
+          <CollegeSearchButton />
+        </Stack>
         <Typography fontSize={15} fontWeight={"bold"} mt={2}>
           すべての商品
         </Typography>
-        <SearchButton />
-        {/* <ItemMyList /> */}
         <ItemAll />
       </CustomTabPanel>
 

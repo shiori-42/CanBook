@@ -6,7 +6,7 @@ import { Typography } from "@mui/material";
 export default function SearchButton() {
   return (
     <Button
-      href="/search"
+      href="/college-search"
       // onClick={() => setIsLogin(!isLogin)} //ログインしたら出品ボタンが出るように！！！！！が難しい
       sx={{
         mt: 1,
@@ -21,7 +21,7 @@ export default function SearchButton() {
       }}
     >
       <Typography fontSize={{ xs: 10, sm: 13 }} fontFamily="revert-layer">
-        商品検索
+        大学検索
       </Typography>
     </Button>
   );
