@@ -142,7 +142,7 @@ export const Auth = () => {
             color="primary"
             variant="contained"
             fullWidth
-            disabled={!name || !email || !pw}
+            disabled={!email || !pw}
             // href="/profile-form" //ここは普通に飛ばしちゃって大丈夫なのか？？？？？？？？
             //ダメでしたuseMutateAuthにかいてる
           >
