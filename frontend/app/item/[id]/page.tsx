@@ -1,8 +1,7 @@
 "use client";
 // import { Items } from "@/app/data/data";
-import NotFound from "@/app/not-found";
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
-import React, { Fragment, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 
 interface Item {
   id: number;

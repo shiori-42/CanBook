@@ -1,10 +1,7 @@
 "use client";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Main from "./components/main";
 import Header from "./components/Header";
-import AppLogin from "./login/page";
-import AppTodo from "./todo/page";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import reportWebVitals from "@/reportWebVitals";
 import "./components/LoginTest/index.css";

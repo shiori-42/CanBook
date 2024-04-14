@@ -8,10 +8,8 @@
 // export default login;
 "use client";
 import { useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import axios from "axios";
 import { Auth } from "../components/Auth";
-import { Todo } from "../components/Todo";
 // import { CsrfToken } from "../types";
 
 axios.defaults.withCredentials = true;

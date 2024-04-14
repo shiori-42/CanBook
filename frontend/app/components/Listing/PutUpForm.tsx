@@ -1,6 +1,5 @@
 import { useState } from "react";
 import InputForm from "./Form/InputForm";
-import ItemMyList from "./ItemList/ItemMyList";
 
 function PutUpform() {
   //form/page.tsxで記述
