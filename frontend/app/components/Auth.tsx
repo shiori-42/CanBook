@@ -6,13 +6,11 @@ import {
   Button,
   Grid,
   Link,
-  Paper,
   TextField,
   Typography,
 } from "@mui/material";
 import { teal } from "@mui/material/colors";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import ImportExportIcon from "@mui/icons-material/ImportExport";
 
 export const Auth = () => {
   const [name, setName] = useState("");

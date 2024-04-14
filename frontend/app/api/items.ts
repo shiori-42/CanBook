@@ -1,13 +1,12 @@
 // api/items.ts //なんのため？？？
 import axios from "axios";
-import { Item } from "../types/Items";
-
+import { item } from "../types/items";
 const API_URL = "http://localhost:8080";
 
-export const fetchItems = async (): Promise<Item[]> => {
+export const fetchItems = async (): Promise<item[]> => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get<Item[]>(`${API_URL}/items`, {
+    const response = await axios.get<item[]>(`${API_URL}/items`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

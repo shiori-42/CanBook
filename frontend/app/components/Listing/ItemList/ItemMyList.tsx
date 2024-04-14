@@ -1,10 +1,7 @@
-// ItemMyList.tsx
-
 import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Stack, Typography } from "@mui/material";
 import Link from "next/link";
-// import { Items } from "@/app/data/data";
 
 interface Item {
   id: number;
