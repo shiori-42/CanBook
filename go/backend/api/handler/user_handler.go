@@ -23,13 +23,15 @@ import (
 	"github.com/shiori-42/textbook_change_app/go/backend/service"
 )
 
-func RegisterUserRoutes(e *echo.Echo) {
-	e.POST("/signup", signUp)
-	e.POST("/login", logIn)
-	e.POST("/logout", logOut)
+type UserHandler interface {
+	signUp(c echo.Context) error
+	logIn(c echo.Context) error
+	logOut(c echo.Context) error
 }
 
-func signUp(c echo.Context) error {
+type userHandler struct{}
+
+func (h *userHandler) signUp(c echo.Context) error {
 	var user model.User
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
@@ -42,7 +44,7 @@ func signUp(c echo.Context) error {
 	return c.JSON(http.StatusCreated, userRes)
 }
 
-func logIn(c echo.Context) error {
+func (h *userHandler) logIn(c echo.Context) error {
 	var user model.User
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
@@ -67,7 +69,7 @@ func logIn(c echo.Context) error {
 	})
 }
 
-func logOut(c echo.Context) error {
+func (h *userHandler) logOut(c echo.Context) error {
 	cookie := new(http.Cookie)
 	cookie.Name = "token"
 	cookie.Value = ""
@@ -79,4 +81,11 @@ func logOut(c echo.Context) error {
 	cookie.SameSite = http.SameSiteNoneMode
 	c.SetCookie(cookie)
 	return c.NoContent(http.StatusOK)
+}
+
+func RegisterUserRoutes(e *echo.Echo) {
+	h := &userHandler{}
+	e.POST("/signup", h.signUp)
+	e.POST("/login", h.logIn)
+	e.POST("/logout", h.logOut)
 }

@@ -21,7 +21,6 @@ import (
 	"strconv"
 	"strings"
 
-	// echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/shiori-42/textbook_change_app/go/backend/repository"
 	"github.com/shiori-42/textbook_change_app/go/backend/service"
@@ -31,25 +30,36 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 }
 
-func RegisterItemRoutes(e *echo.Echo) {
-	i := e.Group("/items")
-	// i.Use(echojwt.WithConfig(echojwt.Config{
-	// 	SigningKey:  []byte(os.Getenv("SECRET")),
-	// 	TokenLookup: "header:Authorization",
-	// }))
-	i.Use(AuthMiddleware)
-	i.GET("", getMyItems) //my page
-	i.GET("/:itemId", getItemByID)
-	i.POST("", createItem)
-	i.PUT("/:itemId", updateItem)
-	i.DELETE("/:itemId", deleteItem)
-	e.GET("/search", searchItems)
-	e.GET("/searchcollege", searchItemsByCollege)
-	e.GET("alluseritems", getAllUserItems) //for no login user
-	e.GET("/images/:imageFilename", getImg)
+type ItemHandler interface {
+	getMyItems(c echo.Context) error
+	getAllUserItems(c echo.Context) error
+	getItemByID(c echo.Context) error
+	getImg(c echo.Context) error
+	createItem(c echo.Context) error
+	updateItem(c echo.Context) error
+	deleteItem(c echo.Context) error
+	searchItems(c echo.Context) error
+	searchItemsByCollege(c echo.Context) error
 }
 
-func getMyItems(c echo.Context) error {
+type itemHandler struct{}
+
+func RegisterItemRoutes(e *echo.Echo) {
+	h := &itemHandler{}
+	i := e.Group("/items")
+	i.Use(AuthMiddleware)
+	i.GET("", h.getMyItems) //my page
+	i.GET("/:itemId", h.getItemByID)
+	i.POST("", h.createItem)
+	i.PUT("/:itemId", h.updateItem)
+	i.DELETE("/:itemId", h.deleteItem)
+	e.GET("/search", h.searchItems)
+	e.GET("/searchcollege", h.searchItemsByCollege)
+	e.GET("alluseritems", h.getAllUserItems) //for no login user
+	e.GET("/images/:imageFilename", h.getImg)
+}
+
+func (h *itemHandler) getMyItems(c echo.Context) error {
 	userID := c.Get("user_id").(uint)
 	items, err := repository.GetMyItems(userID)
 	if err != nil {
@@ -58,7 +68,7 @@ func getMyItems(c echo.Context) error {
 	return c.JSON(http.StatusOK, items)
 }
 
-func getAllUserItems(c echo.Context) error {
+func (h *itemHandler) getAllUserItems(c echo.Context) error {
 	items, err := repository.GetAllUserItems()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
@@ -66,7 +76,7 @@ func getAllUserItems(c echo.Context) error {
 	return c.JSON(http.StatusOK, items)
 }
 
-func getItemByID(c echo.Context) error {
+func (h *itemHandler) getItemByID(c echo.Context) error {
 	itemIDStr := c.Param("itemId")
 	itemID, err := strconv.Atoi(itemIDStr)
 	if err != nil {
@@ -79,7 +89,7 @@ func getItemByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, item)
 }
 
-func getImg(c echo.Context) error {
+func (h *itemHandler) getImg(c echo.Context) error {
 	storedDir := "../images/"
 	imgPath := path.Join(storedDir, c.Param("imageFilename"))
 	if _, err := os.Stat(imgPath); err != nil {
@@ -89,7 +99,7 @@ func getImg(c echo.Context) error {
 	return c.File(imgPath)
 }
 
-func createItem(c echo.Context) error {
+func (h *itemHandler) createItem(c echo.Context) error {
 	userID, ok := c.Get("user_id").(uint)
 	if !ok {
 		return c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "invalid user id"})
@@ -101,7 +111,7 @@ func createItem(c echo.Context) error {
 	return c.JSON(http.StatusCreated, item)
 }
 
-func updateItem(c echo.Context) error {
+func (h *itemHandler) updateItem(c echo.Context) error {
 	itemIDStr := c.Param("itemId")
 	itemID, err := strconv.Atoi(itemIDStr)
 	if err != nil {
@@ -115,7 +125,7 @@ func updateItem(c echo.Context) error {
 	return c.JSON(http.StatusOK, item)
 }
 
-func deleteItem(c echo.Context) error {
+func (h *itemHandler) deleteItem(c echo.Context) error {
 	itemID := c.Param("itemId")
 	userID := c.Get("user_id").(uint)
 
@@ -125,7 +135,7 @@ func deleteItem(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func searchItems(c echo.Context) error {
+func (h *itemHandler) searchItems(c echo.Context) error {
 	keyword := c.QueryParam("keyword")
 	items, err := service.SearchItemsByKeyword(keyword)
 	if err != nil {
@@ -134,7 +144,7 @@ func searchItems(c echo.Context) error {
 	return c.JSON(http.StatusOK, items)
 }
 
-func searchItemsByCollege(c echo.Context) error {
+func (h *itemHandler) searchItemsByCollege(c echo.Context) error {
 	keyword := c.QueryParam("keyword")
 	items, err := service.SearchItemsByCollege(keyword)
 	if err != nil {

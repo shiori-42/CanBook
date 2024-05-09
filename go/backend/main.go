@@ -26,12 +26,18 @@ import (
 )
 
 func main() {
+
 	if os.Getenv("GO_ENV") == "dev" {
 		if err := godotenv.Load(); err != nil {
 			fmt.Println("Error loading .env file")
 			return
 		}
 	}
+
+	fmt.Println("POSTGRES_HOST:", os.Getenv("POSTGRES_HOST"))
+	fmt.Println("POSTGRES_USER:", os.Getenv("POSTGRES_USER"))
+	fmt.Println("POSTGRES_PASSWORD:", os.Getenv("POSTGRES_PASSWORD"))
+	fmt.Println("POSTGRES_DB:", os.Getenv("POSTGRES_DB"))
 
 	if err := db.InitDB(); err != nil {
 		fmt.Printf("Failed to connect to database: %v\n", err)

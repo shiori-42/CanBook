@@ -28,10 +28,10 @@ func InitDB() error {
 	dbPassword := os.Getenv("POSTGRES_PASSWORD")
 	dbName := os.Getenv("POSTGRES_DB")
 	dbHost := os.Getenv("POSTGRES_HOST")
-	// dbPort := os.Getenv("POSTGRES_PORT")
 
-	dsn := fmt.Sprintf("host=%s  user=%s password=%s dbname=%s sslmode=require",
-		dbHost,  dbUser, dbPassword, dbName)
+	dsn := fmt.Sprintf("host=%s  user=%s password=%s dbname=%s sslmode=disable",
+		//sslmode=require
+		dbHost, dbUser, dbPassword, dbName)
 
 	var err error
 	DB, err = sql.Open("postgres", dsn)
