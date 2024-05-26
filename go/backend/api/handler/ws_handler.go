@@ -13,16 +13,23 @@
 package handler
 
 import (
-	"log"
 	"net/http"
-	"os"
-	"strconv"
-
-	"github.com/golang-jwt/jwt/v4"
+	// "os"
+	// "strconv"
+	"github.com/CloudyKit/jet/v6"
+	"log"
+	
+	// "github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
-	"github.com/shiori-42/textbook_change_app/go/backend/repository"
+	// "github.com/shiori-42/textbook_change_app/go/backend/repository"
 )
+
+func RegisterWebSocketRoutes(e *echo.Echo) {
+	h := &wsHandler{}
+	e.GET("/ws", h.HandleWebSocket)
+	e.GET("/ws/:itemId", h.HandleWebSocket, AuthMiddleware)
+}
 
 type WSHandler interface {
 	HandleWebSocket(c echo.Context) error
@@ -30,6 +37,11 @@ type WSHandler interface {
 
 type wsHandler struct{}
 
+type WsJsonResponse struct {
+	Action  string `json:"action"`
+	Message string `json:"message"`
+	MessageType string `json:"messageType"`
+}
 type Client struct {
 	UserID uint
 	Conn   *websocket.Conn
@@ -50,49 +62,35 @@ var (
 	}
 )
 
+//WsEndpoint upgrades connection to websocket
 func (h *wsHandler) HandleWebSocket(c echo.Context) error {
-	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
 		return err
 	}
-	defer conn.Close()
+	defer ws.Close()
 
-	var token string
-	var itemID uint
+	var response WsJsonResponse
+	response.Message=`Connected to websocket`
+	err=ws.WriteJSON(response)
+	if err != nil {
+		return err
+	}
+
+	userID := c.Get("user_id").(uint)
+
 	for {
 		var req map[string]interface{}
-		err := conn.ReadJSON(&req)
+		err := ws.ReadJSON(&req)
 		if err != nil {
 			log.Println(err)
-			break
+			return err
 		}
 
-		if token == "" {
-			if tokenStr, ok := req["token"].(string); ok {
-				token = tokenStr
-				claims := jwt.MapClaims{}
-				_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-					return []byte(os.Getenv("SECRET")), nil
-				})
-				if err != nil {
-					log.Println(err)
-					break
-				}
-				userID := uint(claims["user_id"].(float64))
-				c.Set("user_id", userID)
-			}
-		}
+		
+		itemID:= req["itemId"].(string)
+		
 
-		if itemIDStr, ok := req["itemId"].(string); ok {
-			itemIDUint64, err := strconv.ParseUint(itemIDStr, 10, 64)
-			if err != nil {
-				log.Println(err)
-				break
-			}
-			itemID = uint(itemIDUint64)
-		}
-
-		if itemID != 0 {
 			item, err := repository.GetItemByID(int(itemID))
 			if err != nil {
 				log.Println(err)
@@ -100,20 +98,20 @@ func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 			}
 
 			client := &Client{
-				UserID: c.Get("user_id").(uint),
-				Conn:   conn,
+				UserID:	userID,
+				Conn:   ws,
 			}
 			clients[item.UserID] = client
 
 			for {
 				var message Message
-				err := conn.ReadJSON(&message)
+				err := ws.ReadJSON(&message)
 				if err != nil {
 					log.Println(err)
 					break
 				}
 
-				message.SenderID = strconv.FormatUint(uint64(client.UserID), 10)
+				message.SenderID = strconv.FormatUint(uint64(userID), 10)
 				message.RecipientID = strconv.FormatUint(uint64(item.UserID), 10)
 
 				recipientClient, ok := clients[item.UserID]
@@ -125,7 +123,6 @@ func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 				if err := recipientClient.Conn.WriteJSON(message); err != nil {
 					log.Println(err)
 				}
-			}
 
 			delete(clients, item.UserID)
 		}
@@ -134,7 +131,38 @@ func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 	return nil
 }
 
-func RegisterWebSocketRoutes(e *echo.Echo) {
-	h := &wsHandler{}
-	e.GET("/ws/:itemId", h.HandleWebSocket, AuthMiddleware)
+var views = jet.NewSet(
+	jet.NewOSFileSystemLoader("./html"),
+	jet.InDevelopmentMode(),
+)
+
+// Home renders the home page
+func Home(w http.ResponseWriter, r *http.Request) {
+	err := renderPage(w, "home.jet", nil)
+	if err != nil {
+		log.Println(err)
+	}
 }
+
+// renderPage renders a jet template
+func renderPage(c echo.Context, tmpl string, data jet.VarMap) error {
+	view, err := views.GetTemplate(tmpl)
+	if err != nil {
+		return err
+	}
+
+	err = view.Execute(c.Response().Writer, data, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Home(c echo.Context) error {
+    data := make(jet.VarMap)
+    data.Set("title", "Home Page")
+    return renderPage(c, "home.jet", data)
+}
+
+e.GET("/", handler.Home)
