@@ -31,6 +31,13 @@ type UserHandler interface {
 
 type userHandler struct{}
 
+func RegisterUserRoutes(e *echo.Echo) {
+	h := &userHandler{}
+	e.POST("/signup", h.signUp)
+	e.POST("/login", h.logIn)
+	e.POST("/logout", h.logOut)
+}
+
 func (h *userHandler) signUp(c echo.Context) error {
 	var user model.User
 	if err := c.Bind(&user); err != nil {
@@ -83,9 +90,3 @@ func (h *userHandler) logOut(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func RegisterUserRoutes(e *echo.Echo) {
-	h := &userHandler{}
-	e.POST("/signup", h.signUp)
-	e.POST("/login", h.logIn)
-	e.POST("/logout", h.logOut)
-}

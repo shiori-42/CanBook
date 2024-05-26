@@ -3,6 +3,7 @@ module github.com/shiori-42/textbook_change_app/go/backend
 go 1.22.1
 
 require (
+	github.com/CloudyKit/jet/v6 v6.2.0
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/gorilla/websocket v1.5.1
@@ -13,6 +14,7 @@ require (
 )
 
 require (
+	github.com/CloudyKit/fastprinter v0.0.0-20200109182630-33d98a066a53 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
