@@ -21,7 +21,7 @@
 //     image_name: "",
 //     text_name: "",
 //     class_name: "",
-//     price: 0, //GPTが0をいれますと言ってたから入れた
+//     price: 0,
 //     sell_type: 0,
 //   };
 //   const [values, setValues] = useState<formDataType>(initialState);
