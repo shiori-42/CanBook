@@ -1,28 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ws_handler.go                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 23:23:35 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/28 21:30:56 by shiori0123       ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 package handler
 
 import (
-	"net/http"
-	// "os"
-	// "strconv"
-	"github.com/CloudyKit/jet/v6"
 	"log"
-	
-	// "github.com/golang-jwt/jwt/v4"
+	"net/http"
+	"strconv"
+
+	"github.com/CloudyKit/jet/v6"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
-	// "github.com/shiori-42/textbook_change_app/go/backend/repository"
+	"github.com/shiori-42/textbook_change_app/go/backend/repository"
 )
 
 func RegisterWebSocketRoutes(e *echo.Echo) {
@@ -38,10 +24,11 @@ type WSHandler interface {
 type wsHandler struct{}
 
 type WsJsonResponse struct {
-	Action  string `json:"action"`
-	Message string `json:"message"`
+	Action      string `json:"action"`
+	Message     string `json:"message"`
 	MessageType string `json:"messageType"`
 }
+
 type Client struct {
 	UserID uint
 	Conn   *websocket.Conn
@@ -62,7 +49,7 @@ var (
 	}
 )
 
-//WsEndpoint upgrades connection to websocket
+// HandleWebSocket upgrades connection to WebSocket
 func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
@@ -70,59 +57,64 @@ func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 	}
 	defer ws.Close()
 
+	userID := c.Get("user_id").(uint)
+
 	var response WsJsonResponse
-	response.Message=`Connected to websocket`
-	err=ws.WriteJSON(response)
-	if err != nil {
+	response.Message = "Connected to websocket"
+	if err = ws.WriteJSON(response); err != nil {
 		return err
 	}
 
-	userID := c.Get("user_id").(uint)
-
 	for {
 		var req map[string]interface{}
-		err := ws.ReadJSON(&req)
-		if err != nil {
-			log.Println(err)
+		if err := ws.ReadJSON(&req); err != nil {
+			log.Println("ReadJSON error:", err)
 			return err
 		}
 
-		
-		itemID:= req["itemId"].(string)
-		
+		itemIDStr, ok := req["itemId"].(string)
+		if !ok {
+			log.Println("Invalid itemId")
+			continue
+		}
 
-			item, err := repository.GetItemByID(int(itemID))
-			if err != nil {
-				log.Println(err)
+		itemID, err := strconv.Atoi(itemIDStr)
+		if err != nil {
+			log.Println("Invalid itemId format:", err)
+			continue
+		}
+
+		item, err := repository.GetItemByID(itemID)
+		if err != nil {
+			log.Println("GetItemByID error:", err)
+			break
+		}
+
+		client := &Client{
+			UserID: userID,
+			Conn:   ws,
+		}
+		clients[item.UserID] = client
+
+		for {
+			var message Message
+			if err := ws.ReadJSON(&message); err != nil {
+				log.Println("ReadJSON message error:", err)
 				break
 			}
 
-			client := &Client{
-				UserID:	userID,
-				Conn:   ws,
+			message.SenderID = strconv.FormatUint(uint64(userID), 10)
+			message.RecipientID = strconv.FormatUint(uint64(item.UserID), 10)
+
+			recipientClient, ok := clients[item.UserID]
+			if !ok {
+				log.Printf("Recipient %d not found", item.UserID)
+				continue
 			}
-			clients[item.UserID] = client
 
-			for {
-				var message Message
-				err := ws.ReadJSON(&message)
-				if err != nil {
-					log.Println(err)
-					break
-				}
-
-				message.SenderID = strconv.FormatUint(uint64(userID), 10)
-				message.RecipientID = strconv.FormatUint(uint64(item.UserID), 10)
-
-				recipientClient, ok := clients[item.UserID]
-				if !ok {
-					log.Printf("Recipient %d not found", item.UserID)
-					continue
-				}
-
-				if err := recipientClient.Conn.WriteJSON(message); err != nil {
-					log.Println(err)
-				}
+			if err := recipientClient.Conn.WriteJSON(message); err != nil {
+				log.Println("WriteJSON error:", err)
+			}
 
 			delete(clients, item.UserID)
 		}
@@ -137,11 +129,12 @@ var views = jet.NewSet(
 )
 
 // Home renders the home page
-func Home(w http.ResponseWriter, r *http.Request) {
-	err := renderPage(w, "home.jet", nil)
+func Home(c echo.Context) error {
+	err := renderPage(c, "home.jet", nil)
 	if err != nil {
 		log.Println(err)
 	}
+	return err
 }
 
 // renderPage renders a jet template
@@ -158,11 +151,3 @@ func renderPage(c echo.Context, tmpl string, data jet.VarMap) error {
 
 	return nil
 }
-
-func Home(c echo.Context) error {
-    data := make(jet.VarMap)
-    data.Set("title", "Home Page")
-    return renderPage(c, "home.jet", data)
-}
-
-e.GET("/", handler.Home)
