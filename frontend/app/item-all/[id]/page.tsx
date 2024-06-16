@@ -1,7 +1,7 @@
 "use client";
 // import { Items } from "@/app/data/data";
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Item {
   id: number;
@@ -86,7 +86,7 @@ const ItemDetail: React.FC<Prop> = (props) => {
     overflow: "hidden",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    backgroundImage: `url(${item.image_name})`,
+    backgroundImage: `url(${server}/images/${item.image_name})`,
     // textAlign: "center",
     width: "100%",
     height: 480,

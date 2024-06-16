@@ -31,6 +31,8 @@ const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
 const SearchComponent = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Item[]>([]);
+  const [searchPerformed, setSearchPerformed] = useState(false);
+  // const [item, setItems] = useState<Item>();
 
   // 検索ハンドラ
   const handleSearch = async (e: any) => {
@@ -61,10 +63,13 @@ const SearchComponent = () => {
       }
 
       const data = await response.json();
-      setResults(data.items); // 検索結果を状態に保存
+      console.log("Response data:", data); // レスポンスデータをログ出力
+      setResults(Array.isArray(data.items) ? data.items : []); // 検索結果を状態に保存
+      setSearchPerformed(true);
     } catch (error) {
       console.error("Error fetching data:", error);
       setResults([]); // エラーが発生した場合、結果をクリア
+      setSearchPerformed(true);
     }
   };
 
@@ -85,71 +90,89 @@ const SearchComponent = () => {
             type="submit"
             variant="outlined"
             sx={{ position: "absolute", right: 0 }}
+            disabled={!query.trim()}
           >
             Search
           </Button>
         </Search>
       </form>
       <ul>
-        {results.map((item, index) => (
-          <Grid key={index} item xs={4}>
-            <Link href={`/item/${item.id}`} style={{ textDecoration: "none" }}>
-              <Card
-                sx={{
-                  height: { xs: 200, sm: 270 },
-                  transition: "0.3s",
-                  "&:hover": {
-                    bgcolor: "#ffffff",
-                    opacity: 0.5,
-                    transition: "0.3s",
-                  },
-                }}
+        {results.length > 0 ? (
+          results.map((item, index) => (
+            <Grid key={index} item xs={4}>
+              <Link
+                href={`/item/${item.id}`}
+                style={{ textDecoration: "none" }}
               >
-                <Box bgcolor={"#ededed"}>
-                  <CardMedia
-                    // sx={{ objectFit: "contain" }}
-                    component="img"
-                    sx={{ height: { xs: 110, sm: 180 } }}
-                    image={item.image_name}
-                  />
-                </Box>
-                <Typography fontSize={{ xs: 12, sm: 15 }} height={40} px={0.5}>
-                  {item.name}
-                </Typography>
-                <Stack direction={"row"} mt={1}>
+                <Card
+                  sx={{
+                    height: { xs: 200, sm: 270 },
+                    transition: "0.3s",
+                    "&:hover": {
+                      bgcolor: "#ffffff",
+                      opacity: 0.5,
+                      transition: "0.3s",
+                    },
+                  }}
+                >
+                  <Box bgcolor={"#ededed"}>
+                    <CardMedia
+                      // sx={{ objectFit: "contain" }}
+                      component="img"
+                      sx={{
+                        height: { xs: 110, sm: 180 },
+                        // backgroundImage: `url(${server}/images/${item.image_name})`,
+                      }}
+                      image={`${server}/images/${item.image_name}`} //ここ
+                    />
+                  </Box>
                   <Typography
-                    fontSize={{ xs: 7, sm: 9 }}
-                    mx={0.5}
-                    mt={{ xs: 0.2, sm: 0.5 }}
-                    fontWeight={"bold"}
-                    textAlign={"center"}
-                    justifyContent={"center"}
-                    width={{ xs: 45, sm: 53 }}
-                    height={{ xs: 15, sm: 18 }}
-                    border={1.9}
-                    borderRadius={"20px"}
-                    color={
-                      item.sell_type === "レンタル" ? "#009C88" : "#1573FF"
-                    }
-                    style={{ display: "flex", alignItems: "center" }}
+                    fontSize={{ xs: 12, sm: 15 }}
+                    height={40}
+                    px={0.5}
                   >
-                    {item.sell_type}
+                    {item.name}
                   </Typography>
-                  <Typography
-                    fontSize={{ xs: 16, sm: 20 }}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                    color={
-                      item.sell_type === "レンタル" ? "#009C88" : "#1573FF"
-                    }
-                  >
-                    ￥{item.price}
-                  </Typography>
-                </Stack>
-              </Card>
-            </Link>
-          </Grid>
-        ))}
+                  <Stack direction={"row"} mt={1}>
+                    <Typography
+                      fontSize={{ xs: 7, sm: 9 }}
+                      mx={0.5}
+                      mt={{ xs: 0.2, sm: 0.5 }}
+                      fontWeight={"bold"}
+                      textAlign={"center"}
+                      justifyContent={"center"}
+                      width={{ xs: 45, sm: 53 }}
+                      height={{ xs: 15, sm: 18 }}
+                      border={1.9}
+                      borderRadius={"20px"}
+                      color={
+                        item.sell_type === "レンタル" ? "#009C88" : "#1573FF"
+                      }
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {/* {item.sell_type} */}
+
+                      {item.sell_type}
+                    </Typography>
+                    <Typography
+                      fontSize={{ xs: 16, sm: 20 }}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                      color={
+                        item.sell_type === "レンタル" ? "#009C88" : "#1573FF"
+                      }
+                    >
+                      ￥{item.price}
+                    </Typography>
+                  </Stack>
+                </Card>
+              </Link>
+            </Grid>
+          ))
+        ) : searchPerformed ? ( // 検索が行われたが結果がない場合
+          <Typography>該当する商品が見つかりませんでした。</Typography>
+        ) : null}{" "}
+        {/* 検索が行われていない場合は何も表示しない */}
       </ul>
     </div>
   );

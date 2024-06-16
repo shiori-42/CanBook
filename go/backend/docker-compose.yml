@@ -12,8 +12,6 @@ services:
       - lesson
 networks:
   lesson:
-
-
 # version: "3.8"
 
 # services:

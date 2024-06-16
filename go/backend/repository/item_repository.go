@@ -191,12 +191,21 @@ func DeleteItem(itemID string, userID uint) error {
 }
 
 func SearchItemsByKeyword(keyword string) (model.Items, error) {
+<<<<<<< Updated upstream
 	var items model.Items
 	query := `
         SELECT 
             i.id, 
             i.name,
 			i.course_name,
+=======
+    var items model.Items
+    query := `
+        SELECT 
+            i.id, 
+            i.name,
+            i.course_name,
+>>>>>>> Stashed changes
             i.price,
             i.sell_type,
             i.image_name,
@@ -206,12 +215,13 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
         FROM items i
         WHERE i.name LIKE $1
     `
-	rows, err := db.DB.Query(query, "%"+keyword+"%")
-	if err != nil {
-		return items, err
-	}
-	defer rows.Close()
+    rows, err := db.DB.Query(query, "%"+keyword+"%")
+    if err != nil {
+        return items, err
+    }
+    defer rows.Close()
 
+<<<<<<< Updated upstream
 	for rows.Next() {
 		var item model.Item
 		err = rows.Scan(
@@ -230,8 +240,18 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 		}
 		items.Items = append(items.Items, item)
 	}
+=======
+    for rows.Next() {
+        var item model.Item
+        err = rows.Scan(&item.ID, &item.Name, &item.CourseName, &item.Price, &item.SellType, &item.ImageName, &item.CreatedAt, &item.UpdatedAt, &item.UserID)
+        if err != nil {
+            return items, err
+        }
+        items.Items = append(items.Items, item)
+    }
+>>>>>>> Stashed changes
 
-	return items, nil
+    return items, nil
 }
 
 func SearchItemsByCollege(collegeName string) (model.Items, error) {
