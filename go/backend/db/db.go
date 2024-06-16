@@ -30,7 +30,7 @@ func InitDB() error {
 	dbHost := os.Getenv("POSTGRES_HOST")
 
 	dsn := fmt.Sprintf("host=%s  user=%s password=%s dbname=%s sslmode=disable",
-		//sslmode=require
+	// sslmode=disable
 		dbHost, dbUser, dbPassword, dbName)
 
 	var err error

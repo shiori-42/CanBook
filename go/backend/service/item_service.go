@@ -133,8 +133,8 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 	return items, nil
 }
 
-func SearchItemsByCollege(keyword string) (model.Items, error) {
-	items, err := repository.SearchItemsByCollege(keyword)
+func SearchItemsByCollege(college string) (model.Items, error) {
+	items, err := repository.SearchItemsByCollege(college)
 	if err != nil {
 		return items, err
 	}

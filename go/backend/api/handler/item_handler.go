@@ -139,14 +139,15 @@ func (h *itemHandler) searchItems(c echo.Context) error {
 	keyword := c.QueryParam("keyword")
 	items, err := service.SearchItemsByKeyword(keyword)
 	if err != nil {
+		c.Logger().Errorf("SearchItemsByKeyword error: %v", err)
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, items)
 }
 
 func (h *itemHandler) searchItemsByCollege(c echo.Context) error {
-	keyword := c.QueryParam("keyword")
-	items, err := service.SearchItemsByCollege(keyword)
+	college := c.QueryParam("college")
+	items, err := service.SearchItemsByCollege(college)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
