@@ -193,15 +193,18 @@ func DeleteItem(itemID string, userID uint) error {
 func SearchItemsByKeyword(keyword string) (model.Items, error) {
 	var items model.Items
 	query := `
-        SELECT
-            items.id,
-            items.name,
-			items.course_name,
-            items.image_name,
-			items.price,	
-			items.user_id
-        FROM items
-        WHERE items.name LIKE $1
+        SELECT 
+            i.id, 
+            i.name,
+			i.course_name,
+            i.price,
+            i.sell_type,
+            i.image_name,
+            i.created_at,
+            i.updated_at,
+            i.user_id
+        FROM items i
+        WHERE i.name LIKE $1
     `
 	rows, err := db.DB.Query(query, "%"+keyword+"%")
 	if err != nil {
@@ -211,7 +214,17 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 
 	for rows.Next() {
 		var item model.Item
-		err = rows.Scan(&item.ID, &item.Name, &item.CourseName, &item.ImageName, &item.Price, &item.UserID)
+		err = rows.Scan(
+			&item.ID,
+			&item.Name,
+			&item.CourseName,
+			&item.Price,
+			&item.SellType,
+			&item.ImageName,
+			&item.CreatedAt,
+			&item.UpdatedAt,
+			&item.UserID,
+		)
 		if err != nil {
 			return items, err
 		}

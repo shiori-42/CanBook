@@ -7,6 +7,7 @@ import (
 	"github.com/CloudyKit/jet/v6"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/shiori-42/textbook_change_app/go/backend/handler"
 )
 
 type JetRenderer struct {
@@ -30,7 +31,7 @@ func (r *JetRenderer) Render(w io.Writer, name string, data interface{}, c echo.
 
 	vars, ok := data.(jet.VarMap)
 	if !ok {
-		vars = jet.VarMap{}
+		vars = make(jet.VarMap)
 	}
 
 	return view.Execute(w, vars, nil)
@@ -42,12 +43,14 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.Renderer = NewJetRenderer()
+	// Register WebSocket routes	
+	handler.RegisterWebSocketRoutes(e)
 
 	e.GET("/", func(c echo.Context) error {
-		data := jet.VarMap{
-			"title":  jet.Var("Home Page"),
-		}
+		data := make(jet.VarMap)
+		data.Set("title", "Home Page")
 		return c.Render(http.StatusOK, "home.jet", data)
 	})
+	e.Logger.Fatal(e.Start(":8080"))
 
 }
