@@ -18,7 +18,7 @@ type JetRenderer struct {
 func NewJetRenderer() *JetRenderer {
 	return &JetRenderer{
 		views: jet.NewSet(
-			jet.NewOSFileSystemLoader("./html"), 
+			jet.NewOSFileSystemLoader("./html"),
 			jet.InDevelopmentMode(),
 		),
 	}
@@ -44,7 +44,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.Renderer = NewJetRenderer()
-	// Register WebSocket routes	
+	// Register WebSocket routes
 	handler.RegisterWebSocketRoutes(e)
 
 	e.GET("/", func(c echo.Context) error {

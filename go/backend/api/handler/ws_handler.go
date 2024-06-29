@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"sync"
 
 	"github.com/CloudyKit/jet/v6"
 	"github.com/gorilla/websocket"
@@ -31,6 +32,7 @@ type WsJsonResponse struct {
 
 type Client struct {
 	UserID uint
+	ItemID uint
 	Conn   *websocket.Conn
 }
 
@@ -41,7 +43,8 @@ type Message struct {
 }
 
 var (
-	clients  = make(map[uint]*Client)
+	clients  = make(map[uint]map[uint]*Client)
+	mu       sync.Mutex
 	upgrader = websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
 			return true
@@ -51,13 +54,25 @@ var (
 
 // HandleWebSocket upgrades connection to WebSocket
 func (h *wsHandler) HandleWebSocket(c echo.Context) error {
+	userID := c.Get("user_id").(uint)
+
 	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
 		return err
 	}
-	defer ws.Close()
+	var client *Client
+	defer func() {
+		mu.Lock()	
+		if client != nil {
+			delete(clients[client.UserID], client.ItemID)
+			if len(clients[client.UserID]) == 0 {
+				delete(clients, client.UserID)
+			}
+		}
+		mu.Unlock()	
+		ws.Close()	
+	}()
 
-	userID := c.Get("user_id").(uint)
 
 	var response WsJsonResponse
 	response.Message = "Connected to websocket"
@@ -90,11 +105,18 @@ func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 			break
 		}
 
-		client := &Client{
+		client = &Client{
 			UserID: userID,
+			ItemID: uint(itemID),
 			Conn:   ws,
 		}
-		clients[item.UserID] = client
+
+		mu.Lock()
+		if clients[item.UserID] == nil {
+			clients[item.UserID] = make(map[uint]*Client)
+		}
+		clients[item.UserID][uint(itemID)] = client
+		mu.Unlock()
 
 		for {
 			var message Message
@@ -106,21 +128,19 @@ func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 			message.SenderID = strconv.FormatUint(uint64(userID), 10)
 			message.RecipientID = strconv.FormatUint(uint64(item.UserID), 10)
 
-			recipientClient, ok := clients[item.UserID]
+			mu.Lock()
+			recipientClient, ok := clients[item.UserID][uint(itemID)]
+			mu.Unlock()
 			if !ok {
-				log.Printf("Recipient %d not found", item.UserID)
+				log.Printf("Recipient %d not found for item %d", item.UserID, itemID)
 				continue
 			}
 
 			if err := recipientClient.Conn.WriteJSON(message); err != nil {
 				log.Println("WriteJSON error:", err)
 			}
-
-			delete(clients, item.UserID)
 		}
 	}
-
-	return nil
 }
 
 var views = jet.NewSet(

@@ -208,12 +208,11 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
         FROM items i
         WHERE i.name LIKE $1
     `
-    rows, err := db.DB.Query(query, "%"+keyword+"%")
-    if err != nil {
-        return items, err
-    }
-    defer rows.Close()
-
+	rows, err := db.DB.Query(query, "%"+keyword+"%")
+	if err != nil {
+		return items, err
+	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var item model.Item
@@ -234,9 +233,7 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 		items.Items = append(items.Items, item)
 	}
 
-
-
-    return items, nil
+	return items, nil
 }
 
 func SearchItemsByCollege(collegeName string) (model.Items, error) {

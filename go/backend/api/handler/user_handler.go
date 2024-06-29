@@ -89,4 +89,3 @@ func (h *userHandler) logOut(c echo.Context) error {
 	c.SetCookie(cookie)
 	return c.NoContent(http.StatusOK)
 }
-
