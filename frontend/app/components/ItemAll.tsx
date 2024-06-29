@@ -3,16 +3,6 @@ import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 
-// const handleSearch = (searchQuery: string) => {
-//   const filtered = items.filter((item) =>
-//     item.name.toLowerCase().includes(searchQuery.toLowerCase())
-//   );
-//   setFilteredItems(filtered);
-// };//絞り込みしてる
-
-//ItemMyListのようにGETメソッド書く！
-//ItemMyListが上手くいったら！！！！
-
 interface Item {
   id: number;
   name: string;
@@ -32,8 +22,7 @@ interface ItemAllProps {
   onLoadCompleted?: () => void;
 }
 
-// const ItemAll = () => {
-export const ItemAll: React.FC<ItemAllProps> = (props) => {
+const ItemAll: React.FC<ItemAllProps> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [items, setItems] = useState<Item[]>([]);
 
@@ -79,7 +68,6 @@ export const ItemAll: React.FC<ItemAllProps> = (props) => {
   }, [reload, fetchItems]);
 
   return (
-    //filteredItems.mapだった
     <>
       <Grid container spacing={1} py={2}>
         {items.map((item, index) => (
@@ -101,7 +89,6 @@ export const ItemAll: React.FC<ItemAllProps> = (props) => {
               >
                 <Box bgcolor={"#ededed"}>
                   <CardMedia
-                    // sx={{ objectFit: "contain" }}
                     component="img"
                     sx={{ height: { xs: 110, sm: 180 } }}
                     image={`${process.env.NEXT_PUBLIC_API_URL}/images/${item.image_name}`}

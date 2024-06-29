@@ -28,7 +28,6 @@ const Profile = () => {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        // sx={backgroundImageStyle}
       >
         <StyledBox />
         <Typography fontSize={20} fontWeight={"bold"} mt={1.5}>

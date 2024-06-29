@@ -1,4 +1,3 @@
-// api/items.ts //なんのため？？？
 import axios from "axios";
 import { item } from "../types/items";
 const API_URL = "http://localhost:8080";

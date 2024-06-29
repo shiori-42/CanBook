@@ -30,7 +30,7 @@ function AppLogin() {
     //     <Route path="/aaa" element={<Todo />} />
     //   </Routes>
     // </BrowserRouter>
-    <Auth /> //ここはログイン画面になるのでAuth.tsxをログインUIにする
+    <Auth />
   );
 }
 

@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import { Box, Tabs, Tab, Stack,  IconButton } from "@mui/material";
+import { Box, Tabs, Tab, Stack, IconButton } from "@mui/material";
 // import ItemKeep from "./ItemKeep";
 // import ItemAll from "./ItemAll";
 import ItemMyList from "./Listing/ItemList/ItemMyList";
@@ -92,12 +92,7 @@ export default function BasicTabs() {
 
       <CustomTabPanel value={value} index={1}>
         <Stack direction="row" spacing={2} justifyContent="end">
-          <IconButton
-            // aria-label="account of current user"
-            // aria-controls="menu-appbar"
-            // aria-haspopup="true"
-            sx={{ color: "#F47381" }}
-          >
+          <IconButton sx={{ color: "#F47381" }}>
             <EditIcon />
           </IconButton>
           <IconButton

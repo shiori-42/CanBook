@@ -162,12 +162,3 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
 };
 
 export default InputForm;
-
-// const StyledTextField = styled(TextField)(({ theme }) => ({
-//   width: "100%",
-//   height: 500,
-//   zIndex: 0,
-//   [theme.breakpoints.down("sm")]: {
-//     height: 400,
-//   },
-// }));

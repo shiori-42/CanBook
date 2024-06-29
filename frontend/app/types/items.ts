@@ -4,5 +4,4 @@ export type item = {
   price: string;
   sell_type: string;
   image_name: string;
-  //学部入れる？？？？？？？？？？
 };

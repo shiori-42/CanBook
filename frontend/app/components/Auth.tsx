@@ -145,8 +145,6 @@ export const Auth = () => {
                 ? !email || !pw
                 : !name || !email || !pw || !college || !campus
             }
-            // href="/profile-form" //ここは普通に飛ばしちゃって大丈夫なのか？
-            //ダメでしたuseMutateAuthにかいてる
           >
             {isLogin ? "ログイン" : "会員登録"}
           </Button>
@@ -182,6 +180,3 @@ export const Auth = () => {
     </Box>
   );
 };
-
-//urlはloginだけでなく、signupのurlも作ってLikタグで飛ばす。また当たらしくsignupのフォルダーを作って、signup/page.tsxを作る。？？？？
-//こちら　の部分を onClick={() => setIsLogin(!isLogin)}　にしたら上手く飛ぶかも、、、？
