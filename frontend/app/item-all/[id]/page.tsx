@@ -32,7 +32,7 @@ interface Prop {
 
 const ItemDetail: React.FC<Prop> = (props) => {
   const { reload = true, onLoadCompleted, params } = props;
-  const [item, setItems] = useState<Item>();
+  const [item, setItems] = useState<Item | undefined>();
 
   const fetchItems = () => {
     const token = localStorage.getItem("token");
@@ -75,9 +75,9 @@ const ItemDetail: React.FC<Prop> = (props) => {
     if (reload) {
       fetchItems();
     }
-  }, [reload]);
+  }, [reload, fetchItems]);
 
-  if (item == undefined) {
+  if (!item) {
     return null;
   }
 
