@@ -44,3 +44,4 @@ export default function BasicTable() {
     </TableContainer>
   );
 }
+//詳細ページの本の詳細部分コンポーネント

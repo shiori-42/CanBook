@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 
 const ItemAllDetailPage: React.FC = () => {
-  const params = useParams(); //useParamsは動的なルートパラメータ([id]など)を
+  const params = useParams(); //useParamsは動的なルートパラメータ([id]など)を取得するのに使う
   const { id } = params;
 
   if (!id) {

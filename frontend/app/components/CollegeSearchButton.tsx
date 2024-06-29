@@ -6,7 +6,7 @@ export default function SearchButton() {
   return (
     <Button
       href="/college-search"
-      // onClick={() => setIsLogin(!isLogin)} //ログインしたら出品ボタンが出るように！！！！！が難しい
+      // onClick={() => setIsLogin(!isLogin)} //ログインしたら出品ボタンが出るようにする
       sx={{
         mt: 1,
         border: 1,

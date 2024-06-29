@@ -1,5 +1,5 @@
 "use client";
-import { Box, Button, TextField,} from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 
 const ProfForm = () => {
   return (
@@ -13,19 +13,13 @@ const ProfForm = () => {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        // sx={backgroundImageStyle}
       >
-        {/* <StyledTextField /> */}
-
         <TextField
           type="file"
-          // sx={{ display: "none" }}
           name="image_name"
           id="image_name"
-          // onChange={onFileChange}
           required
           fullWidth
-          // label="写真"
           variant="outlined"
         />
       </Box>
@@ -73,3 +67,6 @@ const ProfForm = () => {
 };
 
 export default ProfForm;
+
+//ProfFormというコンポーネント名変える
+//ファイル名と同じだからエラーが出た

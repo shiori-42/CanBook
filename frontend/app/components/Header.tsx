@@ -17,15 +17,7 @@ import React, { useState } from "react";
 export default function MenuAppBar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [isLogin, setIsLogin] = useState(true); //これは使うのか、、、？？
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAuth(event.target.checked);
-  };
-
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const [isLogin, setIsLogin] = useState(true);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -88,7 +80,7 @@ export default function MenuAppBar() {
 
           <Button
             href="/form"
-            onClick={() => setIsLogin(!isLogin)} //ログインしたら出品ボタンが出るように！！！！！が難しい
+            onClick={() => setIsLogin(!isLogin)} //ログインしたら出品ボタンが出るようにしたい
             sx={{
               mr: { sm: 2 },
               border: 1,
@@ -156,15 +148,6 @@ export default function MenuAppBar() {
               </Menu>
             </div>
           )}
-
-          {/* <IconButton
-            size="large"
-            color="inherit"
-            aria-label="menu"
-            sx={{ p: "12px" }}
-          >
-            <MenuIcon />
-          </IconButton> */}
         </Toolbar>
       </AppBar>
     </Box>
