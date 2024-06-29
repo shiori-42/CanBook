@@ -141,6 +141,7 @@ func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 			}
 		}
 	}
+	return nil
 }
 
 var views = jet.NewSet(
