@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
-import useStore from "../store";
+// import useStore from "../store";
 import { useError } from "../hooks/useError";
 import { useRouter } from "next/navigation";
 
 export const useMutateAuth = () => {
   const router = useRouter();
-  const resetEditedTask = useStore((state) => state.resetEditedTask);
+  // const resetEditedTask = useStore((state) => state.resetEditedTask);
   const { switchErrorHandling } = useError();
   const loginMutation = useMutation(
     async (user: { email: string; password: string }) => {
@@ -59,7 +59,7 @@ export const useMutateAuth = () => {
       onSuccess: () => {
         localStorage.removeItem("token"); // トークンをローカルストレージから削除
 
-        resetEditedTask();
+        // resetEditedTask();
         router.push("/login");
       },
       onError: (err: any) => {

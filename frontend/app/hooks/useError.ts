@@ -1,10 +1,10 @@
 // import axios from "axios";
 // import { CsrfToken } from "../types";
-import useStore from "../store";
+// import useStore from "../store";
 import router from "next/router";
 
 export const useError = () => {
-  const resetEditedTask = useStore((state) => state.resetEditedTask);
+  // const resetEditedTask = useStore((state) => state.resetEditedTask);
   //   const getCsrfToken = async () => {
   //     const { data } = await axios.get<CsrfToken>(
   //       `${process.env.NEXT_PUBLIC_API_URLL}/csrf`
@@ -19,12 +19,12 @@ export const useError = () => {
       //     break;
       case "invalid or expired jwt":
         alert("access token expired, please login");
-        resetEditedTask();
+        // resetEditedTask();
         router.push("/login");
         break;
       case "missing or malformed jwt":
         alert("access token is not valid, please login");
-        resetEditedTask();
+        // resetEditedTask();
         router.push("/login");
         break;
       case "duplicated key not allowed":
