@@ -75,7 +75,7 @@ const ItemDetail: React.FC<Prop> = (props) => {
     if (reload) {
       fetchItems();
     }
-  }, [reload]);
+  }, [reload, fetchItems]);
 
   if (item == undefined) {
     return null;

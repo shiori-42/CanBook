@@ -76,7 +76,7 @@ export const ItemAll: React.FC<Prop> = (props) => {
     if (reload) {
       fetchItems();
     }
-  }, [reload]);
+  }, [reload, fetchItems]);
 
   return (
     //filteredItems.mapだった

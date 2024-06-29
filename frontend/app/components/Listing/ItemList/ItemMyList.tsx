@@ -65,7 +65,7 @@ export const ItemMyList: React.FC<Prop> = (props) => {
     if (reload) {
       fetchItems();
     }
-  }, [reload]);
+  }, [reload, fetchItems]);
 
   return (
     <Grid container spacing={1.2} py={2}>
