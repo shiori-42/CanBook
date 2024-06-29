@@ -17,7 +17,7 @@ interface Item {
 
 const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
 
-interface Prop {
+interface ItemDetailProps {
   reload?: boolean;
   onLoadCompleted?: () => void;
   params: { id: string };
@@ -30,7 +30,7 @@ interface Prop {
 //     return <NotFound />;
 //   }
 
-const ItemDetail: React.FC<Prop> = (props) => {
+const ItemDetail: React.FC<ItemDetailProps> = (props) => {
   const { reload = true, onLoadCompleted, params } = props;
   const [item, setItems] = useState<Item | undefined>();
 
