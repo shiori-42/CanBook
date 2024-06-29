@@ -3,7 +3,7 @@
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-interface Item {
+export type Item = {
   id: number;
   name: string;
   course_name: string;
@@ -13,15 +13,15 @@ interface Item {
   created_at: string;
   updated_at: string;
   user_id: number;
-}
+};
 
 const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
 
-interface ItemDetailProps {
+export type ItemDetailProps = {
   reload?: boolean;
   onLoadCompleted?: () => void;
   params: { id: string };
-}
+};
 
 // const ItemDetail = async ({ params }: { params: { id: string } }) => {
 //   const item = Items.find((itemdata) => itemdata.id === parseInt(params.id));
