@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+<body>
+    {{ block content }}{{ end }}
+</body>
+<script>
+    let socket=null;
+    document.addEventListener('DOMContentLoaded',()=>{
+        socket=new WebSocket('ws://localhost:8080/ws');
+        socket.onopen=()=>{
+            console.log('Connected to the server');
+        }
+    });
+</script>
+</html>
