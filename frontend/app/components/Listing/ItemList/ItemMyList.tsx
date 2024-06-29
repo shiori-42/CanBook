@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Stack, Typography } from "@mui/material";
 import Link from "next/link";
@@ -17,16 +17,16 @@ interface Item {
 
 const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
 
-interface Prop {
+interface ItemMyListProps {
   reload?: boolean;
   onLoadCompleted?: () => void;
 }
 
-export const ItemMyList: React.FC<Prop> = (props) => {
+export const ItemMyList: React.FC<ItemMyListProps> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [items, setItems] = useState<Item[]>([]);
 
-  const fetchItems = () => {
+  const fetchItems = useCallback(() => {
     const token = localStorage.getItem("token");
 
     fetch(`${server}/items`, {
@@ -59,13 +59,13 @@ export const ItemMyList: React.FC<Prop> = (props) => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  };
+  }, [onLoadCompleted]);
 
   useEffect(() => {
     if (reload) {
       fetchItems();
     }
-  }, [reload]);
+  }, [reload, fetchItems]);
 
   return (
     <Grid container spacing={1.2} py={2}>

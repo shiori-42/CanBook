@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Stack, Typography } from "@mui/material";
 import Link from "next/link";
@@ -27,17 +27,17 @@ interface Item {
 
 const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
 
-interface Prop {
+interface ItemAllProps {
   reload?: boolean;
   onLoadCompleted?: () => void;
 }
 
 // const ItemAll = () => {
-export const ItemAll: React.FC<Prop> = (props) => {
+export const ItemAll: React.FC<ItemAllProps> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [items, setItems] = useState<Item[]>([]);
 
-  const fetchItems = () => {
+  const fetchItems = useCallback(() => {
     const token = localStorage.getItem("token");
 
     fetch(`${server}/alluseritems`, {
@@ -70,13 +70,13 @@ export const ItemAll: React.FC<Prop> = (props) => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  };
+  }, [onLoadCompleted]);
 
   useEffect(() => {
     if (reload) {
       fetchItems();
     }
-  }, [reload]);
+  }, [reload, fetchItems]);
 
   return (
     //filteredItems.mapだった
