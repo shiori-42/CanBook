@@ -17,12 +17,12 @@ interface Item {
 
 const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3000";
 
-interface Prop {
+interface ItemMyListProps {
   reload?: boolean;
   onLoadCompleted?: () => void;
 }
 
-export const ItemMyList: React.FC<Prop> = (props) => {
+export const ItemMyList: React.FC<ItemMyListProps> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [items, setItems] = useState<Item[]>([]);
 

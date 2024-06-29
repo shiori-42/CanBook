@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:9000";
 
-interface Prop {
+interface InputFormProps {
   onListingCompleted?: () => void;
 }
 
@@ -16,7 +16,7 @@ type formDataType = {
   sell_type: number;
 };
 
-export const InputForm: React.FC<Prop> = (props) => {
+export const InputForm: React.FC<InputFormProps> = (props) => {
   const { onListingCompleted } = props;
   const router = useRouter();
   const initialState = {
