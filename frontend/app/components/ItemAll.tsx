@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, Card, CardMedia, Stack, Typography } from "@mui/material";
 import Link from "next/link";
@@ -37,7 +37,7 @@ export const ItemAll: React.FC<ItemAllProps> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [items, setItems] = useState<Item[]>([]);
 
-  const fetchItems = () => {
+  const fetchItems = useCallback(() => {
     const token = localStorage.getItem("token");
 
     fetch(`${server}/alluseritems`, {
@@ -70,7 +70,7 @@ export const ItemAll: React.FC<ItemAllProps> = (props) => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  };
+  }, [onLoadCompleted]);
 
   useEffect(() => {
     if (reload) {

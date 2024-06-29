@@ -1,7 +1,7 @@
 "use client";
 // import { Items } from "@/app/data/data";
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface Item {
   id: number;
@@ -34,7 +34,7 @@ const ItemDetail: React.FC<Prop> = (props) => {
   const { reload = true, onLoadCompleted, params } = props;
   const [item, setItems] = useState<Item>();
 
-  const fetchItems = () => {
+  const fetchItems = useCallback(() => {
     const token = localStorage.getItem("token");
 
     fetch(`${server}/items`, {
@@ -69,7 +69,7 @@ const ItemDetail: React.FC<Prop> = (props) => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  };
+  }, [params.id, onLoadCompleted]);
 
   useEffect(() => {
     if (reload) {

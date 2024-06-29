@@ -1,9 +1,9 @@
 "use client";
 // import { Items } from "@/app/data/data";
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-export type Item = {
+export type ItemDetailItem = {
   id: number;
   name: string;
   course_name: string;
@@ -32,9 +32,9 @@ export type ItemDetailProps = {
 
 const ItemDetail: React.FC<ItemDetailProps> = (props) => {
   const { reload = true, onLoadCompleted, params } = props;
-  const [item, setItems] = useState<Item | undefined>();
+  const [item, setItems] = useState<ItemDetailItem | undefined>();
 
-  const fetchItems = () => {
+  const fetchItems = useCallback(() => {
     const token = localStorage.getItem("token");
 
     fetch(`${server}/alluseritems`, {
@@ -69,7 +69,7 @@ const ItemDetail: React.FC<ItemDetailProps> = (props) => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  };
+  }, [params.id, onLoadCompleted]);
 
   useEffect(() => {
     if (reload) {
