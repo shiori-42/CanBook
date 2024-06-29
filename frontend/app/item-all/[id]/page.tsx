@@ -176,4 +176,5 @@ const ItemDetail: React.FC<ItemDetailProps> = (props) => {
     </>
   );
 };
+
 export default ItemDetail;
