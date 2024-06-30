@@ -9,17 +9,29 @@
 
 [作品スライド](https://www.canva.com/design/DAGAO-n2Ewo/s37XOtN8EWCaMm2fmXKKUw/edit?utm_content=DAGAO-n2Ewo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-## 使用方法（現状、ローカルでのみ動作）
+## デプロイURL
 
-### ローカルにクローンする：
+アプリケーションの現段階のデプロイ先は以下のURLです：
+
+- フロントエンド: [CanBook Frontend](https://canbook.vercel.app/)
+- バックエンド: Renderにデプロイ済み
+- データベース: Renderにデプロイ済み
+
+## 使用方法
+
+
+### ローカルにクローンする
 
 ```bash
 $ git clone https://github.com/shiori-42/CanBook.git
 ```
 
-### .envファイルの作成(バックエンド)
 
-`go/backend`ディレクトリに`.env`ファイルを作成し、以下の情報を設定してください。デプロイが完了していないため、ローカルでDockerを使い、PostgreSQLのインスタンスを立ち上げます。
+### 環境変数の設定
+
+#### バックエンド
+
+`go/backend`ディレクトリに`.env`ファイルを作成し、以下の情報を設定してください。
 
 ```bash
 PORT=8080
@@ -32,8 +44,7 @@ GO_ENV=dev
 API_DOMAIN=localhost
 FE_URL=http://localhost:3000
 ```
-
-### .env.localファイルの作成(フロントエンド)
+#### フロントエンド
 
 `frontend`ディレクトリに`.env.local`ファイルを作成し、次のように設定してください。
 
@@ -41,35 +52,35 @@ FE_URL=http://localhost:3000
 NEXT_PUBLIC_API_URL=http://localhost:8080
 ```
 
-この変数は、フロントエンドがバックエンドAPIにアクセスするためのエンドポイントURLを指定しています。デプロイが完了していないため、ローカル環境を指定します。
 
-### 画像を保存する`images`ディレクトリの作成(バックエンド)
+### 必要なディレクトリの作成
 
 `go`ディレクトリ配下に`images`ディレクトリを作成してください。これは出品時にアップロードする画像の保存場所として使用されます。
 
-### Dockerを使用してPostgreSQLのインスタンスを立ち上げる
 
-`go/backend`ディレクトリ内で、以下のコマンドを実行してPostgreSQLを起動します。
+### Dockerを使用してPostgreSQLのインスタンスを立ち上げる
 
 ```bash
 $ docker-compose up -d
 ```
 
+
 ### サーバーを起動する
 
-**バックエンド：**
+#### バックエンド
 
 ```bash
 # go/backendディレクトリ内で
 $ GO_ENV=dev go run main.go
 ```
 
-**フロントエンド：**
+#### フロントエンド
 
 ```bash
 # frontend/appディレクトリ内で
 $ npm run dev
 ```
+
 
 ## 製品開発のきっかけ、課題
 
@@ -85,12 +96,12 @@ $ npm run dev
 
 ## 今後の展望
 
-- まずはプレゼン資料に沿った機能の完成
+- プレゼン資料に沿った機能の完成
   - チャット機能の完成
   - 検索機能の強化
-- 次にリファクタリング
+- リファクタリング
   - CSRFトークンを組み合わせたセキュリティ強化
-- さらに拡張
+- 拡張機能
   - Google Maps APIを利用して、近隣のキャンパスの商品を探すことができるようにする
 
 ## 開発技術
@@ -104,4 +115,11 @@ $ npm run dev
 
 ## 対応デバイス
 
-- パソコン（デプロイ後はスマホにも対応）
+- パソコン（デプロイ後はスマホにも対応予定）
+
+## 現状の課題
+
+- 一部の機能がまだ未実装であるため、デプロイされたアプリケーションは完全なものではありません。
+- エラーやバグの報告はGitHubのIssueを通じて行ってください。
+
+
