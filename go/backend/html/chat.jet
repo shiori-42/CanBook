@@ -1,0 +1,12 @@
+{{ extends "base.jet" }}
+
+{{ block content }}
+<h1>Chat Page</h1>
+<div id="chatbox">
+    <!-- チャットメッセージが表示されるエリア -->
+</div>
+<input type="text" id="messageInput" placeholder="Enter your message">
+<button id="sendMessage">Send</button>
+{{ end }}
+
+<script type="module" src="/static/js/chat.ts"></script>

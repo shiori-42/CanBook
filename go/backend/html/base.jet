@@ -8,13 +8,4 @@
 <body>
     {{ block content }}{{ end }}
 </body>
-<script>
-    let socket=null;
-    document.addEventListener('DOMContentLoaded',()=>{
-        socket=new WebSocket('ws://localhost:8080/ws');
-        socket.onopen=()=>{
-            console.log('Connected to the server');
-        }
-    });
-</script>
 </html>
