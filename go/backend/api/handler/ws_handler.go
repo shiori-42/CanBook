@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ws_handler.go                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: shiori <shiori@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/30 11:15:10 by shiori            #+#    #+#             */
+/*   Updated: 2024/06/30 11:33:20 by shiori           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 package handler
 
 import (
@@ -14,8 +26,8 @@ import (
 
 func RegisterWebSocketRoutes(e *echo.Echo) {
 	h := &wsHandler{}
-	e.GET("/ws", h.HandleWebSocket)
 	e.GET("/ws/:itemId", h.HandleWebSocket, AuthMiddleware)
+	e.GET("/chat", Chat) 
 }
 
 type WSHandler interface {
@@ -62,17 +74,16 @@ func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 	}
 	var client *Client
 	defer func() {
-		mu.Lock()	
+		mu.Lock()
 		if client != nil {
 			delete(clients[client.UserID], client.ItemID)
 			if len(clients[client.UserID]) == 0 {
 				delete(clients, client.UserID)
 			}
 		}
-		mu.Unlock()	
-		ws.Close()	
+		mu.Unlock()
+		ws.Close()
 	}()
-
 
 	var response WsJsonResponse
 	response.Message = "Connected to websocket"
@@ -80,82 +91,67 @@ func (h *wsHandler) HandleWebSocket(c echo.Context) error {
 		return err
 	}
 
+	var req map[string]interface{}
+	if err := ws.ReadJSON(&req); err != nil {
+		log.Println("ReadJSON error:", err)
+		return err
+	}
+
+	itemIDStr, ok := req["itemId"].(string)
+	if !ok {
+		log.Println("Invalid itemId")
+		return err
+	}
+
+	itemID, err := strconv.Atoi(itemIDStr)
+	if err != nil {
+		log.Println("Invalid itemId format:", err)
+		return err
+
+	}
+
+	item, err := repository.GetItemByID(itemID)
+	if err != nil {
+		log.Println("GetItemByID error:", err)
+		return err
+	}
+
+	client = &Client{
+		UserID: userID,
+		ItemID: uint(itemID),
+		Conn:   ws,
+	}
+
+	mu.Lock()
+	if clients[item.UserID] == nil {
+		clients[item.UserID] = make(map[uint]*Client)
+	}
+	clients[item.UserID][uint(itemID)] = client
+	mu.Unlock()
+
 	for {
-		var req map[string]interface{}
-		if err := ws.ReadJSON(&req); err != nil {
-			log.Println("ReadJSON error:", err)
-			return err
-		}
-
-		itemIDStr, ok := req["itemId"].(string)
-		if !ok {
-			log.Println("Invalid itemId")
-			continue
-		}
-
-		itemID, err := strconv.Atoi(itemIDStr)
-		if err != nil {
-			log.Println("Invalid itemId format:", err)
-			continue
-		}
-
-		item, err := repository.GetItemByID(itemID)
-		if err != nil {
-			log.Println("GetItemByID error:", err)
+		var message Message
+		if err := ws.ReadJSON(&message); err != nil {
+			log.Println("ReadJSON message error:", err)
 			break
 		}
 
-		client = &Client{
-			UserID: userID,
-			ItemID: uint(itemID),
-			Conn:   ws,
-		}
+		message.SenderID = strconv.FormatUint(uint64(userID), 10)
+		message.RecipientID = strconv.FormatUint(uint64(item.UserID), 10)
 
 		mu.Lock()
-		if clients[item.UserID] == nil {
-			clients[item.UserID] = make(map[uint]*Client)
-		}
-		clients[item.UserID][uint(itemID)] = client
+		recipientClient, ok := clients[item.UserID][uint(itemID)]
 		mu.Unlock()
+		if !ok {
+			log.Printf("Recipient %d not found for item %d", item.UserID, itemID)
+			continue
+		}
 
-		for {
-			var message Message
-			if err := ws.ReadJSON(&message); err != nil {
-				log.Println("ReadJSON message error:", err)
-				break
-			}
-
-			message.SenderID = strconv.FormatUint(uint64(userID), 10)
-			message.RecipientID = strconv.FormatUint(uint64(item.UserID), 10)
-
-			mu.Lock()
-			recipientClient, ok := clients[item.UserID][uint(itemID)]
-			mu.Unlock()
-			if !ok {
-				log.Printf("Recipient %d not found for item %d", item.UserID, itemID)
-				continue
-			}
-
-			if err := recipientClient.Conn.WriteJSON(message); err != nil {
-				log.Println("WriteJSON error:", err)
-			}
+		if err := recipientClient.Conn.WriteJSON(message); err != nil {
+			log.Println("WriteJSON error:", err)
 		}
 	}
 	return nil
-}
-
-var views = jet.NewSet(
-	jet.NewOSFileSystemLoader("./html"),
-	jet.InDevelopmentMode(),
-)
-
-// Home renders the home page
-func Home(c echo.Context) error {
-	err := renderPage(c, "home.jet", nil)
-	if err != nil {
-		log.Println(err)
-	}
-	return err
 }
 
 // renderPage renders a jet template
@@ -164,11 +160,24 @@ func renderPage(c echo.Context, tmpl string, data jet.VarMap) error {
 	if err != nil {
 		return err
 	}
-
+	
 	err = view.Execute(c.Response().Writer, data, nil)
 	if err != nil {
 		return err
 	}
-
+	
 	return nil
 }
+
+func Chat(c echo.Context) error {
+	err := renderPage(c, "chat.jet", nil)
+	if err != nil {
+		log.Println(err)
+	}
+	return err
+}
+
+var views = jet.NewSet(
+	jet.NewOSFileSystemLoader("./html"),
+	jet.InDevelopmentMode(),
+)

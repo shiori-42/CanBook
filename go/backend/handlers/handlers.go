@@ -1,8 +1,8 @@
 package main
 
 import (
-	"io"
 	"net/http"
+	"log"
 
 	"github.com/CloudyKit/jet/v6"
 	"github.com/labstack/echo/v4"
@@ -24,18 +24,25 @@ func NewJetRenderer() *JetRenderer {
 	}
 }
 
-func (r *JetRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	view, err := r.views.GetTemplate(name)
+func Home(c echo.Context)error{
+	err:=renderPage(c,"home,jet",nil)
+	if err!=nil{
+		log.Println(err)
+	}
+	return err
+}
+
+func renderPage(c echo.Context, tmpl string, data jet.VarMap) error {
+	view, err := r.views.GetTemplate(tmpl)
 	if err != nil {
 		return err
 	}
 
-	vars, ok := data.(jet.VarMap)
-	if !ok {
-		vars = make(jet.VarMap)
+	err=view.Execute(c.Response().Writer,data,nil)
+	if err!=nil{
+		return err
 	}
-
-	return view.Execute(w, vars, nil)
+	return nil
 }
 
 func main() {
