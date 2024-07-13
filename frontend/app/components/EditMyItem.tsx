@@ -28,8 +28,9 @@ const EditForm: React.FC<EditProps> = (props) => {
     price: 0,
     sell_type: 0,
   };
-  const [values, setValues] = useState<formDataType>(initialState);
 
+  const [values, setValues] = useState<formDataType>(initialState);
+  const [imageUrl, setImageUrl] = useState<string>("");//追加
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -48,6 +49,8 @@ const EditForm: React.FC<EditProps> = (props) => {
           price: data.price,
           sell_type: data.sell_type,
         });
+        setImageUrl(`${server}/images/${data.image_name}`);//追加
+        
       })
       .catch((error) => {
         console.error("GET error:", error);
@@ -65,6 +68,7 @@ const EditForm: React.FC<EditProps> = (props) => {
       ...values,
       [event.target.name]: event.target.files![0],
     });
+    setImageUrl(URL.createObjectURL(event.target.files![0]));//追加
   };
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,7 +81,6 @@ const EditForm: React.FC<EditProps> = (props) => {
 
     const token = localStorage.getItem("token");
 
-    console.log("token:", token);
 
     fetch(`${server}/items`, {
       method: "PUT",
@@ -88,7 +91,6 @@ const EditForm: React.FC<EditProps> = (props) => {
       body: data,
     })
       .then((response) => {
-        console.log("PUT status:", response.statusText);
         onListingCompleted && onListingCompleted();
         router.push("/home");
       })
@@ -112,6 +114,7 @@ const EditForm: React.FC<EditProps> = (props) => {
     <Box>
       <form onSubmit={onSubmit}>
         <Box mt={5}>
+        {imageUrl && <img src={imageUrl} alt="current image" style={{ width: '100%', marginBottom: '20px' }} />}//追加
           <TextField
             type="file"
             name="image_name"
