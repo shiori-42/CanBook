@@ -8,9 +8,9 @@ import (
 func ItemValidate(item model.Item) error {
 	return validation.ValidateStruct(&item,
 		validation.Field(
-			&item.Name,
-			validation.Required.Error("name is required"),
-			validation.Length(1, 255).Error("name must be between 1 and 255 characters"),
+			&item.TextName,
+			validation.Required.Error("Textname is required"),
+			validation.Length(1, 255).Error("Textname must be between 1 and 255 characters"),
 		),
 	)
 }

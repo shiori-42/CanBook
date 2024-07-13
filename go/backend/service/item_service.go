@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   item_service.go                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
+/*   By: shiori <shiori@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:06 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/29 05:14:38 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/07/13 23:05:15 by shiori           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ import (
 
 func CreateItem(c echo.Context, userID uint) (model.Item, error) {
 	var item model.Item
-	name := c.FormValue("name")
-	courseName := c.FormValue("course_name")
+	textname := c.FormValue("text_name")
+	className := c.FormValue("class_name")
 	priceStr := c.FormValue("price")
 	price, err := strconv.Atoi(priceStr)
 	if err != nil {
@@ -47,12 +47,12 @@ func CreateItem(c echo.Context, userID uint) (model.Item, error) {
 		return item, fmt.Errorf("failed to save image: %v", err)
 	}
 	item = model.Item{
-		Name:       name,
-		CourseName: courseName,
-		Price:      price,
-		SellType:   sellType,
-		ImageName:  ImageName,
-		UserID:     userID,
+		TextName:  textname,
+		ClassName: className,
+		Price:     price,
+		SellType:  sellType,
+		ImageName: ImageName,
+		UserID:    userID,
 	}
 	if err := validator.ItemValidate(item); err != nil {
 		return item, fmt.Errorf("validation failed: %v", err)
@@ -77,38 +77,42 @@ func GetItemByID(itemID int) (model.Item, error) {
 
 func UpdateItem(c echo.Context, itemID int, userID uint) (model.Item, error) {
 	var item model.Item
-	name := c.FormValue("name")
-	courseName := c.FormValue("course_name")
+	existingItem,err:=repository.GetItemByID(itemID)
+	if err!=nil{
+		return item,fmt.Errorf("failed to get existing item: %v", err)
+	}
+	textname := c.FormValue("text_name")
+	className := c.FormValue("class_name")
 	priceStr := c.FormValue("price")
 	price, err := strconv.Atoi(priceStr)
 	if err != nil {
 		return item, fmt.Errorf("invalid price: %v", err)
 	}
 	sellType := c.FormValue("sell_type")
+	var ImageName string
 	image, err := c.FormFile("image")
-	if err != nil {
-		return item, fmt.Errorf("failed to get image file: %v", err)
+	if err == nil {
+		src, err := image.Open()
+		if err != nil {
+			return item, fmt.Errorf("failed to open image file: %v", err)
+		}
+		defer src.Close()
+		ImageName, err = util.SaveImage(src, image)
+		if err != nil {
+			return item, fmt.Errorf("failed to save image: %v", err)
+		}
+		existingItem.ImageName = ImageName
 	}
-	src, err := image.Open()
-	if err != nil {
-		return item, fmt.Errorf("failed to open image file: %v", err)
-	}
-	defer src.Close()
-	ImageName, err := util.SaveImage(src, image)
-	if err != nil {
-		return item, fmt.Errorf("failed to save image: %v", err)
-	}
-	item = model.Item{
-		Name:       name,
-		CourseName: courseName,
-		Price:      price,
-		SellType:   sellType,
-		ImageName:  ImageName,
-	}
-	if err := validator.ItemValidate(item); err != nil {
+	existingItem.ImageName=ImageName
+	existingItem.TextName=textname
+	existingItem.ClassName=className
+	existingItem.Price=price
+	existingItem.SellType=sellType
+	
+	if err := validator.ItemValidate(existingItem); err != nil {
 		return item, fmt.Errorf("validation failed: %v", err)
 	}
-	if err := repository.UpdateItem(&item, itemID, userID); err != nil {
+	if err := repository.UpdateItem(&existingItem, itemID, userID); err != nil {
 		return item, fmt.Errorf("failed to update item in database: %v", err)
 	}
 	updatedItem, err := repository.GetItemByID(itemID)

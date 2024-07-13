@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   item.go                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
+/*   By: shiori <shiori@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:02:51 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/26 21:57:41 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/07/13 20:30:10 by shiori           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ import (
 )
 
 type Item struct {
-	ID         int       `json:"id"`
-	Name       string    `json:"name"`
-	CourseName string    `json:"course_name"`
-	Price      int       `json:"price"`
-	SellType   string    `json:"sell_type"`
-	ImageName  string    `json:"image_name"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
-	UserID     uint      `json:"user_id"`
+	ID        int       `json:"id"`
+	TextName  string    `json:"text_name"`
+	ClassName string    `json:"class_name"`
+	Price     int       `json:"price"`
+	SellType  string    `json:"sell_type"`
+	ImageName string    `json:"image_name"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	UserID    uint      `json:"user_id"`
 }
 
 type Items struct {
@@ -36,7 +36,7 @@ type Items struct {
 
 type ItemResponse struct {
 	ID        int       `json:"id"`
-	Name      string    `json:"name"`
+	TextName  string    `json:"text_name"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -45,8 +45,8 @@ func AutoMigrateItem() error {
 	_, err := db.DB.Exec(`
     CREATE TABLE IF NOT EXISTS items (
         id SERIAL PRIMARY KEY,
-        name TEXT NOT NULL,
-        course_name TEXT NOT NULL,
+        text_name TEXT NOT NULL,
+        class_name TEXT NOT NULL,
         image_name TEXT NOT NULL,
         price INT NOT NULL,
         sell_type TEXT NOT NULL,
