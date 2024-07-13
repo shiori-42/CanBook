@@ -14,7 +14,7 @@ import React, { useCallback, useEffect, useState } from "react";
 export interface Item {
   id: number;
   name: string;
-  course_name: string;
+  class_name: string;
   price: number;
   sell_type: string;
   image_name: string;

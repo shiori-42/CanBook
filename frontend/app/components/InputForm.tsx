@@ -44,8 +44,8 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
     event.preventDefault();
     const data = new FormData();
     data.append("image", values.image_name);
-    data.append("name", values.text_name);
-    data.append("course_name", values.class_name);
+    data.append("text_name", values.text_name);
+    data.append("class_name", values.class_name);
     data.append("price", values.price.toString());
     data.append("sell_type", values.sell_type.toString());
 

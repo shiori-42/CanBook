@@ -6,7 +6,7 @@
 /*   By: shiori <shiori@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:02:59 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/07/13 19:52:36 by shiori           ###   ########.fr       */
+/*   Updated: 2024/07/13 23:43:12 by shiori           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ func AutoMigrate() error {
 		return err
 	}
 	
-	err = AutoMigrateLikes()
-	if err != nil {
-		log.Printf("Error migrating  likes table: %v", err)
-		return err
-	}
+	// err = AutoMigrateLikes()
+	// if err != nil {
+	// 	log.Printf("Error migrating  likes table: %v", err)
+	// 	return err
+	// }
 
 	return nil
 }
