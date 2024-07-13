@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import InputForm from "../components/Listing/Form/InputForm";
+import InputForm from "../components/InputForm";
 
 const Page = () => {
   //form/page.tsxで記述

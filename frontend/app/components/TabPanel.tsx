@@ -2,7 +2,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import { Box, Tabs, Tab, Stack } from "@mui/material";
-import ItemMyList from "./Listing/ItemList/ItemMyList";
+import ItemMyList from "./ItemMyList";
 import ItemAll from "./ItemAll";
 import SearchButton from "./SearchButton";
 import CollegeSearchButton from "./CollegeSearchButton";
