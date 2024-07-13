@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   item_handler.go                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
+/*   By: shiori <shiori@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/29 05:16:07 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/07/13 18:25:17 by shiori           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@ package handler
 
 import (
 	"fmt"
-	"github.com/golang-jwt/jwt/v4"
 	"net/http"
 	"os"
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/golang-jwt/jwt/v4"
 
 	"github.com/labstack/echo/v4"
 	"github.com/shiori-42/textbook_change_app/go/backend/repository"
@@ -90,11 +91,11 @@ func (h *itemHandler) getItemByID(c echo.Context) error {
 }
 
 func (h *itemHandler) getImg(c echo.Context) error {
-	storedDir := "../images/"
-	imgPath := path.Join(storedDir, c.Param("imageFilename"))
+	uploadDir := os.Getenv("UPLOAD_DIR")
+	imgPath := path.Join(uploadDir, c.Param("imageFilename"))
 	if _, err := os.Stat(imgPath); err != nil {
 		c.Logger().Errorf("Image not found: %s%s", imgPath, imgPath)
-		imgPath = path.Join(storedDir, "default.jpg")
+		imgPath = path.Join(uploadDir, "default.jpg")
 	}
 	return c.File(imgPath)
 }
