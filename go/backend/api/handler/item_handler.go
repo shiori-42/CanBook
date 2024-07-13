@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   item_handler.go                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shiori <shiori@student.42.fr>              +#+  +:+       +#+        */
+/*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 11:59:11 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/07/13 16:41:20 by shiori           ###   ########.fr       */
+/*   Updated: 2024/03/29 05:16:07 by shiori0123       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ func RegisterItemRoutes(e *echo.Echo) {
 	i.GET("", h.getMyItems) //my page
 	i.GET("/:itemId", h.getItemByID)
 	i.POST("", h.createItem)
-	i.PUT("modify/:itemId", h.updateItem)
+	i.PUT("/:itemId", h.updateItem)
 	i.DELETE("/:itemId", h.deleteItem)
 	e.GET("/search", h.searchItems)
 	e.GET("/searchcollege", h.searchItemsByCollege)
