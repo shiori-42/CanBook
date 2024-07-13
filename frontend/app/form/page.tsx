@@ -3,13 +3,8 @@ import React, { useState } from "react";
 import InputForm from "../components/InputForm";
 
 const Page = () => {
-  //form/page.tsxで記述
   const [reload, setReload] = useState(true);
-  return (
-    <InputForm onListingCompleted={() => setReload(true)} />
-
-    // {/* <ItemMyList reload={reload} onLoadCompleted={() => setReload(false)} /> */}
-  );
+  return <InputForm onListingCompleted={() => setReload(true)} />;
 };
 
 export default Page;
