@@ -1,9 +1,15 @@
 "use client";
-import React from "react";
-import PutUpForm from "../components/Listing/PutUpForm";
+import React, { useState } from "react";
+import InputForm from "../components/Listing/Form/InputForm";
 
-const InputForm = () => {
-  return <PutUpForm />;
+const Page = () => {
+  //form/page.tsxで記述
+  const [reload, setReload] = useState(true);
+  return (
+    <InputForm onListingCompleted={() => setReload(true)} />
+
+    // {/* <ItemMyList reload={reload} onLoadCompleted={() => setReload(false)} /> */}
+  );
 };
 
-export default InputForm;
+export default Page;
