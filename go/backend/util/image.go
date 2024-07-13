@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   image.go                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
+/*   By: shiori <shiori@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:44:01 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/27 19:17:40 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/07/13 19:03:33 by shiori           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,20 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"log"
 )
 
 func SaveImage(src multipart.File, image *multipart.FileHeader) (string, error) {
-	uploadDir := "../images/"
+	uploadDir := os.Getenv("UPLOAD_DIR")
+	log.Println("UPLOAD_DIR is set to:", uploadDir)
 
+	err := os.MkdirAll(uploadDir, os.ModePerm)
+	if err != nil {
+		log.Println("Failed to create directory:", err)
+		return "", err
+	}
 	hasher := sha256.New()
-	_, err := io.Copy(hasher, src)
+	_, err = io.Copy(hasher, src)
 	if err != nil {
 		return "", err
 	}
