@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   item_repository.go                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shiori0123 <shiori0123@student.42.fr>      +#+  +:+       +#+        */
+/*   By: shiori <shiori@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 16:42:38 by shiori0123        #+#    #+#             */
-/*   Updated: 2024/03/29 05:12:18 by shiori0123       ###   ########.fr       */
+/*   Updated: 2024/07/13 22:51:00 by shiori           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ func GetMyItems(userID uint) (model.Items, error) {
 	query := `
         SELECT 
             items.id, 
-            items.name,
-			items.course_name, 
+            items.text_name,
+			items.class_name, 
             items.price,
             items.sell_type,
             items.image_name,
@@ -47,8 +47,8 @@ func GetMyItems(userID uint) (model.Items, error) {
 		var item model.Item
 		err = rows.Scan(
 			&item.ID,
-			&item.Name,
-			&item.CourseName,
+			&item.TextName,
+			&item.ClassName,
 			&item.Price,
 			&item.SellType,
 			&item.ImageName,
@@ -70,8 +70,8 @@ func GetAllUserItems() (model.Items, error) {
 	query := `
         SELECT 
             items.id, 
-            items.name,
-			items.course_name, 
+            items.text_name,
+			items.class_name, 
             items.price,
             items.sell_type,
             items.image_name,
@@ -91,8 +91,8 @@ func GetAllUserItems() (model.Items, error) {
 		var item model.Item
 		err = rows.Scan(
 			&item.ID,
-			&item.Name,
-			&item.CourseName,
+			&item.TextName,
+			&item.ClassName,
 			&item.Price,
 			&item.SellType,
 			&item.ImageName,
@@ -114,8 +114,8 @@ func GetItemByID(itemID int) (model.Item, error) {
 	query := `
         SELECT 
             items.id, 
-            items.name,
-			items.course_name, 
+            items.text_name,
+			items.class_name, 
             items.price,
             items.sell_type,
             items.image_name, 
@@ -128,8 +128,8 @@ func GetItemByID(itemID int) (model.Item, error) {
 
 	err := db.DB.QueryRow(query, itemID).Scan(
 		&item.ID,
-		&item.Name,
-		&item.CourseName,
+		&item.TextName,
+		&item.ClassName,
 		&item.Price,
 		&item.SellType,
 		&item.ImageName,
@@ -149,10 +149,10 @@ func GetItemByID(itemID int) (model.Item, error) {
 
 func CreateItem(item *model.Item) error {
 	query := `
-        INSERT INTO items (name,course_name , image_name, price, sell_type, user_id)
+        INSERT INTO items (text_name, class_name , image_name, price, sell_type, user_id)
         VALUES ($1, $2, $3, $4, $5, $6) RETURNING id
     `
-	err := db.DB.QueryRow(query, item.Name, item.CourseName, item.ImageName, item.Price, item.SellType, item.UserID).Scan(&item.ID)
+	err := db.DB.QueryRow(query, item.TextName, item.ClassName, item.ImageName, item.Price, item.SellType, item.UserID).Scan(&item.ID)
 	if err != nil {
 		return err
 	}
@@ -163,10 +163,10 @@ func CreateItem(item *model.Item) error {
 func UpdateItem(item *model.Item, itemID int, userID uint) error {
 	query := `
         UPDATE items
-        SET name = $1,  course_name= $2, image_name = $3, price = $4, sell_type = $5
+        SET text_name = $1,  class_name= $2, image_name = $3, price = $4, sell_type = $5
         WHERE id = $6 AND user_id = $7
     `
-	_, err := db.DB.Exec(query, item.Name, item.CourseName, item.ImageName, item.Price, item.SellType, itemID, userID)
+	_, err := db.DB.Exec(query, item.TextName, item.ClassName, item.ImageName, item.Price, item.SellType, itemID, userID)
 	if err != nil {
 		return err
 	}
@@ -196,8 +196,8 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 	query := `
         SELECT 
             i.id, 
-            i.name,
-			i.course_name,
+            i.text_name,
+			i.class_name,
 
             i.price,
             i.sell_type,
@@ -206,7 +206,7 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
             i.updated_at,
             i.user_id
         FROM items i
-        WHERE i.name LIKE $1
+        WHERE i.text_name LIKE $1
     `
 	rows, err := db.DB.Query(query, "%"+keyword+"%")
 	if err != nil {
@@ -218,8 +218,8 @@ func SearchItemsByKeyword(keyword string) (model.Items, error) {
 		var item model.Item
 		err = rows.Scan(
 			&item.ID,
-			&item.Name,
-			&item.CourseName,
+			&item.TextName,
+			&item.ClassName,
 			&item.Price,
 			&item.SellType,
 			&item.ImageName,
@@ -241,8 +241,8 @@ func SearchItemsByCollege(collegeName string) (model.Items, error) {
 	query := `
         SELECT 
             i.id, 
-            i.name,
-            i.course_name, 
+            i.text_name,
+            i.class_name, 
             i.price,
             i.sell_type,
             i.image_name,
@@ -264,8 +264,8 @@ func SearchItemsByCollege(collegeName string) (model.Items, error) {
 		var item model.Item
 		err = rows.Scan(
 			&item.ID,
-			&item.Name,
-			&item.CourseName,
+			&item.TextName,
+			&item.ClassName,
 			&item.Price,
 			&item.SellType,
 			&item.ImageName,
