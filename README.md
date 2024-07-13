@@ -55,14 +55,6 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 ```
 
 
-### 必要なディレクトリの作成
-
-`go`ディレクトリ配下に`images`ディレクトリを作成してください。これは出品時にアップロードする画像の保存場所として使用されます。
-
-```bash	
-$ mkdir -p go/images	
-```
-
 ### Dockerを使用してPostgreSQLのインスタンスを立ち上げる
 
 ```bash
