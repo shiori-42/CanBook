@@ -16,6 +16,7 @@ const ItemMyListDetailPage: React.FC = () => {
       params={{
         id: id as string, // idを文字列として渡す
       }}
+      showEditAndDeleteButtons={true}
     />
   );
 };
