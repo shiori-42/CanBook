@@ -84,7 +84,7 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
   ];
 
   return (
-    <div className="Listing">
+    <Box className="Listing">
       <form onSubmit={onSubmit}>
         <Box mt={5}>
           <TextField
@@ -157,7 +157,7 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
           </Box>
         </Box>
       </form>
-    </div>
+    </Box>
   );
 };
 

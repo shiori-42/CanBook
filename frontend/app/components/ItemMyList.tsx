@@ -47,7 +47,7 @@ export const ItemMyList: React.FC<ItemMyListProps> = (props) => {
       })
       .then((data) => {
         if (Array.isArray(data.items)) {
-          setItems(data.items); // dataからdata.itemsへ変更
+          setItems(data.items);
         } else {
           console.error("Fetched data is not an array:", data);
           setItems([]); // データが配列でない場合は、空の配列を設定する
@@ -71,9 +71,8 @@ export const ItemMyList: React.FC<ItemMyListProps> = (props) => {
     <Grid container spacing={1.2} py={2}>
       {items.map((item, index) => (
         <Grid key={index} item xs={4} pb={3}>
-          <Link href={`/item/${item.id}`} style={{ textDecoration: "none" }}>
+          <Link href={`/my-item/${item.id}`} style={{ textDecoration: "none" }}>
             {" "}
-            {/* リンクの修正 */}
             <Card
               sx={{
                 height: { xs: 200, sm: 270 },

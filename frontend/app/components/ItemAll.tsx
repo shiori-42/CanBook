@@ -30,7 +30,6 @@ const ItemAll: React.FC<ItemAllProps> = (props) => {
     const token = localStorage.getItem("token");
 
     fetch(`${server}/alluseritems`, {
-      // Template literalsを使用
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +46,7 @@ const ItemAll: React.FC<ItemAllProps> = (props) => {
       })
       .then((data) => {
         if (Array.isArray(data.items)) {
-          setItems(data.items); // dataからdata.itemsへ変更
+          setItems(data.items);
         } else {
           console.error("Fetched data is not an array:", data);
           setItems([]); // データが配列でない場合は、空の配列を設定する
@@ -73,7 +72,7 @@ const ItemAll: React.FC<ItemAllProps> = (props) => {
         {items.map((item, index) => (
           <Grid key={index} item xs={4}>
             <Link
-              href={`/item-all/${item.id}`}
+              href={`/all-item/${item.id}`}
               style={{ textDecoration: "none" }}
             >
               <Card

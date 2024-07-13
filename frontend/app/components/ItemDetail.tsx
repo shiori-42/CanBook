@@ -1,5 +1,14 @@
 "use client";
-import { Box, Button, Stack, Typography, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  Typography,
+  styled,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useCallback, useEffect, useState } from "react";
 
 export interface Item {
@@ -20,24 +29,22 @@ interface ItemDetailProps {
   reload?: boolean;
   onLoadCompleted?: () => void;
   params: { id: string };
+  showEditAndDeleteButtons?: boolean;
 }
 
-// const ItemDetail = async ({ params }: { params: { id: string } }) => {
-//   const item = Items.find((itemdata) => itemdata.id === parseInt(params.id));
-
-//   if (!item) {
-//     return <NotFound />;
-//   }
-
 const ItemDetail: React.FC<ItemDetailProps> = (props) => {
-  const { reload = true, onLoadCompleted, params } = props;
+  const {
+    reload = true,
+    onLoadCompleted,
+    params,
+    showEditAndDeleteButtons = false,
+  } = props;
   const [item, setItems] = useState<Item | undefined>();
 
   const fetchItems = useCallback(() => {
     const token = localStorage.getItem("token");
 
     fetch(`${server}/alluseritems`, {
-      // Template literalsを使用
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +64,7 @@ const ItemDetail: React.FC<ItemDetailProps> = (props) => {
           const item = data.items.find(
             (itemdata: { id: number }) => itemdata.id === parseInt(params.id)
           );
-          setItems(item); // dataからdata.itemsへ変更
+          setItems(item);
         } else {
           console.error("Fetched data is not an array:", data);
         }
@@ -86,7 +93,6 @@ const ItemDetail: React.FC<ItemDetailProps> = (props) => {
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundImage: `url(${server}/images/${item.image_name})`,
-    // textAlign: "center",
     width: "100%",
     height: 480,
     zIndex: 0,
@@ -102,15 +108,25 @@ const ItemDetail: React.FC<ItemDetailProps> = (props) => {
         height={"100%"}
         borderBottom={1}
         borderColor={"divider"}
+        mt={2}
         pb={3}
-        // sx={backgroundImageStyle}
       >
         <StyledBox />
-        {/* <Typography fontSize={20} fontWeight={"bold"}>
-          {item.text_name}
-        </Typography>
-        <Typography fontSize={20}>￥{item.price}</Typography>
-        <Typography fontSize={12}>{item.sell_type}</Typography> */}
+        {showEditAndDeleteButtons && (
+          <Stack direction="row" spacing={2} justifyContent="end">
+            <IconButton sx={{ color: "#F47381" }} href={`/edit/${item.id}`}>
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              sx={{ color: "#F47381" }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Stack>
+        )}
         <Typography
           fontSize={{ xs: 18, sm: 20 }}
           height={40}

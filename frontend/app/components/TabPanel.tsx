@@ -1,14 +1,10 @@
 "use client";
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import { Box, Tabs, Tab, Stack, IconButton } from "@mui/material";
-// import ItemKeep from "./ItemKeep";
-// import ItemAll from "./ItemAll";
-import ItemMyList from "./Listing/ItemList/ItemMyList";
+import { Box, Tabs, Tab, Stack } from "@mui/material";
+import ItemMyList from "./ItemMyList";
 import ItemAll from "./ItemAll";
 import SearchButton from "./SearchButton";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import CollegeSearchButton from "./CollegeSearchButton";
 
 interface TabPanelProps {
@@ -91,19 +87,6 @@ export default function BasicTabs() {
       </CustomTabPanel>
 
       <CustomTabPanel value={value} index={1}>
-        <Stack direction="row" spacing={2} justifyContent="end">
-          <IconButton sx={{ color: "#F47381" }}>
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            sx={{ color: "#F47381" }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Stack>
         <Typography fontSize={15} fontWeight={"bold"} mt={1.5}>
           出品した商品
         </Typography>
