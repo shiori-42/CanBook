@@ -71,7 +71,7 @@ const EditForm: React.FC<EditProps> = (props) => {
     const data = new FormData();
     data.append("image", values.image_name);
     data.append("text_name", values.text_name);
-    data.append("course_name", values.class_name);
+    data.append("class_name", values.class_name);
     data.append("price", values.price.toString());
     data.append("sell_type", values.sell_type.toString());
 
@@ -79,13 +79,13 @@ const EditForm: React.FC<EditProps> = (props) => {
 
     console.log("token:", token);
 
-    fetch(`${server}/items`, {
-      method: "PUT",
-      mode: "cors",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: data,
+    fetch(`${server}/items/${itemId}`, {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: data,
     })
       .then((response) => {
         console.log("PUT status:", response.statusText);
