@@ -14,7 +14,7 @@
 アプリケーションの現段階のデプロイ先は以下のURLです：
 
 - フロントエンド: [CanBook Frontend](https://canbook.vercel.app/)
-- バックエンド: Renderにデプロイ済み
+- バックエンド: [CanBook Backend](https://canbook-1.onrender.com)
 - データベース: Renderにデプロイ済み
 
 ## 使用方法
@@ -24,31 +24,33 @@
 
 ```bash
 $ git clone https://github.com/shiori-42/CanBook.git
+$ cd CanBook
 ```
 
 
 ### 環境変数の設定
 
-#### バックエンド
 
 `go/backend`ディレクトリに`.env`ファイルを作成し、以下の情報を設定してください。
 
 ```bash
+# .envファイルの例
 PORT=8080
-POSTGRES_USER=myuser
-POSTGRES_PASSWORD=mypassword
-POSTGRES_DB=mydatabase
-POSTGRES_HOST=localhost
-SECRET=uu5pveql
-GO_ENV=dev
-API_DOMAIN=localhost
-FE_URL=http://localhost:3000
+POSTGRES_USER=myuser # データベースユーザー名
+POSTGRES_PASSWORD=mypassword # データベースパスワード
+POSTGRES_DB=mydatabase # データベース名
+POSTGRES_HOST=localhost # データベースホスト
+SECRET=uu5pveql # セキュリティ用の秘密鍵
+GO_ENV=dev # 開発環境
+API_DOMAIN=localhost # APIのドメイン
+FE_URL=http://localhost:3000 # フロントエンドURL
 ```
-#### フロントエンド
+
 
 `frontend`ディレクトリに`.env.local`ファイルを作成し、次のように設定してください。
 
 ```bash
+# .env.localファイルの例
 NEXT_PUBLIC_API_URL=http://localhost:8080
 ```
 
@@ -57,6 +59,9 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 
 `go`ディレクトリ配下に`images`ディレクトリを作成してください。これは出品時にアップロードする画像の保存場所として使用されます。
 
+```bash	
+$ mkdir -p go/images	
+```
 
 ### Dockerを使用してPostgreSQLのインスタンスを立ち上げる
 
@@ -70,14 +75,15 @@ $ docker-compose up -d
 #### バックエンド
 
 ```bash
-# go/backendディレクトリ内で
+$ cd go/backend
 $ GO_ENV=dev go run main.go
 ```
 
 #### フロントエンド
 
 ```bash
-# frontend/appディレクトリ内で
+$ cd frontend/app
+$ npm install	
 $ npm run dev
 ```
 
