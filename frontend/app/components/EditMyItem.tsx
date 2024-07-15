@@ -1,4 +1,4 @@
-import { Box, Button, MenuItem, TextField } from "@mui/material";
+import { Box, Button, MenuItem, TextField, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -109,17 +109,25 @@ const EditForm: React.FC<EditProps> = (props) => {
     },
   ];
 
+  const StyledBox = styled(Box)(({ theme }) => ({
+    position: "relative",
+    overflow: "hidden",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundImage: `url(${imageUrl})`,
+    width: "100%",
+    height: 480,
+    zIndex: 0,
+    [theme.breakpoints.down("sm")]: {
+      height: 400,
+    },
+  }));
+
   return (
     <Box>
       <form onSubmit={onSubmit}>
         <Box mt={5}>
-          {imageUrl && (
-            <Image
-              src={imageUrl}
-              alt="current image"
-              style={{ width: "100%", marginBottom: "20px" }}
-            />
-          )}
+          {imageUrl && <StyledBox />}
           <TextField
             type="file"
             name="image_name"
