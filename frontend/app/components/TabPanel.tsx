@@ -43,34 +43,6 @@ export default function BasicTabs() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  // const StyledBox = styled(Box)(({ theme }) => ({
-  //   position: "relative",
-  //   overflow: "hidden",
-  //   backgroundSize: "cover",
-  //   backgroundPosition: "center",
-  //   backgroundImage: `url(${server}/images/${item.image_name})`,
-  //   width: "100%",
-  //   height: 480,
-  //   zIndex: 0,
-  //   [theme.breakpoints.down("sm")]: {
-  //     height: 400,
-  //   },
-  // }));
-  const StyledBox = styled(Box)(({ theme }) => ({
-    position: "relative",
-    overflow: "hidden",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    // backgroundImage: `url(${server}/images/${image_name})`,
-    backgroundImage: `url("/text-o-chem.jpg")`,
-
-    width: "100%",
-    height: 480,
-    zIndex: 0,
-    [theme.breakpoints.down("sm")]: {
-      height: 400,
-    },
-  }));
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -109,8 +81,6 @@ export default function BasicTabs() {
           <SearchButton />
           <CollegeSearchButton />
         </Stack>
-        {/* <Image width={100} height={100} src={"/text-o-chem.jpg"} alt={""} /> */}
-        <StyledBox />
         <Typography fontSize={15} fontWeight={"bold"} mt={2}>
           すべての商品
         </Typography>
