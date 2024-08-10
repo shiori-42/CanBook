@@ -1,10 +1,10 @@
 "use client";
 import { Inter } from "next/font/google";
-import Main from "./components/main";
-import Header from "./components/Header";
+import Main from "./_components/main";
+import Header from "./_components/Header";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import reportWebVitals from "@/reportWebVitals";
-import "./components/LoginTest/index.css";
+import "./_components/LoginTest/index.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -1,5 +1,5 @@
 "use client";
-import ItemDetail from "@/app/components/ItemDetail";
+import ItemDetail from "@/app/_components/ItemDetail";
 import { useParams } from "next/navigation";
 import React from "react";
 

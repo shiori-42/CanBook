@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Box, TextField, Button } from "@mui/material";
-import ChatBody from "../components/ChatBody";
+import ChatBody from "../_components/ChatBody";
 
 export type Message = {
   content: string;

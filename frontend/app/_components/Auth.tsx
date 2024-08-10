@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react";
-import { useMutateAuth } from "../hooks/useMutateAuth";
+import { useMutateAuth } from "../_hooks/useMutateAuth";
 import {
   Avatar,
   Box,
