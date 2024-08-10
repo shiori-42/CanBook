@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useParams } from "next/navigation";
-import EditForm from "@/app/components/EditMyItem";
+import EditForm from "@/app/_components/EditMyItem";
 
 const EditPage: React.FC = () => {
   const params = useParams();

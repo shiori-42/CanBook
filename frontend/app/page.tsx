@@ -1,5 +1,5 @@
 "use client";
-import { Auth } from "./components/Auth";
+import { Auth } from "./_components/Auth";
 
 export default function Home() {
   return (

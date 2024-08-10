@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 // import useStore from "../store";
-import { useError } from "../hooks/useError";
+import { useError } from "./useError";
 import { useRouter } from "next/navigation";
 
 export const useMutateAuth = () => {

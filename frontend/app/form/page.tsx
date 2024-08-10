@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import InputForm from "../components/InputForm";
+import InputForm from "../_components/InputForm";
 
 const Page = () => {
   const [reload, setReload] = useState(true);

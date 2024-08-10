@@ -1,5 +1,5 @@
 import React from "react";
-import ProfForm from "../components/ProfileForm";
+import ProfForm from "../_components/ProfileForm";
 
 const ProfileForm = () => {
   return <ProfForm />;

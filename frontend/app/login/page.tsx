@@ -9,7 +9,7 @@
 "use client";
 import { useEffect } from "react";
 import axios from "axios";
-import { Auth } from "../components/Auth";
+import { Auth } from "../_components/Auth";
 // import { CsrfToken } from "../types";
 
 axios.defaults.withCredentials = true;
