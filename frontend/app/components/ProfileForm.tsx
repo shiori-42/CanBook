@@ -67,6 +67,3 @@ const ProfForm = () => {
 };
 
 export default ProfForm;
-
-//ProfFormというコンポーネント名変える
-//ファイル名と同じだからエラーが出た
