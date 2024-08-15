@@ -1,7 +1,6 @@
 import { Box, Button, MenuItem, TextField, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:9000";
 
