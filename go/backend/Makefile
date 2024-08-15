@@ -1,4 +1,4 @@
-BINARY := CanBook
+BINARY := CanBook-backend-go
 OUTPUT_DIR := build
 MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
@@ -22,4 +22,9 @@ lint:
 vet:
 	go vet ./...
 
-.PHONY:	build mod test lint vet clean
+re:
+	test -f build/${BINARY} && rm build/${BINARY} || true
+	test -f build/${BINARY}-linux-${GOARCH} && rm build/${BINARY}-linux-${GOARCH} || true
+	make build
+
+.PHONY:	build mod test lint vet clean re
