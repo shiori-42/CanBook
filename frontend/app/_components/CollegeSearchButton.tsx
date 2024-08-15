@@ -2,7 +2,7 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
 
-export default function SearchButton() {
+const SearchButton = () => {
   return (
     <Button
       href="/college-search"
@@ -24,4 +24,6 @@ export default function SearchButton() {
       </Typography>
     </Button>
   );
-}
+};
+
+export default SearchButton;
