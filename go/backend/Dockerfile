@@ -6,11 +6,16 @@ RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh 
 COPY ./ ./
 RUN make mod build-linux
 
-
 # release
 FROM alpine AS release
 RUN apk --no-cache add tzdata && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
-COPY --from=dev work/CanBook-backend-go/build/CanBook-backend-go-linux-amd64 /usr/local/bin/CanBook-backend-go
+
+COPY --from=dev /work/CanBook-backend-go/build/CanBook-backend-go-linux-amd64 /usr/local/bin/CanBook-backend-go
+
+RUN chmod +x /usr/local/bin/CanBook-backend-go
+
+RUN ls -la /usr/local/bin/
+
 EXPOSE 8080
 ENTRYPOINT ["/usr/local/bin/CanBook-backend-go"]
