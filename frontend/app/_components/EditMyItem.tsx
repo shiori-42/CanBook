@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 
 const server = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:9000";
 
-interface EditProps {
+type EditProps = {
   itemId: string;
   onListingCompleted?: () => void;
   params: { id: string };
-}
+};
 
 type formDataType = {
   image_name: string | File;
@@ -28,12 +28,11 @@ const EditForm: React.FC<EditProps> = (props) => {
     price: 0,
     sell_type: 0,
   };
-
   const [values, setValues] = useState<formDataType>(initialState);
-  const [imageUrl, setImageUrl] = useState<string>(""); //追加
+  const [imageUrl, setImageUrl] = useState<string>("");
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     fetch(`${server}/items/${itemId}`, {
       method: "GET",
       headers: {
@@ -49,7 +48,7 @@ const EditForm: React.FC<EditProps> = (props) => {
           price: data.price,
           sell_type: data.sell_type,
         });
-        setImageUrl(`${server}/images/${data.image_name}`); //追加
+        setImageUrl(`${server}/images/${data.image_name}`);
       })
       .catch((error) => {
         console.error("GET error:", error);
@@ -69,15 +68,16 @@ const EditForm: React.FC<EditProps> = (props) => {
     });
     setImageUrl(URL.createObjectURL(event.target.files![0])); //追加
   };
+
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const data = new FormData();
     data.append("image", values.image_name);
     data.append("text_name", values.text_name);
     data.append("course_name", values.class_name);
     data.append("price", values.price.toString());
     data.append("sell_type", values.sell_type.toString());
-
     const token = localStorage.getItem("token");
 
     fetch(`${server}/items`, {
