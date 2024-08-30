@@ -27,18 +27,20 @@ export default function MenuAppBar() {
     <Box>
       <AppBar position="static" sx={{ bgcolor: "#ffffff" }}>
         <Toolbar>
-          <Typography
-            fontSize={23}
-            component="div"
-            fontFamily="revert-layer"
-            letterSpacing={1.5}
-            fontWeight={"bold"}
-            color={"#009C88"}
-            sx={{ flexGrow: 1 }}
-            ml={1}
-          >
-            CanBook
-          </Typography>
+          <Link href={"/home"} flexGrow={1} sx={{ textDecoration: "none" }}>
+            <Typography
+              fontSize={23}
+              component="div"
+              fontFamily="revert-layer"
+              letterSpacing={1.5}
+              fontWeight={"bold"}
+              color={"#009C88"}
+              sx={{ flexGrow: 1 }}
+              ml={1}
+            >
+              CanBook
+            </Typography>
+          </Link>
 
           <Button
             color="inherit"
@@ -58,7 +60,6 @@ export default function MenuAppBar() {
               ホーム
             </Typography>
           </Button>
-
           <Button
             href="/login"
             sx={{
@@ -77,7 +78,6 @@ export default function MenuAppBar() {
               ログイン
             </Typography>
           </Button>
-
           <Button
             href="/form"
             onClick={() => setIsLogin(!isLogin)} //ログインしたら出品ボタンが出るようにしたい
