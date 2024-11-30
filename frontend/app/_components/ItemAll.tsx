@@ -91,7 +91,7 @@ const ItemAll: React.FC<ItemAllProps> = (props) => {
                     component="img"
                     sx={{
                       height: { xs: 110, sm: 180 },
-                      padding: "1em 1em 0 1em",
+                      padding: "0 1em",
                       objectFit: "contain",
                     }}
                     image={`${process.env.NEXT_PUBLIC_API_URL}/images/${item.image_name}`}
