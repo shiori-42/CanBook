@@ -87,7 +87,7 @@ export const ItemMyList: React.FC<ItemMyListProps> = (props) => {
               <Box bgcolor={"#ededed"}>
                 <CardMedia
                   component="img"
-                  sx={{ height: { xs: 110, sm: 180 } }}
+                  sx={{ height: { xs: 110, sm: 180 }, objectFit: "contain" }}
                   image={`${process.env.NEXT_PUBLIC_API_URL}/images/${item.image_name}`}
                 />
               </Box>
