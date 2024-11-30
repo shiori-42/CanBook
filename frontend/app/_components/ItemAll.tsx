@@ -89,7 +89,11 @@ const ItemAll: React.FC<ItemAllProps> = (props) => {
                 <Box bgcolor={"#ededed"}>
                   <CardMedia
                     component="img"
-                    sx={{ height: { xs: 110, sm: 180 }, objectFit: "contain" }}
+                    sx={{
+                      height: { xs: 110, sm: 180 },
+                      padding: "1em 1em 0 1em",
+                      objectFit: "contain",
+                    }}
                     image={`${process.env.NEXT_PUBLIC_API_URL}/images/${item.image_name}`}
                   />
                 </Box>
