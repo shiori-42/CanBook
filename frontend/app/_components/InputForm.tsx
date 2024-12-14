@@ -1,4 +1,4 @@
-import { Box, Button, MenuItem, TextField } from "@mui/material";
+import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -27,6 +27,7 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
     sell_type: 0,
   };
   const [values, setValues] = useState<formDataType>(initialState);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null); // プレビューURLを管理
 
   const onValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
@@ -34,12 +35,24 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
       [event.target.name]: event.target.value,
     });
   };
+
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files![0];
     setValues({
       ...values,
-      [event.target.name]: event.target.files![0],
+      image_name: file,
     });
+
+    // ファイルを読み込んでプレビューURLを設定
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPreviewUrl(reader.result as string); // 読み込んだ結果をプレビューURLに設定
+    };
+    if (file) {
+      reader.readAsDataURL(file); // ファイルをData URLとして読み込む
+    }
   };
+
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData();
@@ -54,7 +67,6 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
     console.log("token:", token);
 
     fetch(server.concat("/items"), {
-      //itemsのリンクで入力フォームが出るはず！！！
       method: "POST",
       mode: "cors",
       headers: {
@@ -87,21 +99,39 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
     <Box className="Listing">
       <form onSubmit={onSubmit}>
         <Box mt={5}>
+          {/* 画像プレビュー */}
+          {previewUrl && (
+            <Box mt={2} textAlign="center">
+              {/* <Typography variant="body1">画像プレビュー:</Typography> */}
+              <img
+                src={previewUrl}
+                alt="プレビュー"
+                style={{
+                  maxWidth: "50%",
+                  height: "auto",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "4px",
+                }}
+              />
+              {/* next/Imageではエラーが出てしまったため急ぎの修正としてネイティブのimgタグを使用 */}
+            </Box>
+          )}
+          {/* 画像アップロード */}
           <TextField
             type="file"
-            // sx={{ display: "none" }}
             name="image_name"
             id="image_name"
             onChange={onFileChange}
             required
             fullWidth
-            // label="写真"
             variant="outlined"
             inputProps={{
-              multiple: true,
-            }} //写真を複数入れられるかもしれないコード
-            // variant="outlined"
+              accept: "image/*", // 画像ファイルのみを許可
+            }}
           />
+
+          {/* 教科書名 */}
           <TextField
             type="text"
             name="text_name"
@@ -112,6 +142,7 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
             label="教科書名"
             sx={{ mb: 3, mt: 3 }}
           />
+          {/* 講義名 */}
           <TextField
             type="text"
             name="class_name"
@@ -122,6 +153,7 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
             label="講義名"
             sx={{ mb: 3 }}
           />
+          {/* 価格 */}
           <TextField
             type="text"
             name="price"
@@ -132,6 +164,7 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
             label="価格"
             sx={{ mb: 3 }}
           />
+          {/* 出品タイプ */}
           <TextField
             select
             type="text"
@@ -150,6 +183,7 @@ export const InputForm: React.FC<InputFormProps> = (props) => {
               </MenuItem>
             ))}
           </TextField>
+          {/* 提出ボタン */}
           <Box textAlign="center">
             <Button type="submit" variant="outlined">
               List this item
